@@ -4,7 +4,7 @@ import io.github.aicyi.commons.core.mapper.BeanMapper;
 import io.github.aicyi.commons.core.token.AuthenticationTokens;
 import io.github.aicyi.commons.core.token.TokenPair;
 import io.github.aicyi.commons.lang.exception.BusinessException;
-import io.github.aicyi.commons.util.UUIDUtils;
+import io.github.aicyi.commons.util.id.UUIDUtils;
 import io.github.aicyi.example.domain.*;
 import io.github.aicyi.example.domain.entity.base.User;
 import io.github.aicyi.example.domain.type.CaptchaType;

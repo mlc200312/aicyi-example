@@ -1,6 +1,6 @@
 package io.github.aicyi.example.boot.message;
 
-import io.github.aicyi.commons.util.Maps;
+import io.github.aicyi.commons.util.map.Maps;
 import io.github.aicyi.example.boot.AicyiExampleApplication;
 import io.github.aicyi.midware.message.sms.model.SmsMessage;
 import io.github.aicyi.midware.message.sms.sender.SmsSender;

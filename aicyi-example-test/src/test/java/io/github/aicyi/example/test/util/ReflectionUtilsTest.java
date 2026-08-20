@@ -1,6 +1,6 @@
 package io.github.aicyi.example.test.util;
 
-import io.github.aicyi.commons.util.ReflectionUtils;
+import io.github.aicyi.commons.util.reflect.ReflectionUtils;
 import lombok.Getter;
 import lombok.Setter;
 import org.junit.jupiter.api.DisplayName;

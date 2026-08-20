@@ -1,6 +1,6 @@
 package io.github.aicyi.example.test.util;
 
-import io.github.aicyi.commons.util.Maps;
+import io.github.aicyi.commons.util.map.Maps;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

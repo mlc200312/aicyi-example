@@ -2,7 +2,7 @@ package io.github.aicyi.example.test.util;
 
 import io.github.aicyi.commons.lang.EnumType;
 import io.github.aicyi.commons.lang.StringEnumType;
-import io.github.aicyi.commons.util.EnumUtils;
+import io.github.aicyi.commons.util.enums.EnumUtils;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

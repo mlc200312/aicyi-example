@@ -3,7 +3,7 @@ package io.github.aicyi.example.boot.config;
 import io.github.aicyi.commons.security.token.jwt.IJWTInfo;
 import io.github.aicyi.commons.core.token.AuthenticationTokenService;
 import io.github.aicyi.example.domain.UserInfo;
-import io.github.aicyi.midware.redis.EnhancedRedisTemplateFactory;
+import io.github.aicyi.midware.redis.template.EnhancedRedisTemplateFactory;
 import io.github.aicyi.midware.redis.token.AuthenticationConfig;
 import io.github.aicyi.midware.redis.token.JwtRefreshAuthenticationTokenService;
 import org.springframework.context.annotation.Bean;

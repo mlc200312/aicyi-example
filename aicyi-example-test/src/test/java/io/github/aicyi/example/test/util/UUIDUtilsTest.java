@@ -1,6 +1,6 @@
 package io.github.aicyi.example.test.util;
 
-import io.github.aicyi.commons.util.UUIDUtils;
+import io.github.aicyi.commons.util.id.UUIDUtils;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

@@ -1,10 +1,10 @@
 package io.github.aicyi.example.boot.message;
 
-import io.github.aicyi.commons.util.DateTimeUtils;
-import io.github.aicyi.commons.util.JsonUtils;
-import io.github.aicyi.commons.util.Maps;
-import io.github.aicyi.commons.util.UUIDUtils;
-import io.github.aicyi.midware.utils.IdUtils;
+import io.github.aicyi.commons.util.date.DateTimeUtils;
+import io.github.aicyi.commons.util.json.JsonUtils;
+import io.github.aicyi.commons.util.map.Maps;
+import io.github.aicyi.commons.util.id.UUIDUtils;
+import io.github.aicyi.midware.starter.util.IdUtils;
 import io.github.aicyi.example.boot.AicyiExampleApplication;
 import io.github.aicyi.example.service.channel.MessageChannels;
 import io.github.aicyi.midware.message.mail.model.MailMessage;

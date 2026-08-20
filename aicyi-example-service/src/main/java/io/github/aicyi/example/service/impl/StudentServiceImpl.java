@@ -4,7 +4,7 @@ import io.github.aicyi.commons.core.mapper.BeanMapper;
 import io.github.aicyi.commons.core.id.IdGenerator;
 import io.github.aicyi.commons.lang.exception.BusinessException;
 import io.github.aicyi.commons.lang.type.BooleanType;
-import io.github.aicyi.commons.util.NumberUtils;
+import io.github.aicyi.commons.util.number.NumberUtils;
 import io.github.aicyi.example.dao.mapper.StudentCustomMapper;
 import io.github.aicyi.example.dao.mapper.base.StudentMapper;
 import io.github.aicyi.example.domain.StudentBean;

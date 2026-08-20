@@ -1,6 +1,6 @@
 package io.github.aicyi.example.boot.service;
 
-import io.github.aicyi.commons.util.DateTimeUtils;
+import io.github.aicyi.commons.util.date.DateTimeUtils;
 import io.github.aicyi.example.boot.AicyiExampleApplication;
 import io.github.aicyi.example.domain.StudentBean;
 import io.github.aicyi.example.domain.UserQuery;

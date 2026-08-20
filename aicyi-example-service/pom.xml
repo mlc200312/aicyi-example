@@ -35,11 +35,6 @@
 
         <dependency>
             <groupId>io.github.aicyi.midware</groupId>
-            <artifactId>aicyi-midware-kit</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>io.github.aicyi.midware</groupId>
             <artifactId>aicyi-midware-message-mail</artifactId>
         </dependency>
 
