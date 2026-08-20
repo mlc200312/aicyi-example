@@ -29,22 +29,22 @@ public class DataSourceConfiguration {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
-    @Bean
-    public DataSource dataSource() {
-        HikariConfig config = new HikariConfig();
-        config.setJdbcUrl("jdbc:mysql://localhost:3306/test?characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&verifyServerCertificate=false&useLegacyDatetimeCode=false&serverTimezone=UTC&allowMultiQueries=true");
-        config.setUsername("root");
-        config.setPassword("root");
-        config.setDriverClassName("com.mysql.cj.jdbc.Driver");
-
-        // 连接池优化参数
-        config.setMaximumPoolSize(30);
-        config.setMinimumIdle(10);
-        config.setConnectionTimeout(30000);
-        config.setIdleTimeout(600000);
-        config.setMaxLifetime(1800000);
-        return new HikariDataSource(config);
-    }
+//    @Bean
+//    public DataSource dataSource() {
+//        HikariConfig config = new HikariConfig();
+//        config.setJdbcUrl("jdbc:mysql://localhost:3306/test?characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&verifyServerCertificate=false&useLegacyDatetimeCode=false&serverTimezone=UTC&allowMultiQueries=true");
+//        config.setUsername("root");
+//        config.setPassword("root");
+//        config.setDriverClassName("com.mysql.cj.jdbc.Driver");
+//
+//        // 连接池优化参数
+//        config.setMaximumPoolSize(30);
+//        config.setMinimumIdle(10);
+//        config.setConnectionTimeout(30000);
+//        config.setIdleTimeout(600000);
+//        config.setMaxLifetime(1800000);
+//        return new HikariDataSource(config);
+//    }
 
     @Bean
     public DataSourceTransactionManager transactionManager(DataSource dataSource) {
