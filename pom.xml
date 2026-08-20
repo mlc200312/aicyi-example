@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>io.github.aicyi.example</groupId>
+    <artifactId>aicyi-example</artifactId>
+
+    <packaging>pom</packaging>
+    <name>aicyi example</name>
+    <description>aicyi example</description>
+
+    <parent>
+        <groupId>io.github.aicyi.base</groupId>
+        <artifactId>aicyi-base-starter-parent</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+
+    <modules>
+        <module>aicyi-example-boot</module>
+        <module>aicyi-example-consumer</module>
+        <module>aicyi-example-dao</module>
+        <module>aicyi-example-domain</module>
+        <module>aicyi-example-fixture</module>
+        <module>aicyi-example-service</module>
+        <module>aicyi-example-test</module>
+        <module>aicyi-example-web</module>
+    </modules>
+
+    <dependencies>
+        <dependency>
+            <groupId>io.github.aicyi.commons</groupId>
+            <artifactId>aicyi-commons-core</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.github.aicyi.commons</groupId>
+            <artifactId>aicyi-commons-util</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.github.aicyi.commons</groupId>
+            <artifactId>aicyi-commons-security</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjrt</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+
+        <!-- Spring Boot Starter -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+        </dependency>
+    </dependencies>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>io.github.aicyi.midware</groupId>
+                <artifactId>aicyi-midware-spring-boot-starter</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.aicyi.midware</groupId>
+                <artifactId>aicyi-midware-db-commons</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.aicyi.midware</groupId>
+                <artifactId>aicyi-midware-kit</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.aicyi.midware</groupId>
+                <artifactId>aicyi-midware-message-mail</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.aicyi.midware</groupId>
+                <artifactId>aicyi-midware-message-mq</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.aicyi.midware</groupId>
+                <artifactId>aicyi-midware-message-sms</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.aicyi.midware</groupId>
+                <artifactId>aicyi-midware-message-spring-boot-starter</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.aicyi.midware</groupId>
+                <artifactId>aicyi-midware-rabbitmq</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.aicyi.midware</groupId>
+                <artifactId>aicyi-midware-redis</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.aicyi.midware</groupId>
+                <artifactId>aicyi-midware-web</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+</project>
