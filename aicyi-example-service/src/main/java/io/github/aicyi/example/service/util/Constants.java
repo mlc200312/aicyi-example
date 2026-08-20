@@ -2,7 +2,7 @@ package io.github.aicyi.example.service.util;
 
 import io.github.aicyi.commons.core.message.MessageContent;
 import io.github.aicyi.commons.lang.Assert;
-import io.github.aicyi.commons.util.Maps;
+import io.github.aicyi.commons.util.map.Maps;
 import io.github.aicyi.example.domain.type.CaptchaType;
 import io.github.aicyi.midware.message.mail.model.MailMessage;
 import io.github.aicyi.midware.message.sms.model.SmsMessage;

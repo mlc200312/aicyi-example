@@ -2,13 +2,13 @@
 package io.github.aicyi.example.boot.redis;
 
 import io.github.aicyi.commons.core.codec.JsonCodec;
-import io.github.aicyi.commons.util.jackson.JacksonJsonCodec;
+import io.github.aicyi.commons.util.json.jackson.JacksonJsonCodec;
 import io.github.aicyi.example.boot.AicyiExampleApplication;
 import io.github.aicyi.example.domain.StudentBean;
 import io.github.aicyi.example.domain.UserBean;
-import io.github.aicyi.midware.redis.EnhancedRedisTemplateFactory;
-import io.github.aicyi.midware.redis.JsonCodecRedisSerializer;
-import io.github.aicyi.midware.redis.SerializerType;
+import io.github.aicyi.midware.redis.template.EnhancedRedisTemplateFactory;
+import io.github.aicyi.midware.redis.serializer.JsonCodecRedisSerializer;
+import io.github.aicyi.midware.redis.serializer.SerializerType;
 import io.github.aicyi.example.fixture.util.DataSource;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

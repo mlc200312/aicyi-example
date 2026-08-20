@@ -1,7 +1,7 @@
 package io.github.aicyi.example.service.util;
 
 import io.github.aicyi.commons.core.cache.Cache;
-import io.github.aicyi.commons.util.CurrentContextHolder;
+import io.github.aicyi.commons.util.context.CurrentContextHolder;
 import io.github.aicyi.example.domain.UserInfo;
 import io.github.aicyi.example.domain.entity.base.User;
 import io.github.aicyi.example.service.UserService;

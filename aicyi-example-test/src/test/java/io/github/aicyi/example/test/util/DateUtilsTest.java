@@ -1,6 +1,6 @@
 package io.github.aicyi.example.test.util;
 
-import io.github.aicyi.commons.util.DateUtils;
+import io.github.aicyi.commons.util.date.DateUtils;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

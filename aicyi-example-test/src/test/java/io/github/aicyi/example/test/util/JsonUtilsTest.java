@@ -1,8 +1,8 @@
 package io.github.aicyi.example.test.util;
 
 import io.github.aicyi.commons.core.codec.JsonCodec;
-import io.github.aicyi.commons.util.JsonUtils;
-import io.github.aicyi.commons.util.jackson.JacksonJsonCodec;
+import io.github.aicyi.commons.util.json.JsonUtils;
+import io.github.aicyi.commons.util.json.jackson.JacksonJsonCodec;
 import lombok.Getter;
 import lombok.Setter;
 import org.junit.jupiter.api.DisplayName;

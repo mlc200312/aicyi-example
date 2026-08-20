@@ -1,7 +1,7 @@
 package io.github.aicyi.example.test.util;
 
 import io.github.aicyi.commons.core.mapper.BeanMapper;
-import io.github.aicyi.commons.util.MapperUtils;
+import io.github.aicyi.commons.util.bean.MapperUtils;
 import lombok.Getter;
 import lombok.Setter;
 import org.junit.jupiter.api.DisplayName;

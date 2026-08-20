@@ -1,7 +1,7 @@
 package io.github.aicyi.example.boot.config;
 
 import io.github.aicyi.commons.core.mapper.BeanMapper;
-import io.github.aicyi.commons.util.orikamapper.*;
+import io.github.aicyi.commons.util.bean.orika.*;
 import io.github.aicyi.example.domain.StudentBean;
 import io.github.aicyi.example.domain.entity.base.Student;
 import io.github.aicyi.example.domain.entity.base.User;

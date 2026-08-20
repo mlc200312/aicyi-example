@@ -1,7 +1,7 @@
 package io.github.aicyi.example.domain.type;
 
 import io.github.aicyi.commons.lang.EnumType;
-import io.github.aicyi.commons.util.jackson.EnumTypeJsonDeserializer;
+import io.github.aicyi.commons.util.json.jackson.EnumTypeJsonDeserializer;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 

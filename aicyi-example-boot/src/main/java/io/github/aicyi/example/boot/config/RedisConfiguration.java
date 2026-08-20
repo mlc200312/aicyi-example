@@ -2,9 +2,9 @@ package io.github.aicyi.example.boot.config;
 
 import io.github.aicyi.commons.core.cache.Cache;
 import io.github.aicyi.commons.core.cache.CacheConfig;
-import io.github.aicyi.commons.util.serializer.CacheWrapperCodec;
+import io.github.aicyi.commons.util.codec.CacheWrapperCodec;
 import io.github.aicyi.example.domain.UserInfo;
-import io.github.aicyi.midware.redis.EnhancedRedisTemplateFactory;
+import io.github.aicyi.midware.redis.template.EnhancedRedisTemplateFactory;
 import io.github.aicyi.midware.redis.cache.*;
 import org.redisson.Redisson;
 import org.redisson.api.RedissonClient;

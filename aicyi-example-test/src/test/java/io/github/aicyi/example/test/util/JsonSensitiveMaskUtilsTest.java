@@ -1,6 +1,6 @@
 package io.github.aicyi.example.test.util;
 
-import io.github.aicyi.commons.util.JsonSensitiveMaskUtils;
+import io.github.aicyi.commons.util.json.JsonSensitiveMaskUtils;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

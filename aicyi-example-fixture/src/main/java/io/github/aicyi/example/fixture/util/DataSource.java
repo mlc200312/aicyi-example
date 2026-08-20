@@ -1,9 +1,9 @@
 package io.github.aicyi.example.fixture.util;
 
 import io.github.aicyi.commons.lang.type.BooleanType;
-import io.github.aicyi.commons.util.MapperUtils;
-import io.github.aicyi.commons.util.UUIDUtils;
-import io.github.aicyi.commons.util.orikamapper.OrikaMapperRegistry;
+import io.github.aicyi.commons.util.bean.MapperUtils;
+import io.github.aicyi.commons.util.id.UUIDUtils;
+import io.github.aicyi.commons.util.bean.orika.OrikaMapperRegistry;
 import io.github.aicyi.example.fixture.domain.Example;
 import io.github.aicyi.example.fixture.domain.ExampleBean;
 import io.github.aicyi.example.fixture.domain.Message;
@@ -16,8 +16,8 @@ import io.github.aicyi.example.domain.type.Season;
 import java.util.ArrayList;
 import java.util.Date;
 
-import io.github.aicyi.midware.utils.IdUtils;
-import io.github.aicyi.commons.util.JsonUtils;
+import io.github.aicyi.midware.starter.util.IdUtils;
+import io.github.aicyi.commons.util.json.JsonUtils;
 import io.github.aicyi.example.domain.type.GenderType;
 import io.github.aicyi.example.fixture.dto.ExampleResp;
 import io.github.aicyi.example.web.vo.StudentResp;

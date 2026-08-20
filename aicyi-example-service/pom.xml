@@ -35,17 +35,22 @@
 
         <dependency>
             <groupId>io.github.aicyi.midware</groupId>
-            <artifactId>aicyi-midware-kit</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>io.github.aicyi.midware</groupId>
             <artifactId>aicyi-midware-message-mail</artifactId>
         </dependency>
 
         <dependency>
             <groupId>io.github.aicyi.midware</groupId>
+            <artifactId>aicyi-midware-message-mq</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.github.aicyi.midware</groupId>
             <artifactId>aicyi-midware-message-sms</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.github.aicyi.midware</groupId>
+            <artifactId>aicyi-midware-message-db</artifactId>
         </dependency>
 
         <dependency>

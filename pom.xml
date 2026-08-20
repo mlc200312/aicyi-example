@@ -68,55 +68,13 @@
 
     <dependencyManagement>
         <dependencies>
+
             <dependency>
                 <groupId>io.github.aicyi.midware</groupId>
-                <artifactId>aicyi-midware-spring-boot-starter</artifactId>
+                <artifactId>aicyi-midware</artifactId>
                 <version>0.0.1-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>io.github.aicyi.midware</groupId>
-                <artifactId>aicyi-midware-db-commons</artifactId>
-                <version>0.0.1-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>io.github.aicyi.midware</groupId>
-                <artifactId>aicyi-midware-kit</artifactId>
-                <version>0.0.1-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>io.github.aicyi.midware</groupId>
-                <artifactId>aicyi-midware-message-mail</artifactId>
-                <version>0.0.1-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>io.github.aicyi.midware</groupId>
-                <artifactId>aicyi-midware-message-mq</artifactId>
-                <version>0.0.1-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>io.github.aicyi.midware</groupId>
-                <artifactId>aicyi-midware-message-sms</artifactId>
-                <version>0.0.1-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>io.github.aicyi.midware</groupId>
-                <artifactId>aicyi-midware-message-spring-boot-starter</artifactId>
-                <version>0.0.1-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>io.github.aicyi.midware</groupId>
-                <artifactId>aicyi-midware-rabbitmq</artifactId>
-                <version>0.0.1-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>io.github.aicyi.midware</groupId>
-                <artifactId>aicyi-midware-redis</artifactId>
-                <version>0.0.1-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>io.github.aicyi.midware</groupId>
-                <artifactId>aicyi-midware-web</artifactId>
-                <version>0.0.1-SNAPSHOT</version>
+                <type>pom</type>
+                <scope>import</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>
