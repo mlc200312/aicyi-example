@@ -13,13 +13,6 @@ spring:
   application:
     name: aicyi-example
 
-  # 从 Nacos 配置中心读取配置（spring-cloud-alibaba 2021.0.x 采用 config-import 机制，无需 bootstrap.yml）
-  # 共享配置：aicyi-example.yml；环境配置在 application-{profile}.yml 中按 dataId aicyi-example-{profile}.yml 导入
-  # 配置内容见模块根目录 nacos/，需先导入 Nacos 后再启动应用
-  config:
-    import:
-      - nacos:aicyi-example.yml?group=DEFAULT_GROUP&refreshEnabled=true
-
   mvc:
     path-match:
       matching-strategy: ant_path_matcher
@@ -28,6 +21,11 @@ spring:
     check-template-location: false
 
   cloud:
+
+    # 从 Nacos 配置中心读取配置（spring-cloud-alibaba 2021.0.x 采用 config-import 机制，无需 bootstrap.yml）
+    # namespace 按环境区分：namespace 与 nacos 导入均声明在 application-{profile}.yml 中，随 profile 切换
+    # 配置内容见模块根目录 nacos/，需先导入 Nacos 后再启动应用
+
     nacos:
       config:
         # Nacos 地址，可通过环境变量 NACOS_SERVER_ADDR 覆盖
@@ -38,7 +36,7 @@ spring:
         password: ${NACOS_PASSWORD:nacos}
         import-check:
           enabled: true
-        namespace: 29b4684f-0751-4290-a0a4-f65a51893ef6
+        # namespace 按环境区分，在 application-{profile}.yml 中声明，不在此处写死
 
     stream:
       # 绑定配置

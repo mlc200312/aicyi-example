@@ -1,3 +1,7 @@
+# Nacos dataId: aicyi-rabbitmq.yml
+# group: DEFAULT_GROUP，格式：YAML
+# RabbitMQ 环境配置（由 application-test.yml 迁移拆分而来，需导入到各环境对应的 namespace）
+
 spring:
   cloud:
     stream:

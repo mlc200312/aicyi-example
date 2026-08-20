@@ -10,15 +10,15 @@ logging:
 
 aicyi:
   snowflake:
-      enabled: true
-      service-name: default-service
-      worker-id-bits: 5
-      datacenter-id: 0
-      ttl-seconds: 60
-      heartbeat-seconds: 20
-      auto-recover: true
-      clock-backward-tolerance-ms: 5
-      epoch: 1672531200000
+    enabled: true
+    service-name: default-service
+    worker-id-bits: 5
+    datacenter-id: 0
+    ttl-seconds: 60
+    heartbeat-seconds: 20
+    auto-recover: true
+    clock-backward-tolerance-ms: 5
+    epoch: 1672531200000
 
   message:
 
