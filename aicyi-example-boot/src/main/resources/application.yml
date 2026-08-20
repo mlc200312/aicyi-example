@@ -9,35 +9,32 @@ mybatis:
 spring:
   profiles:
     active: test
+
+  freemarker:
+    check-template-location: false
+
   application:
     name: aicyi-example
-  #    datasource:
-  #    dynamic:
-  #      druid:
-  #        initial-size: 5
-  #        min-idle: 5
-  #        max-wait: 60000
-  #        max-active: 20
-  #        min-evictable-idle-time-millis: 300000
-  #        time-between-eviction-runs-millis: 60000
-  #        validation-query: SELECT 1 FROM DUAL
-  #        init-connection-sqls: SET NAMES utf8mb4
-  #        # 下面这两个配置，可以在每次连接的时候判断一些连接是否有效
-  #        test-on-borrow: true
-  #        test-while-idle: true
-  # redis配置
-  redis:
-    Jedis:
-      pool:
-        max-active: 8
-        max-wait: -1
-        max-idle: 8
-        min-idle: 0
-  mvc:
-    path-match:
-      matching-strategy: ant_path_matcher
+
+  # 从 Nacos 配置中心读取配置（spring-cloud-alibaba 2021.0.x 采用 config-import 机制，无需 bootstrap.yml）
+  # 共享配置：aicyi-example.yml；环境配置在 application-{profile}.yml 中按 dataId aicyi-example-{profile}.yml 导入
+  # 配置内容见模块根目录 nacos/，需先导入 Nacos 后再启动应用
+  config:
+    import:
+      - nacos:aicyi-example.yml?group=DEFAULT_GROUP&refreshEnabled=true
 
   cloud:
+    nacos:
+      config:
+        # Nacos 地址，可通过环境变量 NACOS_SERVER_ADDR 覆盖
+        server-addr: ${NACOS_SERVER_ADDR:127.0.0.1:8848}
+        file-extension: yml
+        # Nacos 开启鉴权时通过环境变量注入账号密码
+        # username: ${NACOS_USERNAME:nacos}
+        # password: ${NACOS_PASSWORD:nacos}
+        import-check:
+          enabled: true
+
     stream:
       # 绑定配置
       bindings:
@@ -95,10 +92,14 @@ spring:
               bind-queue: false
               routing-key-expression: headers['routingKey'] # 动态路由键
 
+  mvc:
+    path-match:
+      matching-strategy: ant_path_matcher
+
 aicyi:
   snowflake:
     enabled: true
-    service-name: ${spring.applicationn.name}
+    service-name: default-service
     worker-id-bits: 5
     datacenter-id: 0
     ttl-seconds: 60
