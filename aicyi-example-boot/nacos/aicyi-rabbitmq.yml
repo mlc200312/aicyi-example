@@ -1,0 +1,34 @@
+spring:
+  cloud:
+    stream:
+      # 默认绑定器配置
+      default-binder: rabbit
+
+      # 绑定器配置
+      binders:
+        rabbit:
+          type: rabbit
+          environment:
+            spring:
+              rabbitmq:
+                host: localhost
+                port: 5672
+                username: test
+                password: test
+                virtual-host: /
+
+  # RabbitMQ原生配置
+  rabbitmq:
+    dynamic: false
+    template:
+      retry:
+        enabled: true
+        max-attempts: 3
+        initial-interval: 1000ms
+    listener:
+      simple:
+        acknowledge-mode: auto
+        retry:
+          enabled: true
+          max-attempts: 3
+          stateless: true

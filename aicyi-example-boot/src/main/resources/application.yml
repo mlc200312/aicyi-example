@@ -10,9 +10,6 @@ spring:
   profiles:
     active: test
 
-  freemarker:
-    check-template-location: false
-
   application:
     name: aicyi-example
 
@@ -23,6 +20,13 @@ spring:
     import:
       - nacos:aicyi-example.yml?group=DEFAULT_GROUP&refreshEnabled=true
 
+  mvc:
+    path-match:
+      matching-strategy: ant_path_matcher
+
+  freemarker:
+    check-template-location: false
+
   cloud:
     nacos:
       config:
@@ -30,10 +34,11 @@ spring:
         server-addr: ${NACOS_SERVER_ADDR:127.0.0.1:8848}
         file-extension: yml
         # Nacos 开启鉴权时通过环境变量注入账号密码
-        # username: ${NACOS_USERNAME:nacos}
-        # password: ${NACOS_PASSWORD:nacos}
+        username: ${NACOS_USERNAME:nacos}
+        password: ${NACOS_PASSWORD:nacos}
         import-check:
           enabled: true
+        namespace: 29b4684f-0751-4290-a0a4-f65a51893ef6
 
     stream:
       # 绑定配置
@@ -91,19 +96,3 @@ spring:
               declare-exchange: false
               bind-queue: false
               routing-key-expression: headers['routingKey'] # 动态路由键
-
-  mvc:
-    path-match:
-      matching-strategy: ant_path_matcher
-
-aicyi:
-  snowflake:
-    enabled: true
-    service-name: default-service
-    worker-id-bits: 5
-    datacenter-id: 0
-    ttl-seconds: 60
-    heartbeat-seconds: 20
-    auto-recover: true
-    clock-backward-tolerance-ms: 5
-    epoch: 1672531200000
