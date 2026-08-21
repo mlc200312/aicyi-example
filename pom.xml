@@ -23,6 +23,7 @@
         <module>aicyi-example-dao</module>
         <module>aicyi-example-domain</module>
         <module>aicyi-example-fixture</module>
+        <module>aicyi-example-mybatisplus</module>
         <module>aicyi-example-service</module>
         <module>aicyi-example-test</module>
         <module>aicyi-example-web</module>
@@ -68,13 +69,57 @@
 
     <dependencyManagement>
         <dependencies>
-
             <dependency>
                 <groupId>io.github.aicyi.midware</groupId>
                 <artifactId>aicyi-midware</artifactId>
                 <version>0.0.1-SNAPSHOT</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>io.github.aicyi.example</groupId>
+                <artifactId>aicyi-example-boot</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.aicyi.example</groupId>
+                <artifactId>aicyi-example-consumer</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.aicyi.example</groupId>
+                <artifactId>aicyi-example-dao</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.aicyi.example</groupId>
+                <artifactId>aicyi-example-domain</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.aicyi.example</groupId>
+                <artifactId>aicyi-example-fixture</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.aicyi.example</groupId>
+                <artifactId>aicyi-example-mybatisplus</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.aicyi.example</groupId>
+                <artifactId>aicyi-example-service</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.aicyi.example</groupId>
+                <artifactId>aicyi-example-test</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.aicyi.example</groupId>
+                <artifactId>aicyi-example-web</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

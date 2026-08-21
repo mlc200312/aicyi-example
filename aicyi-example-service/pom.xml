@@ -20,17 +20,16 @@
         <dependency>
             <groupId>io.github.aicyi.example</groupId>
             <artifactId>aicyi-example-dao</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
         <dependency>
             <groupId>io.github.aicyi.midware</groupId>
-            <artifactId>aicyi-midware-spring-boot-starter</artifactId>
+            <artifactId>aicyi-midware-kit</artifactId>
         </dependency>
 
         <dependency>
             <groupId>io.github.aicyi.midware</groupId>
-            <artifactId>aicyi-midware-message-spring-boot-starter</artifactId>
+            <artifactId>aicyi-midware-message-db</artifactId>
         </dependency>
 
         <dependency>
@@ -46,11 +45,6 @@
         <dependency>
             <groupId>io.github.aicyi.midware</groupId>
             <artifactId>aicyi-midware-message-sms</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>io.github.aicyi.midware</groupId>
-            <artifactId>aicyi-midware-message-db</artifactId>
         </dependency>
 
         <dependency>

@@ -16,11 +16,11 @@ import io.github.aicyi.example.domain.type.Season;
 import java.util.ArrayList;
 import java.util.Date;
 
-import io.github.aicyi.midware.starter.util.IdUtils;
+import io.github.aicyi.example.fixture.dto.StudentResp;
 import io.github.aicyi.commons.util.json.JsonUtils;
 import io.github.aicyi.example.domain.type.GenderType;
 import io.github.aicyi.example.fixture.dto.ExampleResp;
-import io.github.aicyi.example.web.vo.StudentResp;
+import io.github.aicyi.midware.kit.util.IdUtils;
 import org.apache.commons.lang3.RandomUtils;
 
 import java.math.BigDecimal;

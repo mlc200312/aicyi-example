@@ -20,7 +20,11 @@
         <dependency>
             <groupId>io.github.aicyi.example</groupId>
             <artifactId>aicyi-example-fixture</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.github.aicyi.example</groupId>
+            <artifactId>aicyi-example-web</artifactId>
         </dependency>
 
         <!-- util 中 Excel/二维码能力为可选依赖，测试工程显式引入 -->

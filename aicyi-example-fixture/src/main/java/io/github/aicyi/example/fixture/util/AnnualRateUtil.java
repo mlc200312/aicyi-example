@@ -6,8 +6,10 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 /**
- * 投资年化收益率计算工具
- */
+ * @author Mr.Min
+ * @description 投资年化收益率计算工具
+ * @date 2026/8/21
+ **/
 public class AnnualRateUtil {
 
     /**

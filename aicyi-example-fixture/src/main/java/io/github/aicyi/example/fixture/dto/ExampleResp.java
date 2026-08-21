@@ -1,8 +1,7 @@
 package io.github.aicyi.example.fixture.dto;
 
+import io.github.aicyi.commons.lang.DtoBean;
 import io.github.aicyi.commons.lang.model.BaseBean;
-import io.github.aicyi.commons.lang.VoBean;
-import io.github.aicyi.example.web.vo.StudentResp;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.FieldNameConstants;
@@ -17,7 +16,7 @@ import java.util.List;
 @Getter
 @Setter
 @FieldNameConstants
-public class ExampleResp extends BaseBean implements VoBean {
+public class ExampleResp extends BaseBean implements DtoBean {
     private String uuid;
     private Integer idx;
     private Integer status;

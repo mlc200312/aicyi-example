@@ -19,8 +19,17 @@
     <dependencies>
         <dependency>
             <groupId>io.github.aicyi.example</groupId>
-            <artifactId>aicyi-example-web</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <artifactId>aicyi-example-domain</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.github.aicyi.commons</groupId>
+            <artifactId>aicyi-commons-logging</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.github.aicyi.midware</groupId>
+            <artifactId>aicyi-midware-kit</artifactId>
         </dependency>
 
         <!-- util 中 Excel 能力为可选依赖，fixture 的 Excel 数据模型显式引入 -->

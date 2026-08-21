@@ -4,11 +4,11 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>aicyi-example-boot</artifactId>
+    <artifactId>aicyi-example-mybatisplus</artifactId>
 
     <packaging>jar</packaging>
-    <name>aicyi example boot</name>
-    <description>aicyi example boot</description>
+    <name>aicyi example mybatisplus</name>
+    <description>aicyi example mybatisplus</description>
 
     <parent>
         <groupId>io.github.aicyi.example</groupId>
@@ -19,28 +19,56 @@
     <dependencies>
         <dependency>
             <groupId>io.github.aicyi.example</groupId>
-            <artifactId>aicyi-example-test</artifactId>
+            <artifactId>aicyi-example-fixture</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.github.aicyi.commons</groupId>
+            <artifactId>aicyi-commons-core</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.github.aicyi.commons</groupId>
+            <artifactId>aicyi-commons-logging</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.github.aicyi.midware</groupId>
+            <artifactId>aicyi-midware-db-mybatisplus</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.github.aicyi.midware</groupId>
+            <artifactId>aicyi-midware-web</artifactId>
+        </dependency>
+
+        <!-- mybatis‑plus 代码生成器 -->
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-generator</artifactId>
             <scope>test</scope>
         </dependency>
 
         <dependency>
-            <groupId>io.github.aicyi.example</groupId>
-            <artifactId>aicyi-example-web</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>io.github.aicyi.midware</groupId>
-            <artifactId>aicyi-midware-spring-boot-starter</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>io.github.aicyi.midware</groupId>
-            <artifactId>aicyi-midware-message-spring-boot-starter</artifactId>
+            <groupId>com.mysql</groupId>
+            <artifactId>mysql-connector-j</artifactId>
+            <scope>runtime</scope>
         </dependency>
 
         <dependency>
             <groupId>org.reflections</groupId>
             <artifactId>reflections</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.freemarker</groupId>
+            <artifactId>freemarker</artifactId>
+        </dependency>
+
+        <!-- nacos配置中心 -->
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
         </dependency>
 
         <dependency>
@@ -53,12 +81,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
-        </dependency>
-
-        <!-- nacos配置中心 -->
-        <dependency>
-            <groupId>com.alibaba.cloud</groupId>
-            <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
         </dependency>
 
         <dependency>
@@ -107,7 +129,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>io.github.aicyi.example.boot.AicyiExampleApplication</mainClass>
+                    <mainClass>io.github.aicyi.example.mybatisplus.AicyiExampleMyBatisPlusApplication</mainClass>
                 </configuration>
                 <executions>
                     <execution>
