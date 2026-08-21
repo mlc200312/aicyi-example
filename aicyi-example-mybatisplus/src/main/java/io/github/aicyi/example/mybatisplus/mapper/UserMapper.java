@@ -1,6 +1,6 @@
 package io.github.aicyi.example.mybatisplus.mapper;
 
-import io.github.aicyi.example.mybatisplus.entity.User;
+import io.github.aicyi.example.mybatisplus.domain.entity.User;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**

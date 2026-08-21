@@ -5,9 +5,11 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.Version;
-import java.io.Serializable;
-import java.time.LocalDateTime;
 import io.github.aicyi.example.mybatisplus.domain.type.GenderType;
+import java.io.Serializable;
+import java.lang.Boolean;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -74,14 +76,14 @@ public class User implements Serializable {
     /**
      * 生日
      */
-    private java.time.LocalDate birthday;
+    private LocalDate birthday;
 
     /**
      * 删除标记，0：未删除，1：已删除
      */
     @TableField(fill = FieldFill.INSERT)
     @TableLogic
-    private java.lang.Boolean deleted;
+    private Boolean deleted;
 
     /**
      * 版本

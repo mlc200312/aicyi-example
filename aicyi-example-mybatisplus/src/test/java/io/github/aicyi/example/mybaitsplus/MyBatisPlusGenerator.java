@@ -42,9 +42,14 @@ public class MyBatisPlusGenerator {
     private static final Map<String, Object> CONFIG = loadConfig();
 
     /**
-     * 列名(小写) -> Java 类型（全限定名或 JDK 内置类型简名）
+     * 全局列类型覆盖：列名(小写) -> Java 类型（全限定名或 JDK 内置类型简名），对所有表生效
      */
-    private static final Map<String, String> COLUMN_TYPE_OVERRIDES = loadColumnTypeOverrides();
+    private static final Map<String, String> GLOBAL_TYPE_OVERRIDES = loadGlobalTypeOverrides();
+
+    /**
+     * 类（表）级列类型覆盖：表名(小写) -> {列名(小写) -> Java 类型}，优先于全局配置
+     */
+    private static final Map<String, Map<String, String>> TABLE_TYPE_OVERRIDES = loadTableTypeOverrides();
 
     public static void main(String[] args) {
         generateCode();
@@ -56,21 +61,22 @@ public class MyBatisPlusGenerator {
         Map<String, Object> global = section(CONFIG, "global");
         Map<String, Object> pkg = section(CONFIG, "package");
 
-        String path = Paths.get(System.getProperty("user.dir")) + str(global, "project", "/aicyi-example-mybatisplus");
+        String path = Paths.get(System.getProperty("user.dir")) + getStrValue(global, "project");
 
-        FastAutoGenerator.create(str(dataSource, "url"), str(dataSource, "username"), str(dataSource, "password"))
+        FastAutoGenerator.create(getStrValue(dataSource, "url"), getStrValue(dataSource, "username"), getStrValue(dataSource, "password"))
                 .globalConfig(builder -> builder
-                        .author(str(global, "author", "Leno"))
-                        .outputDir(path + "/src/main/java")
+                        .author(getStrValue(global, "author"))
                         .commentDate("yyyy-MM-dd")
+                        .outputDir(path + "/src/main/java")
                 )
                 .dataSourceConfig(builder ->
                         builder.typeConvertHandler((globalConfig, typeRegistry, metaInfo) -> {
 
                             String columnName = (String) ReflectionUtils.getFieldValue(metaInfo, "columnName");
+                            String tableName = (String) ReflectionUtils.getFieldValue(metaInfo, "tableName");
 
-                            // 1. 配置文件中的列类型覆盖：支持业务枚举等任意自定义类
-                            IColumnType overrideType = resolveColumnTypeOverride(columnName);
+                            // 1. 配置文件中的列类型覆盖：类（表）级配置优先，未命中再走全局配置
+                            IColumnType overrideType = resolveColumnTypeOverride(tableName, columnName);
                             if (overrideType != null) {
                                 return overrideType;
                             }
@@ -84,16 +90,16 @@ public class MyBatisPlusGenerator {
                         })
                 )
                 .packageConfig(builder -> builder
-                        .parent(str(pkg, "parent", "io.github.aicyi.example"))
-                        .moduleName(str(pkg, "moduleName", "mybatisplus"))
-                        .entity(str(pkg, "entity", "entity"))
-                        .mapper(str(pkg, "mapper", "mapper"))
-                        .service(str(pkg, "service", "service"))
-                        .serviceImpl(str(pkg, "serviceImpl", "service.impl"))
+                        .parent(getStrValue(pkg, "parent"))
+                        .moduleName(getStrValue(pkg, "moduleName"))
+                        .entity(getStrValue(pkg, "entity"))
+                        .mapper(getStrValue(pkg, "mapper"))
+                        .service(getStrValue(pkg, "service"))
+                        .serviceImpl(getStrValue(pkg, "serviceImpl"))
                         .pathInfo(Collections.singletonMap(OutputFile.xml, path + "/src/main/resources/mapper"))
                 )
                 .strategyConfig((scanner, builder) -> builder.addInclude(getTables(scanner.apply("请输入表名，多个英文逗号分隔？所有输入 all")))
-                        .addTablePrefix(str(global, "tablePrefix", "t_"))
+                        .addTablePrefix(getStrValue(global, "tablePrefix"))
                         .entityBuilder()
                         .enableFileOverride()
                         .enableLombok()
@@ -125,15 +131,29 @@ public class MyBatisPlusGenerator {
     }
 
     /**
-     * 解析配置文件中的列类型覆盖。
+     * 解析配置文件中的列类型覆盖，类（表）级配置优先于全局配置。
      * JDK 内置类型简名（Boolean / Integer 等）复用 DbColumnType；
      * 全限定类名则构造自定义 IColumnType，模板渲染时会自动补 import。
      */
-    private static IColumnType resolveColumnTypeOverride(String columnName) {
+    private static IColumnType resolveColumnTypeOverride(String tableName, String columnName) {
         if (columnName == null) {
             return null;
         }
-        String javaType = COLUMN_TYPE_OVERRIDES.get(columnName.toLowerCase());
+        String columnKey = columnName.toLowerCase();
+        String javaType = null;
+
+        // 1. 类（表）级配置优先
+        if (tableName != null) {
+            Map<String, String> tableOverrides = TABLE_TYPE_OVERRIDES.get(tableName.toLowerCase());
+            if (tableOverrides != null) {
+                javaType = tableOverrides.get(columnKey);
+            }
+        }
+
+        // 2. 未命中则回退全局配置
+        if (javaType == null || javaType.trim().isEmpty()) {
+            javaType = GLOBAL_TYPE_OVERRIDES.get(columnKey);
+        }
         if (javaType == null || javaType.trim().isEmpty()) {
             return null;
         }
@@ -153,17 +173,17 @@ public class MyBatisPlusGenerator {
         return new IColumnType() {
             @Override
             public String getType() {
-                return fullClassName;
+                return fullClassName.substring(fullClassName.lastIndexOf(".") + 1);
             }
 
             @Override
             public String getPkg() {
-                return null;
+                return fullClassName;
             }
         };
     }
 
-    private static Map<String, String> loadColumnTypeOverrides() {
+    private static Map<String, String> loadGlobalTypeOverrides() {
         Map<String, String> overrides = new HashMap<>();
         Map<String, Object> raw = section(section(CONFIG, "column-type"), "overrides");
         for (Map.Entry<String, Object> entry : raw.entrySet()) {
@@ -172,6 +192,36 @@ public class MyBatisPlusGenerator {
             }
         }
         return overrides;
+    }
+
+    /**
+     * 加载类（表）级列类型覆盖。
+     * 表名键带前缀与去前缀两种形式均会注册，配置文件里写 t_user 或 user 都能命中。
+     */
+    @SuppressWarnings("unchecked")
+    private static Map<String, Map<String, String>> loadTableTypeOverrides() {
+        Map<String, Map<String, String>> result = new HashMap<>();
+        String tablePrefix = getStrValue(section(CONFIG, "global"), "tablePrefix").toLowerCase();
+        Map<String, Object> tables = section(section(CONFIG, "column-type"), "tables");
+        for (Map.Entry<String, Object> tableEntry : tables.entrySet()) {
+            if (tableEntry.getKey() == null || !(tableEntry.getValue() instanceof Map)) {
+                continue;
+            }
+            Map<String, String> columnOverrides = new HashMap<>();
+            for (Map.Entry<String, Object> entry : ((Map<String, Object>) tableEntry.getValue()).entrySet()) {
+                if (entry.getKey() != null && entry.getValue() != null) {
+                    columnOverrides.put(entry.getKey().toLowerCase(), String.valueOf(entry.getValue()));
+                }
+            }
+            String tableName = tableEntry.getKey().toLowerCase();
+            result.put(tableName, columnOverrides);
+            if (tableName.startsWith(tablePrefix)) {
+                result.put(tableName.substring(tablePrefix.length()), columnOverrides);
+            } else {
+                result.put(tablePrefix + tableName, columnOverrides);
+            }
+        }
+        return result;
     }
 
     @SuppressWarnings("unchecked")
@@ -196,12 +246,11 @@ public class MyBatisPlusGenerator {
         return value instanceof Map ? (Map<String, Object>) value : Collections.<String, Object>emptyMap();
     }
 
-    private static String str(Map<String, Object> config, String key) {
-        return str(config, key, null);
-    }
-
-    private static String str(Map<String, Object> config, String key, String defaultValue) {
+    private static String getStrValue(Map<String, Object> config, String key) {
         Object value = config == null ? null : config.get(key);
-        return value != null ? String.valueOf(value) : defaultValue;
+        if (value == null) {
+            throw new IllegalArgumentException("Config key '" + key + "' not found");
+        }
+        return String.valueOf(value);
     }
 }

@@ -23,12 +23,17 @@ package:
   service: service
   serviceImpl: service.impl
 
-# 按列名自定义 Java 类型（列名大小写不敏感）
+# 按列名自定义 Java 类型（列名大小写不敏感），分两级：
+#   1. overrides 全局配置：对所有表生效
+#   2. tables    类（表）级配置：优先于全局配置，未配置时回退全局配置；
+#                解决不同表同名列需要不同 Java 类型的问题，表名写 t_user 或 user 均可
 # 取值支持：
 #   1. 任意类的全限定名，如业务枚举
 #   2. JDK 内置类型简名，如 Boolean / Integer / LocalDateTime
 column-type:
   overrides:
     birthday: java.time.LocalDate
-    gender_type: io.github.aicyi.example.mybatisplus.type.GenderType
     deleted: java.lang.Boolean
+  tables:
+    t_user:
+      gender_type: io.github.aicyi.example.mybatisplus.domain.type.GenderType

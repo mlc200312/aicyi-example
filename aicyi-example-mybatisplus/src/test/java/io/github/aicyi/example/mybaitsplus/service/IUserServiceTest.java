@@ -4,7 +4,7 @@ import io.github.aicyi.commons.util.bean.MapperUtils;
 import io.github.aicyi.example.domain.UserBean;
 import io.github.aicyi.example.fixture.util.DataSource;
 import io.github.aicyi.example.mybatisplus.AicyiExampleMyBatisPlusApplication;
-import io.github.aicyi.example.mybatisplus.entity.User;
+import io.github.aicyi.example.mybatisplus.domain.entity.User;
 import io.github.aicyi.example.mybatisplus.service.IUserService;
 import org.junit.Test;
 import org.junit.runner.RunWith;

@@ -1,6 +1,6 @@
 package io.github.aicyi.example.mybatisplus.service.impl;
 
-import io.github.aicyi.example.mybatisplus.entity.User;
+import io.github.aicyi.example.mybatisplus.domain.entity.User;
 import io.github.aicyi.example.mybatisplus.mapper.UserMapper;
 import io.github.aicyi.example.mybatisplus.service.IUserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
