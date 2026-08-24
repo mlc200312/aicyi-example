@@ -43,19 +43,14 @@ public class MyBatisPlusGenerator {
     private static final Map<String, Object> CONFIG = loadConfig();
 
     /**
-     * 全局列类型覆盖：列名(小写) -> Java 类型（全限定名或 JDK 内置类型简名），对所有表生效
+     * Java 类型 配置：表名(小写，"*"/"global" 为全局) -> {列名(小写) -> Java 类型}
      */
-    private static final Map<String, String> GLOBAL_TYPE_OVERRIDES = loadGlobalTypeOverrides();
-
-    /**
-     * 类（表）级列类型覆盖：表名(小写) -> {列名(小写) -> Java 类型}，优先于全局配置
-     */
-    private static final Map<String, Map<String, String>> TABLE_TYPE_OVERRIDES = loadTableTypeOverrides();
+    private static final Map<String, Map<String, String>> JAVA_TYPE_OVERRIDES = loadColumnTypeConfig("java-type");
 
     /**
      * TypeHandler 配置：表名(小写，"*"/"global" 为全局) -> {列名(小写) -> TypeHandler 类全限定名}
      */
-    private static final Map<String, Map<String, String>> TYPE_HANDLERS = loadTypeHandlers();
+    private static final Map<String, Map<String, String>> TYPE_HANDLERS = loadColumnTypeConfig("type-handlers");
 
     public static void main(String[] args) {
         generateCode();
@@ -157,24 +152,9 @@ public class MyBatisPlusGenerator {
      * 全限定类名则构造自定义 IColumnType，模板渲染时会自动补 import。
      */
     private static IColumnType resolveColumnTypeOverride(String tableName, String columnName) {
-        if (columnName == null) {
-            return null;
-        }
-        String columnKey = columnName.toLowerCase();
-        String javaType = null;
 
-        // 1. 类（表）级配置优先
-        if (tableName != null) {
-            Map<String, String> tableOverrides = TABLE_TYPE_OVERRIDES.get(tableName.toLowerCase());
-            if (tableOverrides != null) {
-                javaType = tableOverrides.get(columnKey);
-            }
-        }
+        String javaType = resolveValue(JAVA_TYPE_OVERRIDES, tableName, columnName);
 
-        // 2. 未命中则回退全局配置
-        if (javaType == null || javaType.trim().isEmpty()) {
-            javaType = GLOBAL_TYPE_OVERRIDES.get(columnKey);
-        }
         if (javaType == null || javaType.trim().isEmpty()) {
             return null;
         }
@@ -204,94 +184,65 @@ public class MyBatisPlusGenerator {
         };
     }
 
-    private static Map<String, String> loadGlobalTypeOverrides() {
-        Map<String, String> overrides = new HashMap<>();
-        Map<String, Object> raw = section(section(CONFIG, "column-type"), "overrides");
-        for (Map.Entry<String, Object> entry : raw.entrySet()) {
-            if (entry.getKey() != null && entry.getValue() != null) {
-                overrides.put(entry.getKey().toLowerCase(), String.valueOf(entry.getValue()));
-            }
-        }
-        return overrides;
-    }
-
-    /**
-     * 加载类（表）级列类型覆盖。
-     * 表名键带前缀与去前缀两种形式均会注册，配置文件里写 t_user 或 user 都能命中。
-     */
-    @SuppressWarnings("unchecked")
-    private static Map<String, Map<String, String>> loadTableTypeOverrides() {
-        Map<String, Map<String, String>> result = new HashMap<>();
-        String tablePrefix = getStrValue(section(CONFIG, "global"), "tablePrefix").toLowerCase();
-        Map<String, Object> tables = section(section(CONFIG, "column-type"), "tables");
-        for (Map.Entry<String, Object> tableEntry : tables.entrySet()) {
-            if (tableEntry.getKey() == null || !(tableEntry.getValue() instanceof Map)) {
-                continue;
-            }
-            Map<String, String> columnOverrides = new HashMap<>();
-            for (Map.Entry<String, Object> entry : ((Map<String, Object>) tableEntry.getValue()).entrySet()) {
-                if (entry.getKey() != null && entry.getValue() != null) {
-                    columnOverrides.put(entry.getKey().toLowerCase(), String.valueOf(entry.getValue()));
-                }
-            }
-            String tableName = tableEntry.getKey().toLowerCase();
-            result.put(tableName, columnOverrides);
-            if (tableName.startsWith(tablePrefix)) {
-                result.put(tableName.substring(tablePrefix.length()), columnOverrides);
-            } else {
-                result.put(tablePrefix + tableName, columnOverrides);
-            }
-        }
-        return result;
-    }
-
     /**
      * 解析列的 TypeHandler：类（表）级配置优先，其次全局（"*"/"global"）配置。
      */
     private static String resolveTypeHandler(String tableName, String columnName) {
+        return resolveValue(TYPE_HANDLERS, tableName, columnName);
+    }
+
+    /**
+     * 从配置中解析出列的值，类（表）级配置优先，其次全局（"*"/"global"）配置。
+     *
+     * @param columnTypeConfig 列类型配置
+     * @param tableName        表名
+     * @param columnName       列名
+     * @return 列的值
+     */
+    private static String resolveValue(Map<String, Map<String, String>> columnTypeConfig, String tableName, String columnName) {
         if (columnName == null) {
             return null;
         }
         String columnKey = columnName.toLowerCase();
         if (tableName != null) {
-            Map<String, String> tableHandlers = TYPE_HANDLERS.get(tableName.toLowerCase());
-            if (tableHandlers != null && tableHandlers.get(columnKey) != null) {
-                return tableHandlers.get(columnKey);
+            Map<String, String> tableValues = columnTypeConfig.get(tableName.toLowerCase());
+            if (tableValues != null && tableValues.get(columnKey) != null) {
+                return tableValues.get(columnKey);
             }
         }
-        Map<String, String> globalHandlers = TYPE_HANDLERS.get("*");
-        return globalHandlers == null ? null : globalHandlers.get(columnKey);
+        Map<String, String> globalValues = columnTypeConfig.get("*");
+        return globalValues == null ? null : globalValues.get(columnKey);
     }
 
     /**
-     * 加载 TypeHandler 配置，与列类型覆盖相同的两级结构：
+     * 加载 column-type 配置，与列类型覆盖相同的两级结构：
      * "*" 或 "global" 为全局配置；其余键为表名，带前缀与去前缀两种形式均会注册。
      */
     @SuppressWarnings("unchecked")
-    private static Map<String, Map<String, String>> loadTypeHandlers() {
+    private static Map<String, Map<String, String>> loadColumnTypeConfig(String key) {
         Map<String, Map<String, String>> result = new HashMap<>();
         String tablePrefix = getStrValue(section(CONFIG, "global"), "tablePrefix").toLowerCase();
-        Map<String, Object> tables = section(section(CONFIG, "column-type"), "type-handlers");
+        Map<String, Object> tables = section(section(CONFIG, "column-type"), key);
         for (Map.Entry<String, Object> tableEntry : tables.entrySet()) {
             if (tableEntry.getKey() == null || !(tableEntry.getValue() instanceof Map)) {
                 continue;
             }
-            Map<String, String> columnHandlers = new HashMap<>();
+            Map<String, String> columnTypeMap = new HashMap<>();
             for (Map.Entry<String, Object> entry : ((Map<String, Object>) tableEntry.getValue()).entrySet()) {
                 if (entry.getKey() != null && entry.getValue() != null) {
-                    columnHandlers.put(entry.getKey().toLowerCase(), String.valueOf(entry.getValue()).trim());
+                    columnTypeMap.put(entry.getKey().toLowerCase(), String.valueOf(entry.getValue()).trim());
                 }
             }
             String tableName = tableEntry.getKey().toLowerCase();
             if ("*".equals(tableName) || "global".equals(tableName)) {
-                result.put("*", columnHandlers);
+                result.put("*", columnTypeMap);
                 continue;
             }
-            result.put(tableName, columnHandlers);
+            result.put(tableName, columnTypeMap);
             if (tableName.startsWith(tablePrefix)) {
-                result.put(tableName.substring(tablePrefix.length()), columnHandlers);
+                result.put(tableName.substring(tablePrefix.length()), columnTypeMap);
             } else {
-                result.put(tablePrefix + tableName, columnHandlers);
+                result.put(tablePrefix + tableName, columnTypeMap);
             }
         }
         return result;
