@@ -1,0 +1,66 @@
+package io.github.aicyi.example.mybaitsplus.service;
+
+import com.google.common.collect.Lists;
+import io.github.aicyi.example.mybatisplus.AicyiExampleMyBatisPlusApplication;
+import io.github.aicyi.example.mybatisplus.domain.entity.MessageTemplate;
+import io.github.aicyi.example.mybatisplus.service.IMessageTemplateService;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+/**
+ * @author Mr.Min
+ * @description 业务描述
+ * @date 2026/8/21
+ **/
+@RunWith(SpringJUnit4ClassRunner.class)
+@SpringBootTest(classes = AicyiExampleMyBatisPlusApplication.class)
+public class IMessageTemplateServiceTest {
+
+    @Autowired
+    private IMessageTemplateService messageTemplateService;
+
+    @Test
+    public void save() {
+
+        MessageTemplate messageTemplate = new MessageTemplate();
+        messageTemplate.setTemplateCode("Test");
+        messageTemplate.setTemplateName("测试");
+        messageTemplate.setMessageType("SMS");
+        messageTemplate.setFormat("TEXT");
+        messageTemplate.setEngineType("ENGINE_TYPE");
+        messageTemplate.setSubject("Subject");
+        messageTemplate.setContent("Content");
+        messageTemplate.setSignature("Signature");
+        messageTemplate.setVariables(Lists.newArrayList("variable1", "variable2", "variable3"));
+        messageTemplate.setEnabled(true);
+        messageTemplate.setRemark("Remark");
+        messageTemplate.setDeleted(false);
+        messageTemplate.setVersion(1);
+        messageTemplate.setCreateTime(LocalDateTime.now());
+        messageTemplate.setUpdateTime(LocalDateTime.now());
+
+        messageTemplateService.save(messageTemplate);
+    }
+
+    @Test
+    public void update() {
+        MessageTemplate messageTemplate = new MessageTemplate();
+        messageTemplate.setId(6L);
+        messageTemplate.setVariables(Lists.newArrayList("variable1", "variable2", "variable3", "variable4", "variable5"));
+
+        messageTemplateService.updateById(messageTemplate);
+    }
+
+    @Test
+    public void get() {
+        List<MessageTemplate> list = messageTemplateService.list();
+
+        System.out.println(list);
+    }
+}

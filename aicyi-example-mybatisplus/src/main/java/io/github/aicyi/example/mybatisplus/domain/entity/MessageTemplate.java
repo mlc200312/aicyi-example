@@ -7,11 +7,10 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.Version;
-
 import java.io.Serializable;
 import java.lang.Boolean;
 import java.time.LocalDateTime;
-
+import java.util.List;
 import io.github.aicyi.midware.db.mybatisplus.handlers.StringListTypeHandler;
 import lombok.Getter;
 import lombok.Setter;
@@ -81,12 +80,12 @@ public class MessageTemplate implements Serializable {
      * 模版参数
      */
     @TableField(typeHandler = StringListTypeHandler.class)
-    private String variables;
+    private List variables;
 
     /**
      * 是否启用，0:未启用，1:已启用；
      */
-    private Byte enabled;
+    private Boolean enabled;
 
     /**
      * 备注

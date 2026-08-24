@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2026-08-24
  */
 @RestController
-@RequestMapping("/mybatisplus/messageTemplate")
+@RequestMapping("/mybatisplus/message-template")
 public class MessageTemplateController {
 
 }

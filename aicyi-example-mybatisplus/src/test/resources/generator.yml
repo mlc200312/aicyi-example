@@ -34,9 +34,12 @@ column-type:
   overrides:
     birthday: java.time.LocalDate
     deleted: java.lang.Boolean
+    enabled: java.lang.Boolean
   tables:
     t_user:
       gender_type: io.github.aicyi.example.mybatisplus.domain.type.GenderType
+    message_template:
+      variables: java.util.List
     # 按列名指定 TypeHandler（生成 @TableField(typeHandler = Xxx.class)，列名大小写不敏感），分两级：
     #   1. "*" 或 "global" 全局配置：对所有表生效（表级未配置时回退全局）
     #   2. 表级配置：优先于全局，表名写 t_user 或 user 均可

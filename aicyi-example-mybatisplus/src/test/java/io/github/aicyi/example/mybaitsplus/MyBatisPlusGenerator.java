@@ -123,6 +123,7 @@ public class MyBatisPlusGenerator {
                         .logicDeleteColumnName("deleted")
                         .controllerBuilder()
                         .enableRestStyle()
+                        .enableHyphenStyle()
                         .build()
                 )
                 // 自定义注入：将配置的列 TypeHandler 写入字段 customMap，由实体模板渲染 @TableField(typeHandler = ...)
