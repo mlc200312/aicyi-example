@@ -56,7 +56,7 @@ public class UserSessions implements InitializingBean {
             User user = sessions.userService.getById(Long.valueOf(key));
 
             // 用户不存在（如已注销）返回 null，由缓存层按 cacheNull 配置决定空值防穿透
-            return user == null ? null : UserInfo.of(user, null);
+            return user == null ? null : UserInfo.of(user);
         });
     }
 

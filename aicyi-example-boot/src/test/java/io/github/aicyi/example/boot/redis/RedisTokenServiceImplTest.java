@@ -2,10 +2,10 @@ package io.github.aicyi.example.boot.redis;
 
 import io.github.aicyi.commons.core.token.TokenCreateRequest;
 import io.github.aicyi.commons.core.token.TokenService;
-import io.github.aicyi.commons.security.token.jwt.JWTInfo;
 import io.github.aicyi.commons.util.map.Maps;
 import io.github.aicyi.commons.util.id.UUIDUtils;
 import io.github.aicyi.example.boot.AicyiExampleApplication;
+import io.github.aicyi.example.domain.UserInfo;
 import io.github.aicyi.midware.redis.template.EnhancedRedisTemplateFactory;
 import io.github.aicyi.midware.redis.token.RedisTokenServiceImpl;
 import io.github.aicyi.example.fixture.util.BaseLoggerTest;
@@ -34,16 +34,16 @@ public class RedisTokenServiceImplTest extends BaseLoggerTest {
     @Autowired
     private EnhancedRedisTemplateFactory factory;
 
-    private JWTInfo jwtInfo;
-    private TokenCreateRequest<JWTInfo> request;
-    private TokenService<String, JWTInfo> tokenService;
+    private UserInfo jwtInfo;
+    private TokenCreateRequest<UserInfo> request;
+    private TokenService<String, UserInfo> tokenService;
 
     @Before
     @Override
     public void beforeTest() {
-        jwtInfo = new JWTInfo();
-        jwtInfo.setId("610780341698822144");
-        jwtInfo.setUniqueName("张三");
+        jwtInfo = new UserInfo();
+        jwtInfo.setUserId(610780341698822144L);
+        jwtInfo.setUsername("张三");
         jwtInfo.setDeviceId(UUIDUtils.generateV7Id());
 
         request = new TokenCreateRequest<>();
@@ -55,7 +55,7 @@ public class RedisTokenServiceImplTest extends BaseLoggerTest {
         long refreshTtl = 3;
         TimeUnit refreshTimeUnit = TimeUnit.HOURS;
 
-        tokenService = new RedisTokenServiceImpl<>(factory.getStringRedisTemplate(), JWTInfo.class, refreshTtl, refreshTimeUnit);
+        tokenService = new RedisTokenServiceImpl<>(factory.getStringRedisTemplate(), UserInfo.class, refreshTtl, refreshTimeUnit);
     }
 
     @Test
@@ -68,7 +68,7 @@ public class RedisTokenServiceImplTest extends BaseLoggerTest {
         assert isValid;
 
         String refresh = tokenService.refresh(token);
-        JWTInfo principal = tokenService.parsePrincipal(refresh);
+        UserInfo principal = tokenService.parsePrincipal(refresh);
         assert principal.getId().equals(jwtInfo.getId());
 
         Map<String, Object> attributes = tokenService.parseAttributes(refresh);
@@ -96,7 +96,7 @@ public class RedisTokenServiceImplTest extends BaseLoggerTest {
 
         String token3 = tokenService.create(request);
 
-        JWTInfo principal = tokenService.parsePrincipal(token1);
+        UserInfo principal = tokenService.parsePrincipal(token1);
 
         Set<String> tokens = tokenService.getTokens(principal);
         assert tokens.contains(token1) && tokens.contains(token2) && tokens.contains(token3);

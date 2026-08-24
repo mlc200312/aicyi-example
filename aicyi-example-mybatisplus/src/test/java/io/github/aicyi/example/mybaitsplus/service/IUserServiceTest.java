@@ -35,4 +35,14 @@ public class IUserServiceTest {
 
         userService.save(user);
     }
+
+    @Test
+    public void update() {
+
+        User user = userService.getById(349144798063493120L);
+
+        user.setPassword("update");
+
+        userService.updateById(user);
+    }
 }

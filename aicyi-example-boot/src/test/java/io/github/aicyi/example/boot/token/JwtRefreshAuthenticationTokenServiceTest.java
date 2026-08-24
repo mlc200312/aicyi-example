@@ -80,7 +80,7 @@ public class JwtRefreshAuthenticationTokenServiceTest extends BaseLoggerTest {
 
         User user = beanMapper.map(userBean, User.class);
 
-        UserInfo userInfo = UserInfo.of(user, UUIDUtils.generateV7Id());
+        UserInfo userInfo = UserInfo.of(user);
 
         Map<String, Object> attributes = Maps.ofStr("test", "test").build();
 
@@ -118,7 +118,7 @@ public class JwtRefreshAuthenticationTokenServiceTest extends BaseLoggerTest {
 
         User user = beanMapper.map(userBean, User.class);
 
-        UserInfo userInfo = UserInfo.of(user, UUIDUtils.generateV7Id());
+        UserInfo userInfo = UserInfo.of(user);
 
         List<String> tokenList = new ArrayList<>();
 

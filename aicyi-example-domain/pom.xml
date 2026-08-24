@@ -17,5 +17,21 @@
     </parent>
 
     <dependencies>
+        <dependency>
+            <groupId>io.github.aicyi.midware</groupId>
+            <artifactId>aicyi-midware-kit</artifactId>
+        </dependency>
+        <!-- util 中 Excel 能力为可选依赖，fixture 的 Excel 数据模型显式引入 -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>easyexcel</artifactId>
+            <exclusions>
+                <!-- POI 4 时代构件，与 BOM 管理的 POI 5.5.1 冲突（schemas 类由 poi-ooxml-lite 提供） -->
+                <exclusion>
+                    <groupId>org.apache.poi</groupId>
+                    <artifactId>poi-ooxml-schemas</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
     </dependencies>
 </project>

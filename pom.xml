@@ -31,21 +31,6 @@
 
     <dependencies>
         <dependency>
-            <groupId>io.github.aicyi.commons</groupId>
-            <artifactId>aicyi-commons-core</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>io.github.aicyi.commons</groupId>
-            <artifactId>aicyi-commons-util</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>io.github.aicyi.commons</groupId>
-            <artifactId>aicyi-commons-security</artifactId>
-        </dependency>
-
-        <dependency>
             <groupId>org.aspectj</groupId>
             <artifactId>aspectjrt</artifactId>
         </dependency>
@@ -69,6 +54,13 @@
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>io.github.aicyi.commons</groupId>
+                <artifactId>aicyi-commons</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
             <dependency>
                 <groupId>io.github.aicyi.midware</groupId>
                 <artifactId>aicyi-midware</artifactId>

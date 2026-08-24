@@ -2,10 +2,10 @@ package io.github.aicyi.example.boot.redis;
 
 import io.github.aicyi.commons.core.token.TokenCreateRequest;
 import io.github.aicyi.commons.core.token.TokenService;
-import io.github.aicyi.commons.security.token.jwt.JWTInfo;
 import io.github.aicyi.commons.util.map.Maps;
 import io.github.aicyi.commons.util.id.UUIDUtils;
 import io.github.aicyi.example.boot.AicyiExampleApplication;
+import io.github.aicyi.example.domain.UserInfo;
 import io.github.aicyi.midware.redis.template.EnhancedRedisTemplateFactory;
 import io.github.aicyi.midware.redis.token.MultiRedisTokenServiceImpl;
 import io.github.aicyi.example.fixture.util.BaseLoggerTest;
@@ -36,16 +36,16 @@ public class MultiRedisTokenServiceImplTest extends BaseLoggerTest {
     @Autowired
     private EnhancedRedisTemplateFactory factory;
 
-    private JWTInfo jwtInfo;
-    private TokenCreateRequest<JWTInfo> request;
-    private TokenService<String, JWTInfo> tokenService;
+    private UserInfo jwtInfo;
+    private TokenCreateRequest<UserInfo> request;
+    private TokenService<String, UserInfo> tokenService;
 
     @Before
     @Override
     public void beforeTest() {
-        jwtInfo = new JWTInfo();
-        jwtInfo.setId("610780341698822144");
-        jwtInfo.setUniqueName("张三");
+        jwtInfo = new UserInfo();
+        jwtInfo.setUserId(610780341698822144L);
+        jwtInfo.setUsername("张三");
         jwtInfo.setDeviceId(UUIDUtils.generateV7Id());
 
         request = new TokenCreateRequest<>();
@@ -58,7 +58,7 @@ public class MultiRedisTokenServiceImplTest extends BaseLoggerTest {
         long refreshTtl = 3;
         TimeUnit refreshTimeUnit = TimeUnit.HOURS;
 
-        MultiRedisTokenServiceImpl<JWTInfo> multiRedisTokenService = new MultiRedisTokenServiceImpl<>(factory.getStringRedisTemplate(), JWTInfo.class, refreshTtl, refreshTimeUnit);
+        MultiRedisTokenServiceImpl<UserInfo> multiRedisTokenService = new MultiRedisTokenServiceImpl<>(factory.getStringRedisTemplate(), UserInfo.class, refreshTtl, refreshTimeUnit);
         multiRedisTokenService.setMultiTokenAllowed(true);
         multiRedisTokenService.setMultiTokenCount(3);
 
@@ -75,7 +75,7 @@ public class MultiRedisTokenServiceImplTest extends BaseLoggerTest {
         assert isValid;
 
         String refresh = tokenService.refresh(token);
-        JWTInfo principal = tokenService.parsePrincipal(refresh);
+        UserInfo principal = tokenService.parsePrincipal(refresh);
         assert principal.getId().equals(jwtInfo.getId());
 
         Map<String, Object> attributes = tokenService.parseAttributes(refresh);
@@ -97,14 +97,14 @@ public class MultiRedisTokenServiceImplTest extends BaseLoggerTest {
     public void test2() {
         // 模拟多设备登录
 
-        MultiRedisTokenServiceImpl<JWTInfo> multiRedisTokenService = (MultiRedisTokenServiceImpl<JWTInfo>) tokenService;
+        MultiRedisTokenServiceImpl<UserInfo> multiRedisTokenService = (MultiRedisTokenServiceImpl<UserInfo>) tokenService;
         multiRedisTokenService.setMultiTokenAllowed(true);
         multiRedisTokenService.setMultiTokenCount(2);
 
         List<String> tokenList = new ArrayList<>();
         for (int i = 0; i < 4; i++) {
 
-            JWTInfo principal = request.getPrincipal();
+            UserInfo principal = request.getPrincipal();
             principal.setDeviceId("设备信息-" + i);
 
             String token = multiRedisTokenService.create(request);
@@ -118,10 +118,10 @@ public class MultiRedisTokenServiceImplTest extends BaseLoggerTest {
 
         assert tokens.size() == multiRedisTokenService.getMultiTokenCount() && !tokens.contains(first);
 
-        List<JWTInfo> principals = new ArrayList<>();
+        List<UserInfo> principals = new ArrayList<>();
         for (String token : tokens) {
 
-            JWTInfo principal = multiRedisTokenService.parsePrincipal(token);
+            UserInfo principal = multiRedisTokenService.parsePrincipal(token);
 
             principals.add(principal);
         }

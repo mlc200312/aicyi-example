@@ -27,6 +27,36 @@
             <artifactId>aicyi-midware-db-commons</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>io.github.aicyi.midware</groupId>
+            <artifactId>aicyi-midware-message-db</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.github.aicyi.midware</groupId>
+            <artifactId>aicyi-midware-message-mail</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.github.aicyi.midware</groupId>
+            <artifactId>aicyi-midware-message-mq</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.github.aicyi.midware</groupId>
+            <artifactId>aicyi-midware-message-sms</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.github.aicyi.midware</groupId>
+            <artifactId>aicyi-midware-rabbitmq</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.github.aicyi.midware</groupId>
+            <artifactId>aicyi-midware-redis</artifactId>
+        </dependency>
+
         <!-- message starter 中模板本地缓存能力为可选依赖，测试工程显式引入 -->
         <dependency>
             <groupId>com.github.ben-manes.caffeine</groupId>
@@ -43,6 +73,7 @@
             <groupId>org.mybatis.generator</groupId>
             <artifactId>mybatis-generator-core</artifactId>
             <version>1.3.5</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 </project>

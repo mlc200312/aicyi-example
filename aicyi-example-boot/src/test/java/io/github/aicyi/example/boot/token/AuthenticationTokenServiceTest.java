@@ -56,7 +56,7 @@ class AuthenticationTokenServiceTest {
 
         User user = beanMapper.map(userBean, User.class);
 
-        principal = UserInfo.of(user, UUIDUtils.generateV7Id());
+        principal = UserInfo.of(user);
 
         SecretKey secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 

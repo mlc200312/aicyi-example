@@ -54,7 +54,7 @@ public class AuthServiceImpl implements AuthService {
         }
 
         // 生成token
-        TokenPair token = AuthenticationTokens.createToken(UserInfo.of(user, UUIDUtils.generateV7Id()), null);
+        TokenPair token = AuthenticationTokens.createToken(UserInfo.of(user), null);
 
         // 返回登录结果
         LoginResult result = new LoginResult();
