@@ -1,3 +1,62 @@
 # Nacos dataId: aicyi-example.yml
 # group: DEFAULT_GROUP，格式：YAML
 # 共享配置（所有环境生效），当前无环境无关的公共配置项，可按需扩展
+
+spring:
+  cloud:
+    stream:
+      # 绑定配置
+      bindings:
+        message-output:
+          destination: default.exchange
+          group: default.queue
+          content-type: application/json
+          binder: rabbit
+          producer:
+            required-groups: default.queue # 确保消费者组存在
+
+        delayed-output:
+          destination: delayed.exchange
+          group: delayed.queue
+          binder: rabbit
+
+        direct-output:
+          destination: direct.exchange
+          group: direct.queue
+          binder: rabbit
+
+        topic-output:
+          destination: topic.exchange
+          content-type: application/json
+          binder: rabbit
+
+      # RabbitMQ特定配置
+      rabbit:
+        bindings:
+          message-output:
+            producer:
+              exchange-type: topic # 消息模式：topic
+              delayed-exchange: false # 不自动声明延迟交换机
+              declare-exchange: false # 不自动声明交换机
+              bind-queue: false # 不自动绑定队列
+
+          delayed-output:
+            producer:
+              exchange-type: topic
+              declare-exchange: false
+              bind-queue: false
+              routing-key-expression: "'delayed.routing.key'" # 静态路由键
+
+          direct-output:
+            producer:
+              exchange-type: direct # 消息模式：direct
+              declare-exchange: false
+              bind-queue: false
+              routing-key-expression: "'direct.routing.key'" # 静态路由键
+
+          topic-output:
+            producer:
+              exchange-type: topic
+              declare-exchange: false
+              bind-queue: false
+              routing-key-expression: headers['routingKey'] # 动态路由键

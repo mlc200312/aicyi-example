@@ -10,7 +10,6 @@ logging:
 
 aicyi:
   snowflake:
-    enabled: true
     service-name: default-service
     worker-id-bits: 5
     datacenter-id: 0
@@ -21,12 +20,7 @@ aicyi:
     epoch: 1672531200000
 
   message:
-
-    template:
-      enabled: true
-
     email:
-      enabled: true
       host: smtp.163.com
       port: -1
       # 敏感凭证通过部署环境的环境变量注入，不写入配置中心明文
@@ -35,7 +29,6 @@ aicyi:
       from-name: minliangchao
 
     sms:
-      enabled: true
       provider: default
       # 敏感凭证通过部署环境的环境变量注入，不写入配置中心明文
       username: ${SMS_ACCOUNT_SID:AC56dfa4c2d3284693ddebd2834b499486} # your-sms-account-sid
@@ -43,5 +36,4 @@ aicyi:
       from: ${SMS_FROM_NUMBER:+19472182422} # +10000000000
 
     mq:
-      enabled: true
       provider: rabbitMq

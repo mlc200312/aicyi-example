@@ -9,23 +9,12 @@ mybatis:
 spring:
   profiles:
     active: test
-
   application:
     name: aicyi-example
-
-  mvc:
-    path-match:
-      matching-strategy: ant_path_matcher
-
-  freemarker:
-    check-template-location: false
-
   cloud:
-
     # 从 Nacos 配置中心读取配置（spring-cloud-alibaba 2021.0.x 采用 config-import 机制，无需 bootstrap.yml）
     # namespace 按环境区分：namespace 与 nacos 导入均声明在 application-{profile}.yml 中，随 profile 切换
     # 配置内容见模块根目录 nacos/，需先导入 Nacos 后再启动应用
-
     nacos:
       config:
         # Nacos 地址，可通过环境变量 NACOS_SERVER_ADDR 覆盖
@@ -38,59 +27,29 @@ spring:
           enabled: true
         # namespace 按环境区分，在 application-{profile}.yml 中声明，不在此处写死
 
-    stream:
-      # 绑定配置
-      bindings:
-        message-output:
-          destination: default.exchange
-          group: default.queue
-          content-type: application/json
-          binder: rabbit
-          producer:
-            required-groups: default.queue # 确保消费者组存在
+  mvc:
+    path-match:
+      matching-strategy: ant_path_matcher
 
-        delayed-output:
-          destination: delayed.exchange
-          group: delayed.queue
-          binder: rabbit
+  freemarker:
+    check-template-location: false
 
-        direct-output:
-          destination: direct.exchange
-          group: direct.queue
-          binder: rabbit
+aicyi:
+  redis:
+    enabled: true
 
-        topic-output:
-          destination: topic.exchange
-          content-type: application/json
-          binder: rabbit
+  mybatis-plus:
+    enabled: true
 
-      # RabbitMQ特定配置
-      rabbit:
-        bindings:
-          message-output:
-            producer:
-              exchange-type: topic # 消息模式：topic
-              delayed-exchange: false # 不自动声明延迟交换机
-              declare-exchange: false # 不自动声明交换机
-              bind-queue: false # 不自动绑定队列
+  snowflake:
+    enabled: true
 
-          delayed-output:
-            producer:
-              exchange-type: topic
-              declare-exchange: false
-              bind-queue: false
-              routing-key-expression: "'delayed.routing.key'" # 静态路由键
-
-          direct-output:
-            producer:
-              exchange-type: direct # 消息模式：direct
-              declare-exchange: false
-              bind-queue: false
-              routing-key-expression: "'direct.routing.key'" # 静态路由键
-
-          topic-output:
-            producer:
-              exchange-type: topic
-              declare-exchange: false
-              bind-queue: false
-              routing-key-expression: headers['routingKey'] # 动态路由键
+  message:
+    template:
+      enabled: true
+    email:
+      enabled: true
+    sms:
+      enabled: true
+    mq:
+      enabled: true
