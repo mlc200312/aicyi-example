@@ -37,3 +37,12 @@ column-type:
   tables:
     t_user:
       gender_type: io.github.aicyi.example.mybatisplus.domain.type.GenderType
+    # 按列名指定 TypeHandler（生成 @TableField(typeHandler = Xxx.class)，列名大小写不敏感），分两级：
+    #   1. "*" 或 "global" 全局配置：对所有表生效（表级未配置时回退全局）
+    #   2. 表级配置：优先于全局，表名写 t_user 或 user 均可
+    # 取值必须是 TypeHandler 实现类的全限定名，示例：
+  type-handlers:
+    "*":
+      json_info: com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler
+    message_template:
+      variables: io.github.aicyi.midware.db.mybatisplus.handlers.StringListTypeHandler

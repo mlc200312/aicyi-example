@@ -17,6 +17,20 @@ import ${field.propertyType};
         </#if>
     </#if>
 </#list>
+<#-- 字段自定义 TypeHandler：为 TypeHandler 类自动补充 import -->
+<#list table.fields as field>
+    <#if field.customMap?? && field.customMap.typeHandler??>
+        <#assign duplicated=false>
+        <#list table.fields as other>
+            <#if other?index < field?index && other.customMap?? && other.customMap.typeHandler! == field.customMap.typeHandler>
+                <#assign duplicated=true>
+            </#if>
+        </#list>
+        <#if !duplicated>
+import ${field.customMap.typeHandler};
+        </#if>
+    </#if>
+</#list>
 <#if springdoc!false>
 import io.swagger.v3.oas.annotations.media.Schema;
 <#elseif swagger>
@@ -46,8 +60,19 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
     </#if>
 </#if>
+<#-- 存在自定义 TypeHandler 的字段时，开启 autoResultMap，保证查询结果也走 TypeHandler -->
+<#assign hasTypeHandler=false>
+<#list table.fields as field>
+    <#if field.customMap?? && field.customMap.typeHandler??>
+        <#assign hasTypeHandler=true>
+    </#if>
+</#list>
 <#if table.convert>
+    <#if hasTypeHandler>
+@TableName(value = "${schemaName!}${table.name}", autoResultMap = true)
+    <#else>
 @TableName("${schemaName!}${table.name}")
+    </#if>
 </#if>
 <#if springdoc!false>
 @Schema(name = "${entity}", description = "${table.comment!}")
@@ -84,6 +109,11 @@ public class ${entity} {
      */
         </#if>
     </#if>
+    <#-- 普通字段：存在自定义 TypeHandler 时追加 typeHandler 属性 -->
+    <#assign typeHandlerAttr="">
+    <#if field.customMap?? && field.customMap.typeHandler??>
+        <#assign typeHandlerAttr=", typeHandler = ${field.customMap.typeHandler?keep_after_last('.')}.class">
+    </#if>
     <#if field.keyFlag>
         <#-- 主键 -->
         <#if field.keyIdentityFlag>
@@ -93,16 +123,23 @@ public class ${entity} {
         <#elseif field.convert>
     @TableId("${field.annotationColumnName}")
         </#if>
-        <#-- 普通字段 -->
     <#elseif field.fill??>
     <#-- -----   存在字段填充设置   ----->
         <#if field.convert>
-    @TableField(value = "${field.annotationColumnName}", fill = FieldFill.${field.fill})
+    @TableField(value = "${field.annotationColumnName}", fill = FieldFill.${field.fill}${typeHandlerAttr})
+        <#elseif typeHandlerAttr?has_content>
+    @TableField(fill = FieldFill.${field.fill}${typeHandlerAttr})
         <#else>
     @TableField(fill = FieldFill.${field.fill})
         </#if>
     <#elseif field.convert>
+        <#if typeHandlerAttr?has_content>
+    @TableField(value = "${field.annotationColumnName}"${typeHandlerAttr})
+        <#else>
     @TableField("${field.annotationColumnName}")
+        </#if>
+    <#elseif typeHandlerAttr?has_content>
+    @TableField(typeHandler = ${field.customMap.typeHandler?keep_after_last('.')}.class)
     </#if>
     <#-- 乐观锁注解 -->
     <#if field.versionField>

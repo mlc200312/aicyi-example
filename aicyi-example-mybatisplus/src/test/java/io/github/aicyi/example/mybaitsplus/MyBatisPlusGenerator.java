@@ -3,6 +3,7 @@ package io.github.aicyi.example.mybaitsplus;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.generator.FastAutoGenerator;
 import com.baomidou.mybatisplus.generator.config.OutputFile;
+import com.baomidou.mybatisplus.generator.config.po.TableField;
 import com.baomidou.mybatisplus.generator.config.rules.DbColumnType;
 import com.baomidou.mybatisplus.generator.config.rules.IColumnType;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
@@ -50,6 +51,11 @@ public class MyBatisPlusGenerator {
      * 类（表）级列类型覆盖：表名(小写) -> {列名(小写) -> Java 类型}，优先于全局配置
      */
     private static final Map<String, Map<String, String>> TABLE_TYPE_OVERRIDES = loadTableTypeOverrides();
+
+    /**
+     * TypeHandler 配置：表名(小写，"*"/"global" 为全局) -> {列名(小写) -> TypeHandler 类全限定名}
+     */
+    private static final Map<String, Map<String, String>> TYPE_HANDLERS = loadTypeHandlers();
 
     public static void main(String[] args) {
         generateCode();
@@ -119,6 +125,20 @@ public class MyBatisPlusGenerator {
                         .enableRestStyle()
                         .build()
                 )
+                // 自定义注入：将配置的列 TypeHandler 写入字段 customMap，由实体模板渲染 @TableField(typeHandler = ...)
+                .injectionConfig(builder -> builder.beforeOutputFile((tableInfo, objectMap) -> {
+                    for (TableField field : tableInfo.getFields()) {
+                        String typeHandler = resolveTypeHandler(tableInfo.getName(), field.getColumnName());
+                        if (typeHandler != null) {
+                            Map<String, Object> customMap = field.getCustomMap();
+                            if (customMap == null) {
+                                customMap = new HashMap<>();
+                                field.setCustomMap(customMap);
+                            }
+                            customMap.put("typeHandler", typeHandler);
+                        }
+                    }
+                }))
                 // 使用自定义实体模板，为自定义字段类型（业务枚举等）自动补 import
                 .templateConfig(builder -> builder.entity(CUSTOM_ENTITY_TEMPLATE))
                 .templateEngine(new FreemarkerTemplateEngine())
@@ -219,6 +239,58 @@ public class MyBatisPlusGenerator {
                 result.put(tableName.substring(tablePrefix.length()), columnOverrides);
             } else {
                 result.put(tablePrefix + tableName, columnOverrides);
+            }
+        }
+        return result;
+    }
+
+    /**
+     * 解析列的 TypeHandler：类（表）级配置优先，其次全局（"*"/"global"）配置。
+     */
+    private static String resolveTypeHandler(String tableName, String columnName) {
+        if (columnName == null) {
+            return null;
+        }
+        String columnKey = columnName.toLowerCase();
+        if (tableName != null) {
+            Map<String, String> tableHandlers = TYPE_HANDLERS.get(tableName.toLowerCase());
+            if (tableHandlers != null && tableHandlers.get(columnKey) != null) {
+                return tableHandlers.get(columnKey);
+            }
+        }
+        Map<String, String> globalHandlers = TYPE_HANDLERS.get("*");
+        return globalHandlers == null ? null : globalHandlers.get(columnKey);
+    }
+
+    /**
+     * 加载 TypeHandler 配置，与列类型覆盖相同的两级结构：
+     * "*" 或 "global" 为全局配置；其余键为表名，带前缀与去前缀两种形式均会注册。
+     */
+    @SuppressWarnings("unchecked")
+    private static Map<String, Map<String, String>> loadTypeHandlers() {
+        Map<String, Map<String, String>> result = new HashMap<>();
+        String tablePrefix = getStrValue(section(CONFIG, "global"), "tablePrefix").toLowerCase();
+        Map<String, Object> tables = section(section(CONFIG, "column-type"), "type-handlers");
+        for (Map.Entry<String, Object> tableEntry : tables.entrySet()) {
+            if (tableEntry.getKey() == null || !(tableEntry.getValue() instanceof Map)) {
+                continue;
+            }
+            Map<String, String> columnHandlers = new HashMap<>();
+            for (Map.Entry<String, Object> entry : ((Map<String, Object>) tableEntry.getValue()).entrySet()) {
+                if (entry.getKey() != null && entry.getValue() != null) {
+                    columnHandlers.put(entry.getKey().toLowerCase(), String.valueOf(entry.getValue()).trim());
+                }
+            }
+            String tableName = tableEntry.getKey().toLowerCase();
+            if ("*".equals(tableName) || "global".equals(tableName)) {
+                result.put("*", columnHandlers);
+                continue;
+            }
+            result.put(tableName, columnHandlers);
+            if (tableName.startsWith(tablePrefix)) {
+                result.put(tableName.substring(tablePrefix.length()), columnHandlers);
+            } else {
+                result.put(tablePrefix + tableName, columnHandlers);
             }
         }
         return result;
