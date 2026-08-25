@@ -1,0 +1,19 @@
+# Nacos dataId: aicyi-xxl-job.yml
+# group: DEFAULT_GROUP，格式：YAML
+# datasource 环境配置（由 application-test.yml 迁移拆分而来，需导入到各环境对应的 namespace）
+
+xxl:
+  job:
+    ### 调度中心地址，docker compose内部容器名xxl-job；本机测试用127.0.0.1
+    admin:
+      addresses: http://127.0.0.1:8080/xxl-job-admin
+    ### 执行器配置
+    executor:
+      appname: aicyi-executor #执行器名称，后台管理页面要填一样
+      address: ""
+      ip: ""
+      port: 9998 #执行器端口，不要冲突
+      logpath: ./logs/xxl-job/jobhandler
+      logretentiondays: 30
+    ### 访问令牌，调度中心配置的AccessToken，默认空
+    accessToken: Aicyi_XXLJOB@2026_Secret888

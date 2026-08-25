@@ -27,6 +27,7 @@
         <module>aicyi-example-service</module>
         <module>aicyi-example-test</module>
         <module>aicyi-example-web</module>
+        <module>aicyi-example-xxljob</module>
     </modules>
 
     <dependencies>
