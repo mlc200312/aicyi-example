@@ -6,4 +6,10 @@
 -->
 <configuration scan="true">
     <include resource="aicyi/logback-aicyi-defaults.xml"/>
+
+    <!-- 覆盖：ACCESS 日志同时进控制台（仍保留 access.log） -->
+    <logger name="ACCESS" level="info" additivity="false">
+        <appender-ref ref="accessAppender"/>
+        <appender-ref ref="STDOUT"/>
+    </logger>
 </configuration>
