@@ -15,13 +15,16 @@
 
 ## 需要导入的配置
 
-| Data ID | Group | 格式 | 说明 |
-| --- | --- | --- | --- |
-| `aicyi-example.yml` | DEFAULT_GROUP | YAML | 共享配置（所有环境，需在每个 namespace 各导入一份） |
-| `aicyi-example-test.yml` | DEFAULT_GROUP | YAML | test 环境配置 |
-| `aicyi-example-prod.yml` | DEFAULT_GROUP | YAML | prod 环境配置 |
-| `aicyi-redis.yml` | DEFAULT_GROUP | YAML | redis 环境配置 |
-| `aicyi-rabbitmq.yml` | DEFAULT_GROUP | YAML | RabbitMQ 环境配置 |
+| Data ID                      | Group | 格式 | 说明                              |
+|------------------------------| --- | --- |---------------------------------|
+| `aicyi-example.yml`          | DEFAULT_GROUP | YAML | 共享配置（所有环境，需在每个 namespace 各导入一份） |
+| `aicyi-example-test.yml`     | DEFAULT_GROUP | YAML | test 环境配置                       |
+| `aicyi-example-prod.yml`     | DEFAULT_GROUP | YAML | prod 环境配置                       |
+| `aicyi-example-rabbitmq.yml` | DEFAULT_GROUP | YAML | rabbitmq 交换机配置                  |
+| `aicyi-redis.yml`            | DEFAULT_GROUP | YAML | redis 环境配置                      |
+| `aicyi-datasource.yml`       | DEFAULT_GROUP | YAML | Mysql 环境配置                      |
+| `aicyi-rabbitmq.yml`         | DEFAULT_GROUP | YAML | RabbitMQ 环境配置                   |
+| `aicyi-xxl-job.yml`          | DEFAULT_GROUP | YAML | Xxl-Job 环境配置                    |
 
 ## 导入步骤
 

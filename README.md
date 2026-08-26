@@ -40,3 +40,4 @@
 ## 相关文档
 
 - [RabbitMQ 本地环境快速启动](aicyi-example-rabbitmq/docs/rabbitmq-quick-start.md)：Docker 起容器 + 应用账号 + 一键初始化交换机/队列/绑定（配套脚本 `scripts/init-rabbitmq.sh`）
+- [Nacos 本地环境快速启动](nacos/nacos-quick-start.md)：Docker 起容器 + 应用账号 + 一键初始化交换机/队列/绑定（配套脚本 `scripts/init-rabbitmq.sh`）
