@@ -43,13 +43,19 @@ aicyi 是一套可独立引用的 Spring Boot 2.7 基础框架（BOM / commons /
         <artifactId>aicyi-midware-web</artifactId>
     </dependency>
 
-    <!-- 中间件自动装配（Redis/Snowflake/MyBatis-Plus） -->
+    <!-- 中间件自动装配（RabbitMq/Redis/Snowflake/MyBatis-Plus） -->
     <dependency>
         <groupId>io.github.aicyi.midware</groupId>
         <artifactId>aicyi-midware-spring-boot-starter</artifactId>
     </dependency>
 
-    <!-- Redis 增强模板/锁（aicyi.redis.enabled=true 时生效） -->
+    <!-- rabbitmq 增强/锁（aicyi.mq.rabbitmq.enabled=true 缺省开启） -->
+    <dependency>
+        <groupId>io.github.aicyi.midware</groupId>
+        <artifactId>aicyi-midware-rabbitmq</artifactId>
+    </dependency>
+
+    <!-- Redis 增强模板/锁（aicyi.redis.enabled=true 缺省开启） -->
     <dependency>
         <groupId>io.github.aicyi.midware</groupId>
         <artifactId>aicyi-midware-redis</artifactId>
