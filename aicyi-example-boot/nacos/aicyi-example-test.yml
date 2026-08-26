@@ -2,14 +2,9 @@
 # group: DEFAULT_GROUP，格式：YAML
 # test 环境配置（由 application-test.yml 迁移而来）
 
-logging:
-  level:
-    root: INFO
-  # 重写logback模版 默认：common-logging下的logback-spring.xml
-  config: classpath:logback-spring.xml
-
 aicyi:
   snowflake:
+    enabled: true
     service-name: default-service
     worker-id-bits: 5
     datacenter-id: 0

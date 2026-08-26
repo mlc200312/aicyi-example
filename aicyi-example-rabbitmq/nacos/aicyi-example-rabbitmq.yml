@@ -1,0 +1,127 @@
+# Nacos dataId: aicyi-example-rabbitmq.yml
+# group: DEFAULT_GROUP，格式：YAML
+# 共享配置（所有环境生效），当前无环境无关的公共配置项，可按需扩展
+
+spring:
+  cloud:
+    stream:
+      # 绑定配置
+      bindings:
+        message-output:
+          destination: default.exchange
+          group: default.queue
+          content-type: application/json
+          binder: rabbit
+          producer:
+            required-groups: default.queue # 确保消费者组存在
+
+        delayed-output:
+          destination: delayed.exchange
+          group: delayed.queue
+          binder: rabbit
+
+        direct-output:
+          destination: direct.exchange
+          group: direct.queue
+          binder: rabbit
+
+        topic-output:
+          destination: topic.exchange
+          content-type: application/json
+          binder: rabbit
+
+        message-input:
+          destination: default.exchange
+          group: default.queue
+          content-type: application/json
+          binder: rabbit
+          consumer:
+            concurrency: 3 # 最大并发数
+            max-attempts: 3 # 最大重试次数
+            back-off-initial-interval: 1000 # 重试间隔(ms)
+
+        delayed-input:
+          destination: delayed.exchange
+          group: delayed.queue
+          content-type: application/json
+          binder: rabbit
+
+        direct-input:
+          destination: direct.exchange
+          group: direct.queue
+          binder: rabbit
+
+        orderEvents-in-0:
+          destination: topic.exchange
+          group: order-service
+          binder: rabbit
+
+        systemLogs-in-0:
+          destination: topic.exchange
+          group: log-service
+          binder: rabbit
+
+      # RabbitMQ特定配置
+      rabbit:
+        bindings:
+          message-output:
+            producer:
+              exchange-type: topic # 消息模式：topic
+              delayed-exchange: false # 不自动声明延迟交换机
+              declare-exchange: false # 不自动声明交换机
+              bind-queue: false # 不自动绑定队列
+
+          delayed-output:
+            producer:
+              exchange-type: topic
+              declare-exchange: false
+              bind-queue: false
+              routing-key-expression: "'delayed.routing.key'" # 静态路由键
+
+          direct-output:
+            producer:
+              exchange-type: direct # 消息模式：direct
+              declare-exchange: false
+              bind-queue: false
+              routing-key-expression: "'direct.routing.key'" # 静态路由键
+
+          topic-output:
+            producer:
+              exchange-type: topic
+              declare-exchange: false
+              bind-queue: false
+              routing-key-expression: headers['routingKey'] # 动态路由键
+
+          message-input:
+            consumer:
+              queue-name-group-only: true # 队名列等于组名，默认队列名等于交换机+组名
+              durable-subscription: true # 持久化订阅
+              exchange-auto-delete: false # 不自动删除交换机
+              declare-exchange: false # 不自动声明交换机
+              bind-queue: false # 不自动绑定队列
+
+          delayed-input:
+            consumer:
+              queue-name-group-only: true
+              durable-subscription: true
+              declare-exchange: false
+              bind-queue: false
+
+          direct-input:
+            consumer:
+              queue-name-group-only: true
+              durable-subscription: true
+              declare-exchange: false
+              bind-queue: false
+
+          orderEvents-in-0:
+            consumer:
+              durable-subscription: true
+              declare-exchange: false
+              bind-queue: false
+
+          systemLogs-in-0:
+            consumer:
+              durable-subscription: true
+              declare-exchange: false
+              bind-queue: false

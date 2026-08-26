@@ -5,16 +5,13 @@ import io.github.aicyi.commons.util.json.JsonUtils;
 import io.github.aicyi.commons.util.map.Maps;
 import io.github.aicyi.commons.util.id.UUIDUtils;
 import io.github.aicyi.example.boot.AicyiExampleApplication;
-import io.github.aicyi.example.service.channel.MessageChannels;
 import io.github.aicyi.midware.kit.util.IdUtils;
 import io.github.aicyi.midware.message.mail.model.MailMessage;
-import io.github.aicyi.midware.message.mq.model.MqMessage;
 import io.github.aicyi.commons.core.message.MessageSendResult;
 import io.github.aicyi.commons.core.message.MessageSendCallback;
 import io.github.aicyi.midware.message.core.sender.UnifiedMessageManager;
 import io.github.aicyi.example.fixture.util.BaseLoggerTest;
 import io.github.aicyi.midware.message.sms.model.SmsMessage;
-import io.github.aicyi.example.fixture.util.DataSource;
 import lombok.SneakyThrows;
 import org.junit.Before;
 import org.junit.Test;
@@ -78,36 +75,6 @@ public class UnifiedMessageManagerTest extends BaseLoggerTest {
             @Override
             public void onError(Exception e) {
                 log("短信发送失败：" + e.getMessage());
-            }
-        });
-
-        countDownLatch.await(10, TimeUnit.SECONDS);
-    }
-
-    @Test
-    public void test3() {
-        MqMessage mqMessage = MqMessage.of(DataSource.getUser(), MessageChannels.OUTPUT);
-        MessageSendResult result = unifiedMessageManager.send(mqMessage);
-
-        log(result);
-    }
-
-    @SneakyThrows
-    @Test
-    public void test4() {
-        CountDownLatch countDownLatch = new CountDownLatch(1);
-
-        MqMessage mqMessage = MqMessage.of(DataSource.getUser(), MessageChannels.OUTPUT);
-        unifiedMessageManager.sendAsync(mqMessage, new MessageSendCallback() {
-            @Override
-            public void onComplete(MessageSendResult result) {
-                log("消息发送完成：" + result);
-                countDownLatch.countDown();
-            }
-
-            @Override
-            public void onError(Exception e) {
-                log("消息发送失败：" + e.getMessage());
             }
         });
 

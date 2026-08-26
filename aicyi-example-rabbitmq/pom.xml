@@ -4,11 +4,11 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>aicyi-example-boot</artifactId>
+    <artifactId>aicyi-example-rabbitmq</artifactId>
 
     <packaging>jar</packaging>
-    <name>aicyi example boot</name>
-    <description>aicyi example boot</description>
+    <name>aicyi example rabbitmq</name>
+    <description>aicyi example rabbitmq</description>
 
     <parent>
         <groupId>io.github.aicyi.example</groupId>
@@ -23,18 +23,13 @@
         </dependency>
 
         <dependency>
-            <groupId>io.github.aicyi.example</groupId>
-            <artifactId>aicyi-example-web</artifactId>
-        </dependency>
-
-        <dependency>
             <groupId>io.github.aicyi.midware</groupId>
             <artifactId>aicyi-midware-spring-boot-starter</artifactId>
         </dependency>
 
         <dependency>
             <groupId>io.github.aicyi.midware</groupId>
-            <artifactId>aicyi-midware-message-spring-boot-starter</artifactId>
+            <artifactId>aicyi-midware-rabbitmq</artifactId>
         </dependency>
 
         <!-- nacos配置中心 -->
@@ -107,7 +102,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>io.github.aicyi.example.boot.AicyiExampleApplication</mainClass>
+                    <mainClass>io.github.aicyi.example.rabbitmq.AicyiExampleRabbitmqApplication</mainClass>
                 </configuration>
                 <executions>
                     <execution>

@@ -12,5 +12,6 @@ spring:
     import:
       - nacos:aicyi-example.yml?group=DEFAULT_GROUP&refreshEnabled=true
       - nacos:aicyi-example-prod.yml?group=DEFAULT_GROUP&refreshEnabled=true
+      - nacos:aicyi-datasource.yml?group=DEFAULT_GROUP&refreshEnabled=true
       - nacos:aicyi-redis.yml?group=DEFAULT_GROUP&refreshEnabled=true
       - nacos:aicyi-rabbitmq.yml?group=DEFAULT_GROUP&refreshEnabled=true

@@ -36,3 +36,7 @@
 - Nacos 开启鉴权时，通过环境变量 `NACOS_USERNAME` / `NACOS_PASSWORD` 注入账号密码。
 - 配置项开启 `refreshEnabled=true`，配合 `@RefreshScope` 可实现动态刷新。
 - 敏感凭证（邮箱/短信）保持环境变量占位符形式，实际值由部署环境注入。
+
+## 相关文档
+
+- [RabbitMQ 本地环境快速启动](aicyi-example-rabbitmq/docs/rabbitmq-quick-start.md)：Docker 起容器 + 应用账号 + 一键初始化交换机/队列/绑定（配套脚本 `scripts/init-rabbitmq.sh`）

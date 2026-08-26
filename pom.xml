@@ -19,11 +19,11 @@
 
     <modules>
         <module>aicyi-example-boot</module>
-        <module>aicyi-example-consumer</module>
         <module>aicyi-example-dao</module>
         <module>aicyi-example-domain</module>
         <module>aicyi-example-fixture</module>
         <module>aicyi-example-mybatisplus</module>
+        <module>aicyi-example-rabbitmq</module>
         <module>aicyi-example-service</module>
         <module>aicyi-example-test</module>
         <module>aicyi-example-web</module>
@@ -76,7 +76,7 @@
             </dependency>
             <dependency>
                 <groupId>io.github.aicyi.example</groupId>
-                <artifactId>aicyi-example-consumer</artifactId>
+                <artifactId>aicyi-example-rabbitmq</artifactId>
                 <version>0.0.1-SNAPSHOT</version>
             </dependency>
             <dependency>

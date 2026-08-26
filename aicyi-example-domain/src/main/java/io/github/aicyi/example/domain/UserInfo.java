@@ -1,6 +1,7 @@
 package io.github.aicyi.example.domain;
 
 import io.github.aicyi.commons.core.token.IJWTInfo;
+import io.github.aicyi.commons.lang.model.BaseBean;
 import io.github.aicyi.commons.util.bean.MapperUtils;
 import io.github.aicyi.example.domain.entity.base.User;
 import lombok.Getter;
@@ -13,7 +14,7 @@ import lombok.Setter;
  **/
 @Getter
 @Setter
-public class UserInfo implements IJWTInfo {
+public class UserInfo extends BaseBean implements IJWTInfo {
     private Long userId;
     private String username;
     private String nickname;

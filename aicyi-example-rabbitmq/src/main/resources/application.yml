@@ -5,18 +5,13 @@ logging:
   config: classpath:logback-spring.xml
 
 server:
-  port: 80
+  port: 8082
 
 spring:
   profiles:
     active: test
   application:
-    name: aicyi-example-boot
-  mvc:
-    # springfox 3.0.0 在 Spring Boot 2.6+ 默认 PathPatternParser 下会抛
-    # WebMvcPatternsRequestConditionWrapper.getPatterns NPE，必须回退到 AntPathMatcher
-    path-match:
-      matching-strategy: ant_path_matcher
+    name: aicyi-example-rabbitmq
   cloud:
     # 从 Nacos 配置中心读取配置（spring-cloud-alibaba 2021.0.x 采用 config-import 机制，无需 bootstrap.yml）
     # namespace 按环境区分：namespace 与 nacos 导入均声明在 application-{profile}.yml 中，随 profile 切换
