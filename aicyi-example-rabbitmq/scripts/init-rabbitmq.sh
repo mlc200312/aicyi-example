@@ -3,7 +3,7 @@
 # RabbitMQ 本地开发环境初始化脚本（幂等，可重复执行）
 #
 # 前置条件：
-#   1. RabbitMQ 容器已启动（见 docs/rabbitmq-quick-start.md 第 1 步）
+#   1. RabbitMQ 容器已启动（见 docs/infra/rabbitmq.md 第 1 步）
 #   2. test/test 账号已创建（见文档第 2 步，或直接使用下方 RABBITMQ_USER 覆盖）
 #
 # 用法：

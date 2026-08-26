@@ -1,10 +1,11 @@
-# RabbitMQ 本地环境快速启动
+# RabbitMQ 本地环境
 
-本文档帮助新人在本地从零搭好 `aicyi-example-rabbitmq` 所需的 RabbitMQ 环境（容器 + 账号 + 拓扑），全程约 2 分钟。
+在本地从零搭好 RabbitMQ（容器 + 账号 + 拓扑），供 `aicyi-example-rabbitmq` 应用与主应用的 MQ 能力使用，全程约 2 分钟。
 
 应用连接参数在 Nacos 配置 `aicyi-rabbitmq.yml` 中：`localhost:5672`，账号 `test/test`，vhost `/`。
 
-> 注意：应用所有绑定均声明 `declare-exchange: false` / `bind-queue: false`，**应用不会自动创建交换机、队列与绑定**，必须先按本文初始化拓扑，否则启动报 `NOT_FOUND`。
+> **注意**：应用所有绑定均声明 `declare-exchange: false` / `bind-queue: false`，**应用不会自动创建交换机、队列与绑定**，
+> 必须先按本文初始化拓扑，否则启动报 `NOT_FOUND`。
 
 ## 1. 启动 RabbitMQ 容器
 
@@ -55,19 +56,18 @@ curl -s -u test:test http://localhost:15672/api/whoami
 ## 3. 一键初始化拓扑
 
 ```bash
-bash scripts/init-rabbitmq.sh
+bash aicyi-example-rabbitmq/scripts/init-rabbitmq.sh
 ```
 
 脚本幂等，可重复执行。若改用其他账号/地址：
 
 ```bash
-RABBITMQ_MGMT=http://localhost:15672 RABBITMQ_USER=admin RABBITMQ_PASS=admin bash scripts/init-rabbitmq.sh
+RABBITMQ_MGMT=http://localhost:15672 RABBITMQ_USER=admin RABBITMQ_PASS=admin bash aicyi-example-rabbitmq/scripts/init-rabbitmq.sh
 ```
 
 ## 4. 拓扑说明（与配置对应关系）
 
-拓扑依据 `aicyi-example-rabbitmq/src/main/resources/application.yml`（消费端绑定）与
-`aicyi-example-rabbitmq/nacos/aicyi-example-rabbitmq.yml`（生产端 `routing-key-expression`）推导：
+拓扑依据 `nacos/aicyi-example-rabbitmq.yml`（绑定与生产端 `routing-key-expression`）推导。
 
 ### 交换机
 
@@ -107,3 +107,8 @@ RABBITMQ_MGMT=http://localhost:15672 RABBITMQ_USER=admin RABBITMQ_PASS=admin bas
 | `NOT_FOUND - no exchange/queue ...` | 拓扑未初始化 | 执行第 3 步 |
 | `operation ... involving 'x-delayed-message' ... plugin not enabled` | 延迟插件未启用 | 执行 1.1 |
 | `Connection refused` | 容器未启动/端口未映射 | `docker ps` 检查 5672 映射 |
+
+## 相关文档
+
+- [aicyi-example-rabbitmq 应用说明](../apps/aicyi-example-rabbitmq.md)
+- [Nacos 配置中心](./nacos.md)
