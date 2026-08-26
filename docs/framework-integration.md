@@ -49,7 +49,7 @@ aicyi 是一套可独立引用的 Spring Boot 2.7 基础框架（BOM / commons /
         <artifactId>aicyi-midware-spring-boot-starter</artifactId>
     </dependency>
 
-    <!-- rabbitmq 增强/锁（aicyi.mq.rabbitmq.enabled=true 缺省开启） -->
+    <!-- rabbitmq 增强（aicyi.mq.rabbitmq.enabled=true 缺省开启） -->
     <dependency>
         <groupId>io.github.aicyi.midware</groupId>
         <artifactId>aicyi-midware-rabbitmq</artifactId>
