@@ -2,12 +2,11 @@ package io.github.aicyi.example.web.vo;
 
 import io.github.aicyi.commons.lang.VoBean;
 import io.github.aicyi.commons.lang.model.BaseBean;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotBlank;
 
 /**
  * @author Mr.Min
@@ -16,10 +15,10 @@ import javax.validation.constraints.NotBlank;
  **/
 @Getter
 @Setter
-@ApiModel("刷新令牌请求参数")
+@Schema(description = "刷新令牌请求参数")
 public class RefreshTokenReq extends BaseBean implements VoBean {
 
     @NotBlank
-    @ApiModelProperty("刷新令牌")
+    @Schema(description = "刷新令牌")
     private String refreshToken;
 }

@@ -13,7 +13,7 @@ spring:
   application:
     name: aicyi-example-mybatisplus
   cloud:
-    # 从 Nacos 配置中心读取配置（spring-cloud-alibaba 2021.0.x 采用 config-import 机制，无需 bootstrap.yml）
+    # 从 Nacos 配置中心读取配置（spring-cloud-alibaba 2023.0.x 采用 config-import 机制，无需 bootstrap.yml）
     # namespace 按环境区分：namespace 与 nacos 导入均声明在 application-{profile}.yml 中，随 profile 切换
     # 配置内容见模块根目录 nacos/，需先导入 Nacos 后再启动应用
     nacos:
@@ -21,24 +21,25 @@ spring:
         # Nacos 地址，可通过环境变量 NACOS_SERVER_ADDR 覆盖
         server-addr: ${NACOS_SERVER_ADDR:127.0.0.1:8848}
         file-extension: yml
-        # Nacos 开启鉴权时通过环境变量注入账号密码
-        username: ${NACOS_USERNAME:nacos}
-        password: ${NACOS_PASSWORD:nacos}
+        # Nacos 未开启鉴权时不要配置账号密码，否则客户端每次登录失败并刷 ERROR
+        # 若 Nacos 开启鉴权，取消注释并通过环境变量注入：
+        # username: ${NACOS_USERNAME}
+        # password: ${NACOS_PASSWORD}
         import-check:
           enabled: true
         # namespace 按环境区分，在 application-{profile}.yml 中声明，不在此处写死
 
 
-mybatis‑plus:
+mybatis-plus:
   # mapper xml文件位置
-  mapper‑locations: classpath:mapper/**/*.xml
+  mapper-locations: classpath:mapper/**/*.xml
   # 实体类别名包，xml可以直接写类名不用全限定名
-#  type‑aliases‑package: io.github.aicyi.example.**.entity
+#  type-aliases-package: io.github.aicyi.example.**.entity
   configuration:
     # 打印sql日志，开发环境开启，生产关闭
-    log‑impl: org.apache.ibatis.logging.stdout.StdOutImpl
-    map‑underscore‑to‑camel‑case: true # 下划线转驼峰，默认true，显式写出来
-  global‑config:
-    db‑config:
-      id‑type: assign_id # 主键策略：ASSIGN_ID雪花算法；也可auto自增
-      table‑underline: true # 表名下划线
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    map-underscore-to-camel-case: true # 下划线转驼峰，默认true，显式写出来
+  global-config:
+    db-config:
+      id-type: assign_id # 主键策略：ASSIGN_ID雪花算法；也可auto自增
+      table-underline: true # 表名下划线

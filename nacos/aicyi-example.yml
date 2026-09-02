@@ -8,11 +8,5 @@ mybatis:
     log-impl: io.github.aicyi.midware.db.commons.ibatis.IbatisLogger
 
 spring:
-  # springfox 3.0.0 在 Spring Boot 2.6+ 默认 PathPatternParser 下会抛
-  # WebMvcPatternsRequestConditionWrapper.getPatterns NPE，必须回退到 AntPathMatcher
-  mvc:
-    path-match:
-      matching-strategy: ant_path_matcher
-
   freemarker:
     check-template-location: false

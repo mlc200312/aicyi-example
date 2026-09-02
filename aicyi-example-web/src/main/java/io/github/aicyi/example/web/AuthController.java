@@ -11,8 +11,8 @@ import io.github.aicyi.example.domain.UpdatePasswordParam;
 import io.github.aicyi.example.service.AuthService;
 import io.github.aicyi.example.web.vo.*;
 import io.github.aicyi.midware.web.annotation.IgnoreAuth;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.*;
  * @date 15:45
  **/
 @IgnoreAuth
-@Api(value = "授权控制器", tags = {"授权控制器"})
+@Tag(name = "授权控制器")
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
@@ -32,7 +32,7 @@ public class AuthController {
     private final BeanMapper beanMapper;
     private final AuthService authService;
 
-    @ApiOperation(value = "注册", notes = "注册")
+    @Operation(summary = "注册", description = "注册")
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public Result<Void> register(@Validated @RequestBody RegisterReq req) {
         RegisterParam param = beanMapper.map(req, RegisterParam.class);
@@ -40,7 +40,7 @@ public class AuthController {
         return Result.success();
     }
 
-    @ApiOperation(value = "登录", notes = "登录")
+    @Operation(summary = "登录", description = "登录")
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public Result<LoginResp> login(@Validated @RequestBody LoginReq req) {
         LoginParam param = beanMapper.map(req, LoginParam.class);
@@ -49,14 +49,14 @@ public class AuthController {
         return Result.success(resp);
     }
 
-    @ApiOperation(value = "刷新Token接口", notes = "刷新Token接口")
+    @Operation(summary = "刷新Token接口", description = "刷新Token接口")
     @RequestMapping(value = "/refresh-token", method = RequestMethod.POST)
     public Result<TokenPair> refreshToken(@Validated @RequestBody RefreshTokenReq req) {
         TokenPair tokenPair = AuthenticationTokens.refreshToken(req.getRefreshToken());
         return Result.success(tokenPair);
     }
 
-    @ApiOperation(value = "更新密码", notes = "更新密码")
+    @Operation(summary = "更新密码", description = "更新密码")
     @RequestMapping(value = "/update-password", method = RequestMethod.POST)
     public Result<Void> updatePassword(@Validated @RequestBody UpdatePasswordReq req) {
         UpdatePasswordParam param = beanMapper.map(req, UpdatePasswordParam.class);

@@ -2,12 +2,11 @@ package io.github.aicyi.example.web.vo;
 
 import io.github.aicyi.commons.lang.model.BaseBean;
 import io.github.aicyi.commons.lang.VoBean;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotBlank;
 import java.time.LocalDate;
 
 /**
@@ -17,19 +16,19 @@ import java.time.LocalDate;
  **/
 @Getter
 @Setter
-@ApiModel("注册请求参数")
+@Schema(description = "注册请求参数")
 public class RegisterReq extends BaseBean implements VoBean {
     @NotBlank
-    @ApiModelProperty("用户名")
+    @Schema(description = "用户名")
     private String username;
     @NotBlank
-    @ApiModelProperty("密码")
+    @Schema(description = "密码")
     private String password;
     @NotBlank
-    @ApiModelProperty("手机号")
+    @Schema(description = "手机号")
     private String mobile;
-    @ApiModelProperty("生日")
+    @Schema(description = "生日")
     private LocalDate birthday;
-    @ApiModelProperty("性别")
+    @Schema(description = "性别")
     private Integer genderType;
 }

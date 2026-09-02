@@ -2,8 +2,7 @@ package io.github.aicyi.example.web.vo;
 
 import io.github.aicyi.commons.lang.model.BaseBean;
 import io.github.aicyi.commons.lang.VoBean;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,10 +13,10 @@ import lombok.Setter;
  **/
 @Getter
 @Setter
-@ApiModel("获取验证码响应参数")
+@Schema(description = "获取验证码响应参数")
 public class GetCaptchaResp extends BaseBean implements VoBean {
-    @ApiModelProperty("验证码")
+    @Schema(description = "验证码")
     private String captcha;
-    @ApiModelProperty("uuid")
+    @Schema(description = "uuid")
     private String uuid;
 }

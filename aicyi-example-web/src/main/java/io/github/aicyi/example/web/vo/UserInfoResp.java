@@ -3,7 +3,7 @@ package io.github.aicyi.example.web.vo;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.github.aicyi.commons.lang.model.BaseBean;
 import io.github.aicyi.commons.lang.VoBean;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,15 +16,15 @@ import lombok.Setter;
 @Setter
 public class UserInfoResp extends BaseBean implements VoBean {
     @JsonProperty("userId")
-    @ApiModelProperty("用户ID")
+    @Schema(description = "用户ID")
     private String id;
     @JsonProperty("username")
-    @ApiModelProperty("用户名")
+    @Schema(description = "用户名")
     private String uniqueName;
-    @ApiModelProperty("用户昵称")
+    @Schema(description = "用户昵称")
     private String nickname;
-    @ApiModelProperty("手机号")
+    @Schema(description = "手机号")
     private String mobile;
-    @ApiModelProperty("邮箱")
+    @Schema(description = "邮箱")
     private String email;
 }

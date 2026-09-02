@@ -5,6 +5,10 @@
 spring:
   cloud:
     stream:
+      # Spring Cloud Stream 4.x 函数式模型：声明消费者函数名，绑定名自动派生为 <函数名>-in-0
+      function:
+        definition: messageInput;delayedInput;directInput;orderEvents;systemLogs
+
       # 绑定配置
       bindings:
         message-output:
@@ -92,7 +96,7 @@ spring:
               bind-queue: false
               routing-key-expression: headers['routingKey'] # 动态路由键
 
-          message-input:
+          messageInput-in-0:
             consumer:
               queue-name-group-only: true # 队名列等于组名，默认队列名等于交换机+组名
               durable-subscription: true # 持久化订阅
@@ -100,14 +104,14 @@ spring:
               declare-exchange: false # 不自动声明交换机
               bind-queue: false # 不自动绑定队列
 
-          delayed-input:
+          delayedInput-in-0:
             consumer:
               queue-name-group-only: true
               durable-subscription: true
               declare-exchange: false
               bind-queue: false
 
-          direct-input:
+          directInput-in-0:
             consumer:
               queue-name-group-only: true
               durable-subscription: true

@@ -1,6 +1,5 @@
 package io.github.aicyi.example.mybaitsplus.service;
 
-import com.google.common.collect.Lists;
 import io.github.aicyi.example.mybatisplus.AicyiExampleMyBatisPlusApplication;
 import io.github.aicyi.example.mybatisplus.domain.entity.MessageTemplate;
 import io.github.aicyi.example.mybatisplus.service.IMessageTemplateService;
@@ -11,6 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -37,7 +37,7 @@ public class IMessageTemplateServiceTest {
         messageTemplate.setSubject("Subject");
         messageTemplate.setContent("Content");
         messageTemplate.setSignature("Signature");
-        messageTemplate.setVariables(Lists.newArrayList("variable1", "variable2", "variable3"));
+        messageTemplate.setVariables(new ArrayList<>(List.of("variable1", "variable2", "variable3")));
         messageTemplate.setEnabled(true);
         messageTemplate.setRemark("Remark");
         messageTemplate.setDeleted(false);
@@ -52,7 +52,7 @@ public class IMessageTemplateServiceTest {
     public void update() {
         MessageTemplate messageTemplate = new MessageTemplate();
         messageTemplate.setId(6L);
-        messageTemplate.setVariables(Lists.newArrayList("variable1", "variable2", "variable3", "variable4", "variable5"));
+        messageTemplate.setVariables(new ArrayList<>(List.of("variable1", "variable2", "variable3", "variable4", "variable5")));
 
         messageTemplateService.updateById(messageTemplate);
     }

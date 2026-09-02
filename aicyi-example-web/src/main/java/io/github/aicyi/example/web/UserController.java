@@ -9,9 +9,11 @@ import io.github.aicyi.example.service.UserService;
 import io.github.aicyi.example.service.util.UserSessions;
 import io.github.aicyi.example.web.vo.UpdateUserInfoReq;
 import io.github.aicyi.example.web.vo.UserInfoResp;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,7 +22,7 @@ import org.springframework.web.bind.annotation.*;
  * @description 用户控制器
  * @date 15:45
  **/
-@Api(value = "用户控制器", tags = {"用户控制器"})
+@Tag(name = "用户控制器")
 @RestController
 @RequestMapping("/user")
 @RequiredArgsConstructor
@@ -29,14 +31,9 @@ public class UserController {
     private final BeanMapper beanMapper;
     private final UserService userService;
 
-    @ApiOperation(value = "查询用户信息", notes = "查询用户信息")
-    @ApiImplicitParam(
-            name = "Authorization",
-            value = "令牌",
-            required = true,
-            paramType = "header",
-            dataTypeClass = String.class
-    )
+    @Operation(summary = "查询用户信息", description = "查询用户信息")
+    @Parameter(name = "Authorization", description = "令牌", required = true,
+            in = ParameterIn.HEADER, schema = @Schema(type = "string"))
     @RequestMapping(value = "/get-user-info", method = RequestMethod.GET)
     public Result<UserInfoResp> getUserInfo() {
 
@@ -47,14 +44,9 @@ public class UserController {
         return Result.success(resp);
     }
 
-    @ApiOperation(value = "更新用户信息", notes = "更新用户信息")
-    @ApiImplicitParam(
-            name = "Authorization",
-            value = "令牌",
-            required = true,
-            paramType = "header",
-            dataTypeClass = String.class
-    )
+    @Operation(summary = "更新用户信息", description = "更新用户信息")
+    @Parameter(name = "Authorization", description = "令牌", required = true,
+            in = ParameterIn.HEADER, schema = @Schema(type = "string"))
     @RequestMapping(value = "/update-user-info", method = RequestMethod.POST)
     public Result<Void> updateUserInfo(@RequestBody UpdateUserInfoReq req) {
 

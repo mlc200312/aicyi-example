@@ -2,15 +2,17 @@ package io.github.aicyi.example.rabbitmq.handler;
 
 import io.github.aicyi.commons.core.logging.Logger;
 import io.github.aicyi.commons.logging.LoggerFactory;
-import io.github.aicyi.example.rabbitmq.channel.InputMessageChannels;
 import io.github.aicyi.example.domain.UserBean;
-import org.springframework.cloud.stream.annotation.StreamListener;
+import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageHeaders;
 import org.springframework.stereotype.Component;
 
 /**
  * @author Mr.Min
- * @description Topic 消息处理
+ * @description Topic 消息处理（函数 orderEvents / systemLogs，绑定 orderEvents-in-0 / systemLogs-in-0）。
+ * <p>
+ * 旧版 @StreamListener 的 condition SpEL 条件路由在 Spring Cloud Stream 4.x
+ * 函数式模型中不再支持，改为在方法内按 routingKey 头分发。
  * @date 2025/9/25
  **/
 @Component
@@ -18,8 +20,23 @@ public class TopicMessageHandlers {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
-    @StreamListener(value = InputMessageChannels.ORDER_EVENTS_IN_0, condition = "headers['routingKey']=='order.created'")
-    public void orderEventsCreated(org.springframework.messaging.Message<UserBean> message) {
+    /**
+     * 订单事件：按 routingKey 分发（替代原 @StreamListener condition）
+     */
+    public void handleOrderEvent(Message<UserBean> message) {
+        MessageHeaders headers = message.getHeaders();
+        Object routingKey = headers.get("routingKey");
+
+        if ("order.created".equals(routingKey)) {
+            orderEventsCreated(message);
+        } else if ("order.paid".equals(routingKey)) {
+            orderEventsPaid(message);
+        } else {
+            logger.info("Ignored order event [{}]: {}", routingKey, message.getPayload());
+        }
+    }
+
+    public void orderEventsCreated(Message<UserBean> message) {
 
         MessageHeaders headers = message.getHeaders();
 
@@ -29,8 +46,7 @@ public class TopicMessageHandlers {
         // 处理消息逻辑
     }
 
-    @StreamListener(value = InputMessageChannels.ORDER_EVENTS_IN_0, condition = "headers['routingKey']=='order.paid'")
-    public void orderEventsPaid(org.springframework.messaging.Message<UserBean> message) {
+    public void orderEventsPaid(Message<UserBean> message) {
 
         MessageHeaders headers = message.getHeaders();
 
@@ -40,8 +56,7 @@ public class TopicMessageHandlers {
         // 处理消息逻辑
     }
 
-    @StreamListener(value = InputMessageChannels.SYSTEM_LOGS_IN_0)
-    public void systemLogs(org.springframework.messaging.Message<UserBean> message) {
+    public void systemLogs(Message<UserBean> message) {
 
         MessageHeaders headers = message.getHeaders();
 

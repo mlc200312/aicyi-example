@@ -2,8 +2,7 @@ package io.github.aicyi.example.web.vo;
 
 import io.github.aicyi.commons.lang.model.BaseBean;
 import io.github.aicyi.commons.lang.VoBean;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,30 +13,30 @@ import lombok.Setter;
  **/
 @Getter
 @Setter
-@ApiModel("学生对象响应参数")
+@Schema(description = "学生对象响应参数")
 public class StudentResp extends BaseBean implements VoBean {
-    @ApiModelProperty("主键ID")
+    @Schema(description = "主键ID")
     private String id;
-    @ApiModelProperty("年龄")
+    @Schema(description = "年龄")
     private Integer age;
-    @ApiModelProperty("身份证ID")
+    @Schema(description = "身份证ID")
     private String idCard;
-    @ApiModelProperty("用户名")
+    @Schema(description = "用户名")
     private String userName;
-    @ApiModelProperty("手机号")
+    @Schema(description = "手机号")
     private String mobile;
-    @ApiModelProperty("性别")
+    @Schema(description = "性别")
     private Integer genderType;
-    @ApiModelProperty("生日")
+    @Schema(description = "生日")
     private String birthday;
-    @ApiModelProperty("班级")
+    @Schema(description = "班级")
     private String gradeType;
-    @ApiModelProperty("成绩")
+    @Schema(description = "成绩")
     private String score0;
-    @ApiModelProperty("注册时间")
+    @Schema(description = "注册时间")
     private String registerTime;
-    @ApiModelProperty("创建时间")
+    @Schema(description = "创建时间")
     private String createTime;
-    @ApiModelProperty("更新时间")
+    @Schema(description = "更新时间")
     private String updateTime;
 }

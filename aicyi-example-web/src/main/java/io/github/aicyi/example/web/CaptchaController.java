@@ -6,15 +6,15 @@ import io.github.aicyi.example.domain.SendCaptchaParam;
 import io.github.aicyi.example.service.CaptchaService;
 import io.github.aicyi.example.web.vo.*;
 import io.github.aicyi.midware.web.annotation.IgnoreAuth;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.imageio.ImageIO;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Objects;
@@ -25,7 +25,7 @@ import java.util.Objects;
  * @date 15:13
  **/
 @IgnoreAuth
-@Api(value = "验证码控制器", tags = {"验证码控制器"})
+@Tag(name = "验证码控制器")
 @RestController
 @RequestMapping("/captcha")
 @RequiredArgsConstructor
@@ -34,7 +34,7 @@ public class CaptchaController {
     private final BeanMapper beanMapper;
     private final CaptchaService captchaService;
 
-    @ApiOperation(value = "生成验证码", notes = "生成验证码")
+    @Operation(summary = "生成验证码", description = "生成验证码")
     @RequestMapping(value = "/get-captcha", method = RequestMethod.GET)
     public Result<GetCaptchaResp> getCaptcha(HttpServletRequest request) {
         String uuid = captchaService.saveCaptcha();
@@ -45,7 +45,7 @@ public class CaptchaController {
         return Result.success(resp);
     }
 
-    @ApiOperation(value = "验证码", notes = "验证码")
+    @Operation(summary = "验证码", description = "验证码")
     @RequestMapping(value = "/{uuid}", method = RequestMethod.GET)
     public void show(HttpServletResponse response, @PathVariable String uuid) {
         BufferedImage image = captchaService.getCaptcha(uuid);
@@ -67,7 +67,7 @@ public class CaptchaController {
         }
     }
 
-    @ApiOperation(value = "生成邮箱验证码", notes = "生成邮箱验证码")
+    @Operation(summary = "生成邮箱验证码", description = "生成邮箱验证码")
     @RequestMapping(value = "/send-email-captcha", method = RequestMethod.POST)
     public Result<SendEmailCaptchaResp> sendEmailCaptcha(@Validated @RequestBody SendEmailCaptchaReq req) {
         SendCaptchaParam param = beanMapper.map(req, SendCaptchaParam.class);
@@ -77,7 +77,7 @@ public class CaptchaController {
         return Result.success(resp);
     }
 
-    @ApiOperation(value = "生成SMS验证码", notes = "生成SMS验证码")
+    @Operation(summary = "生成SMS验证码", description = "生成SMS验证码")
     @RequestMapping(value = "/send-sms-captcha", method = RequestMethod.POST)
     public Result<SendSmsCaptchaResp> sendSmsCaptcha(@Validated @RequestBody SendSmsCaptchaReq req) {
         SendCaptchaParam param = beanMapper.map(req, SendCaptchaParam.class);

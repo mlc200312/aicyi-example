@@ -9,11 +9,10 @@ import io.jsonwebtoken.lang.Maps;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.integration.support.MessageBuilder;
 import org.springframework.messaging.Message;
-import org.springframework.messaging.MessageChannel;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.Map;
@@ -27,18 +26,12 @@ import java.util.Map;
 @SpringBootTest(classes = AicyiExampleRabbitmqApplication.class)
 public class MqSenderTest extends BaseLoggerTest {
 
-    @Autowired(required = false)
-    @Qualifier(OutputMessageChannels.OUTPUT)
-    private MessageChannel messageChannel;
-    @Autowired(required = false)
-    @Qualifier(OutputMessageChannels.TOPIC_OUTPUT)
-    private MessageChannel topicMessageChannel;
-    @Autowired(required = false)
-    @Qualifier(OutputMessageChannels.DIRECT_OUTPUT)
-    private MessageChannel directMessageChannel;
-    @Autowired(required = false)
-    @Qualifier(OutputMessageChannels.DELAYED_OUTPUT)
-    private MessageChannel delayedMessageChannel;
+    /**
+     * Spring Cloud Stream 4.x 函数式模型：@EnableBinding 注入的 MessageChannel Bean 已不存在，
+     * 生产者统一通过 StreamBridge 按绑定名发送
+     */
+    @Autowired
+    private StreamBridge streamBridge;
 
     @Autowired
     private MqSender mqSender;
@@ -56,9 +49,9 @@ public class MqSenderTest extends BaseLoggerTest {
         Message<UserBean> message = MessageBuilder.withPayload(userBean).build();
 
         // 方式一
-        messageChannel.send(message);
-        topicMessageChannel.send(message);
-        directMessageChannel.send(message);
+        streamBridge.send(OutputMessageChannels.OUTPUT, message);
+        streamBridge.send(OutputMessageChannels.TOPIC_OUTPUT, message);
+        streamBridge.send(OutputMessageChannels.DIRECT_OUTPUT, message);
 
         // 方式二
         mqSender.send(OutputMessageChannels.OUTPUT, userBean);
@@ -75,9 +68,9 @@ public class MqSenderTest extends BaseLoggerTest {
         Message<UserBean> message = MessageBuilder.withPayload(userBean).copyHeaders(headers).build();
 
         // 方式一
-        messageChannel.send(message);
-        topicMessageChannel.send(message);
-        directMessageChannel.send(message);
+        streamBridge.send(OutputMessageChannels.OUTPUT, message);
+        streamBridge.send(OutputMessageChannels.TOPIC_OUTPUT, message);
+        streamBridge.send(OutputMessageChannels.DIRECT_OUTPUT, message);
 
         // 方式二
         mqSender.send(OutputMessageChannels.OUTPUT, userBean, headers);
@@ -95,7 +88,7 @@ public class MqSenderTest extends BaseLoggerTest {
 
         Message<UserBean> message = MessageBuilder.withPayload(userBean).copyHeaders(headers).build();
         // 方式一
-        delayedMessageChannel.send(message, delayMillis);
+        streamBridge.send(OutputMessageChannels.DELAYED_OUTPUT, message);
 
         // 方式二
         // 立即发送
@@ -117,9 +110,9 @@ public class MqSenderTest extends BaseLoggerTest {
         Message<UserBean> message3 = MessageBuilder.withPayload(userBean).copyHeaders(headers3).build();
 
         // 方式一
-        topicMessageChannel.send(message);
-        topicMessageChannel.send(message2);
-        topicMessageChannel.send(message3);
+        streamBridge.send(OutputMessageChannels.TOPIC_OUTPUT, message);
+        streamBridge.send(OutputMessageChannels.TOPIC_OUTPUT, message2);
+        streamBridge.send(OutputMessageChannels.TOPIC_OUTPUT, message3);
 
         // 方式二
         mqSender.send(OutputMessageChannels.TOPIC_OUTPUT, userBean, headers);

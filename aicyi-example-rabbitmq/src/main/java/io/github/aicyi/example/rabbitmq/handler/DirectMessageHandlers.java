@@ -2,15 +2,14 @@ package io.github.aicyi.example.rabbitmq.handler;
 
 import io.github.aicyi.commons.core.logging.Logger;
 import io.github.aicyi.commons.logging.LoggerFactory;
-import io.github.aicyi.example.rabbitmq.channel.InputMessageChannels;
 import io.github.aicyi.example.domain.UserBean;
-import org.springframework.cloud.stream.annotation.StreamListener;
+import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageHeaders;
 import org.springframework.stereotype.Component;
 
 /**
  * @author Mr.Min
- * @description Direct 消息处理
+ * @description Direct 消息处理（函数 directInput，绑定 directInput-in-0）
  * @date 2025/9/25
  **/
 @Component
@@ -18,8 +17,7 @@ public class DirectMessageHandlers {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
-    @StreamListener(InputMessageChannels.DIRECT_INPUT)
-    public void handleMessage(org.springframework.messaging.Message<UserBean> message) {
+    public void handleMessage(Message<UserBean> message) {
         MessageHeaders headers = message.getHeaders();
 
         Object object = headers.get("amqp_receivedRoutingKey");

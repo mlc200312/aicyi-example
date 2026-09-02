@@ -2,8 +2,7 @@ package io.github.aicyi.example.web.vo;
 
 import io.github.aicyi.commons.lang.VoBean;
 import io.github.aicyi.commons.core.token.TokenPair;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,10 +13,10 @@ import lombok.Setter;
  **/
 @Getter
 @Setter
-@ApiModel("登录响应参数")
+@Schema(description = "登录响应参数")
 public class LoginResp implements VoBean {
-    @ApiModelProperty("用户ID")
+    @Schema(description = "用户ID")
     private String userId;
-    @ApiModelProperty("令牌对")
+    @Schema(description = "令牌对")
     private TokenPair token;
 }

@@ -28,9 +28,10 @@
             <artifactId>aicyi-midware-web</artifactId>
         </dependency>
 
+        <!-- springdoc-openapi（OpenAPI 3）：springfox 不兼容 Spring Boot 3.x -->
         <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-boot-starter</artifactId>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
         </dependency>
     </dependencies>
 </project>
