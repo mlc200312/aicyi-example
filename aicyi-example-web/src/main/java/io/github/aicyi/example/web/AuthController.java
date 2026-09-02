@@ -1,7 +1,6 @@
 package io.github.aicyi.example.web;
 
 import io.github.aicyi.commons.lang.model.Result;
-import io.github.aicyi.commons.core.mapper.BeanMapper;
 import io.github.aicyi.commons.core.token.AuthenticationTokens;
 import io.github.aicyi.commons.core.token.TokenPair;
 import io.github.aicyi.example.domain.LoginParam;
@@ -9,6 +8,7 @@ import io.github.aicyi.example.domain.LoginResult;
 import io.github.aicyi.example.domain.RegisterParam;
 import io.github.aicyi.example.domain.UpdatePasswordParam;
 import io.github.aicyi.example.service.AuthService;
+import io.github.aicyi.example.web.mapper.AuthVoMapper;
 import io.github.aicyi.example.web.vo.*;
 import io.github.aicyi.midware.web.annotation.IgnoreAuth;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -29,13 +29,13 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class AuthController {
 
-    private final BeanMapper beanMapper;
+    private final AuthVoMapper beanMapper;
     private final AuthService authService;
 
     @Operation(summary = "注册", description = "注册")
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public Result<Void> register(@Validated @RequestBody RegisterReq req) {
-        RegisterParam param = beanMapper.map(req, RegisterParam.class);
+        RegisterParam param = beanMapper.toRegisterParam(req);
         authService.register(param);
         return Result.success();
     }
@@ -43,9 +43,9 @@ public class AuthController {
     @Operation(summary = "登录", description = "登录")
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public Result<LoginResp> login(@Validated @RequestBody LoginReq req) {
-        LoginParam param = beanMapper.map(req, LoginParam.class);
+        LoginParam param = beanMapper.toLoginParam(req);
         LoginResult result = authService.login(param);
-        LoginResp resp = beanMapper.map(result, LoginResp.class);
+        LoginResp resp = beanMapper.toLoginResp(result);
         return Result.success(resp);
     }
 
@@ -59,7 +59,7 @@ public class AuthController {
     @Operation(summary = "更新密码", description = "更新密码")
     @RequestMapping(value = "/update-password", method = RequestMethod.POST)
     public Result<Void> updatePassword(@Validated @RequestBody UpdatePasswordReq req) {
-        UpdatePasswordParam param = beanMapper.map(req, UpdatePasswordParam.class);
+        UpdatePasswordParam param = beanMapper.toUpdatePasswordParam(req);
         authService.updatePassword(param);
         return Result.success();
     }

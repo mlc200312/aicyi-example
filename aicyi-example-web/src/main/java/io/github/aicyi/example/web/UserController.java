@@ -1,12 +1,12 @@
 package io.github.aicyi.example.web;
 
 import io.github.aicyi.commons.lang.model.Result;
-import io.github.aicyi.commons.core.mapper.BeanMapper;
 import io.github.aicyi.commons.util.context.CurrentContextHolder;
 import io.github.aicyi.example.domain.UserInfo;
 import io.github.aicyi.example.domain.entity.base.User;
 import io.github.aicyi.example.service.UserService;
 import io.github.aicyi.example.service.util.UserSessions;
+import io.github.aicyi.example.web.mapper.UserVoMapper;
 import io.github.aicyi.example.web.vo.UpdateUserInfoReq;
 import io.github.aicyi.example.web.vo.UserInfoResp;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class UserController {
 
-    private final BeanMapper beanMapper;
+    private final UserVoMapper beanMapper;
     private final UserService userService;
 
     @Operation(summary = "查询用户信息", description = "查询用户信息")
@@ -39,7 +39,7 @@ public class UserController {
 
         UserInfo userInfo = UserSessions.getUserInfo();
 
-        UserInfoResp resp = beanMapper.map(userInfo, UserInfoResp.class);
+        UserInfoResp resp = beanMapper.toUserInfoResp(userInfo);
 
         return Result.success(resp);
     }
@@ -50,7 +50,7 @@ public class UserController {
     @RequestMapping(value = "/update-user-info", method = RequestMethod.POST)
     public Result<Void> updateUserInfo(@RequestBody UpdateUserInfoReq req) {
 
-        User user = beanMapper.map(req, User.class);
+        User user = beanMapper.toUser(req);
 
         String userId = CurrentContextHolder.getUserId();
 

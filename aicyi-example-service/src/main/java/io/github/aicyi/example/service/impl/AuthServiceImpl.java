@@ -1,6 +1,6 @@
 package io.github.aicyi.example.service.impl;
 
-import io.github.aicyi.commons.core.mapper.BeanMapper;
+import io.github.aicyi.example.service.mapper.ServiceBeanMapper;
 import io.github.aicyi.commons.core.token.AuthenticationTokens;
 import io.github.aicyi.commons.core.token.TokenPair;
 import io.github.aicyi.commons.lang.exception.BusinessException;
@@ -27,14 +27,14 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
 
-    private final BeanMapper beanMapper;
+    private final ServiceBeanMapper beanMapper;
     private final PasswordEncoder passwordEncoder;
     private final UserService userService;
     private final CaptchaService captchaService;
 
     @Override
     public void register(RegisterParam param) {
-        User user = beanMapper.map(param, User.class);
+        User user = beanMapper.toUser(param);
         // 密码加密
         user.setPassword(passwordEncoder.encode(param.getPassword()));
         userService.save(user);

@@ -46,6 +46,12 @@
             <artifactId>lombok</artifactId>
         </dependency>
 
+        <!-- MapStruct 编译期 Bean 映射（取代 Orika）：多个模块定义 @Mapper，父工程统一引入 -->
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+        </dependency>
+
         <!-- Spring Boot Starter -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

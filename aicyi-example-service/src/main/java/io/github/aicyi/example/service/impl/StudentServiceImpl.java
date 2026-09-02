@@ -1,6 +1,5 @@
 package io.github.aicyi.example.service.impl;
 
-import io.github.aicyi.commons.core.mapper.BeanMapper;
 import io.github.aicyi.commons.core.id.IdGenerator;
 import io.github.aicyi.commons.lang.exception.BusinessException;
 import io.github.aicyi.commons.lang.type.BooleanType;
@@ -15,6 +14,7 @@ import io.github.aicyi.example.domain.entity.base.Student;
 import io.github.aicyi.example.domain.entity.base.StudentExample;
 import io.github.aicyi.example.domain.entity.base.User;
 import io.github.aicyi.example.domain.type.ExampleResultCode;
+import io.github.aicyi.example.service.mapper.ServiceBeanMapper;
 import io.github.aicyi.example.service.StudentService;
 import io.github.aicyi.example.service.UserService;
 import io.github.aicyi.example.service.util.UserSessions;
@@ -42,7 +42,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class StudentServiceImpl implements StudentService {
 
-    private final BeanMapper beanMapper;
+    private final ServiceBeanMapper beanMapper;
     private final IdGenerator idGenerator;
     private final StudentMapper studentMapper;
     private final StudentCustomMapper studentCustomMapper;
@@ -56,7 +56,7 @@ public class StudentServiceImpl implements StudentService {
         if (Objects.nonNull(student)) {
             return;
         }
-        Student newStudent = beanMapper.map(bean, Student.class);
+        Student newStudent = beanMapper.toStudent(bean);
         newStudent.setUserId(userInfo.getUserId());
         newStudent.setRegisterTime(LocalDateTime.now());
         BaseEntityUtils.setDefaultValue(newStudent, idGenerator);
@@ -70,7 +70,7 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public void update(StudentBean bean) {
-        Student student = beanMapper.map(bean, Student.class);
+        Student student = beanMapper.toStudent(bean);
         studentMapper.updateByPrimaryKeySelective(student);
     }
 
@@ -154,8 +154,8 @@ public class StudentServiceImpl implements StudentService {
     }
 
     private StudentBean createStudentBean(Student student, User user) {
-        StudentBean studentBean = beanMapper.map(student, StudentBean.class);
-        beanMapper.map(user, studentBean);
+        StudentBean studentBean = beanMapper.toStudentBean(student);
+        beanMapper.updateStudentBean(user, studentBean);
         return studentBean;
     }
 }

@@ -1,10 +1,10 @@
 package io.github.aicyi.example.mybaitsplus.service;
 
-import io.github.aicyi.commons.util.bean.MapperUtils;
 import io.github.aicyi.example.domain.UserBean;
 import io.github.aicyi.example.fixture.util.DataSource;
 import io.github.aicyi.example.mybatisplus.AicyiExampleMyBatisPlusApplication;
 import io.github.aicyi.example.mybatisplus.domain.entity.User;
+import io.github.aicyi.example.mybaitsplus.mapper.UserBeanMapper;
 import io.github.aicyi.example.mybatisplus.service.IUserService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,7 +29,7 @@ public class IUserServiceTest {
 
         UserBean userBean = DataSource.getUser();
 
-        User user = MapperUtils.getInstance().map(userBean, User.class);
+        User user = UserBeanMapper.INSTANCE.toUser(userBean);
 
         user.setUsername(userBean.getUserName());
 

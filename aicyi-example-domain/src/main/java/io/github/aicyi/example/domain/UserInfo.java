@@ -2,8 +2,8 @@ package io.github.aicyi.example.domain;
 
 import io.github.aicyi.commons.core.token.IJWTInfo;
 import io.github.aicyi.commons.lang.model.BaseBean;
-import io.github.aicyi.commons.util.bean.MapperUtils;
 import io.github.aicyi.example.domain.entity.base.User;
+import io.github.aicyi.example.domain.mapper.UserInfoMapper;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -22,7 +22,7 @@ public class UserInfo extends BaseBean implements IJWTInfo {
     private String deviceId;
 
     public static UserInfo of(User user) {
-        UserInfo userInfo = MapperUtils.getInstance().map(user, UserInfo.class);
+        UserInfo userInfo = UserInfoMapper.INSTANCE.toUserInfo(user);
         userInfo.setUserId(user.getId());
         userInfo.setNickname(user.getNickname());
         userInfo.setMobile(user.getMobile());

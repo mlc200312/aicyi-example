@@ -1,9 +1,7 @@
 package io.github.aicyi.example.fixture.util;
 
 import io.github.aicyi.commons.lang.type.BooleanType;
-import io.github.aicyi.commons.util.bean.MapperUtils;
 import io.github.aicyi.commons.util.id.UUIDUtils;
-import io.github.aicyi.commons.util.bean.orika.OrikaMapperRegistry;
 import io.github.aicyi.example.fixture.domain.Example;
 import io.github.aicyi.example.fixture.domain.ExampleBean;
 import io.github.aicyi.example.fixture.domain.Message;
@@ -20,6 +18,7 @@ import io.github.aicyi.example.fixture.dto.StudentResp;
 import io.github.aicyi.commons.util.json.JsonUtils;
 import io.github.aicyi.example.domain.type.GenderType;
 import io.github.aicyi.example.fixture.dto.ExampleResp;
+import io.github.aicyi.example.fixture.mapper.FixtureBeanMapper;
 import io.github.aicyi.midware.kit.util.IdUtils;
 import org.apache.commons.lang3.RandomUtils;
 
@@ -74,7 +73,7 @@ public class DataSource {
     }
 
     public static StudentBean getStudent() {
-        StudentBean student = MapperUtils.getInstance().map(getUser(), StudentBean.class);
+        StudentBean student = FixtureBeanMapper.INSTANCE.toStudentBean(getUser());
         student.setStudentId(IdUtils.generateId());
         student.setScore(randomBigDecimal().doubleValue());
         student.setGradeType(RandomGenerator.randomEnum(GradeType.class));
@@ -85,9 +84,7 @@ public class DataSource {
     }
 
     public static StudentResp getStudentResp() {
-        return OrikaMapperRegistry.INSTANCE.map(getStudent(), StudentResp.class,
-                OrikaMapperRegistry.config()
-                        .map("score", "score0"));
+        return FixtureBeanMapper.INSTANCE.toStudentResp(getStudent());
     }
 
     public static List<StudentBean> getStudentList() {
@@ -118,7 +115,7 @@ public class DataSource {
         example.setIdList(Arrays.asList(1L, 2L, 3L));
         UserBean user = getUser();
         StudentBean student = getStudent();
-        MapperUtils.getInstance().map(user, student);
+        FixtureBeanMapper.INSTANCE.updateStudentBean(user, student);
         example.setUser(user);
         example.setStudent(student);
         example.setNothing("nothing");
@@ -126,12 +123,7 @@ public class DataSource {
     }
 
     public static ExampleResp getExampleResp() {
-        ExampleResp resp = OrikaMapperRegistry.INSTANCE.map(getExample(), ExampleResp.class,
-                OrikaMapperRegistry.config()
-                        .map("id", "uuid")
-                        .ignore("user")
-                        .ignore("student")
-        );
+        ExampleResp resp = FixtureBeanMapper.INSTANCE.toExampleResp(getExample());
         resp.setUser(getUserJson());
         resp.setStudent(getStudentResp());
         return resp;

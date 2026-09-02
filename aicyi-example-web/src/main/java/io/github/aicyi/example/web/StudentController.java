@@ -1,7 +1,6 @@
 package io.github.aicyi.example.web;
 
 import io.github.aicyi.commons.lang.model.Result;
-import io.github.aicyi.commons.core.mapper.BeanMapper;
 import io.github.aicyi.example.domain.StudentQuery;
 import io.github.aicyi.example.web.vo.AddStudentReq;
 import io.github.aicyi.midware.web.model.PageResponse;
@@ -9,6 +8,7 @@ import io.github.aicyi.example.domain.StudentBean;
 import io.github.aicyi.example.web.vo.StudentReq;
 import io.github.aicyi.example.web.vo.StudentResp;
 import io.github.aicyi.example.service.StudentService;
+import io.github.aicyi.example.web.mapper.StudentVoMapper;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -20,6 +20,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author Mr.Min
@@ -33,7 +34,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class StudentController {
 
-    private final BeanMapper beanMapper;
+    private final StudentVoMapper beanMapper;
     private final StudentService studentService;
 
     @Operation(summary = "查询学生", description = "查询学生")
@@ -42,7 +43,7 @@ public class StudentController {
     @RequestMapping(value = "/get-by-id", method = RequestMethod.GET)
     public Result<StudentResp> getById(@RequestParam String id) {
         StudentBean bean = studentService.getById(Long.valueOf(id));
-        StudentResp resp = beanMapper.map(bean, StudentResp.class);
+        StudentResp resp = beanMapper.toStudentResp(bean);
         return Result.success(resp);
     }
 
@@ -52,7 +53,7 @@ public class StudentController {
     @RequestMapping(value = "/get-by-mobile", method = RequestMethod.GET)
     public Result<StudentResp> getByMobile(@RequestParam String mobile) {
         StudentBean bean = studentService.getByMobile(mobile);
-        StudentResp resp = beanMapper.map(bean, StudentResp.class);
+        StudentResp resp = beanMapper.toStudentResp(bean);
         return Result.success(resp);
     }
 
@@ -61,9 +62,11 @@ public class StudentController {
             in = ParameterIn.HEADER, schema = @Schema(type = "string"))
     @RequestMapping(value = "/paged-list", method = RequestMethod.GET)
     public Result<PageResponse<StudentResp>> pagedList(@Validated @ModelAttribute StudentReq req) {
-        StudentQuery query = beanMapper.map(req, StudentQuery.class);
+        StudentQuery query = beanMapper.toStudentQuery(req);
         Page<StudentBean> page = studentService.pagedList(query);
-        List<StudentResp> respList = beanMapper.mapList(page.getContent(), StudentResp.class);
+        List<StudentResp> respList = page.getContent().stream()
+                .map(beanMapper::toStudentResp)
+                .collect(Collectors.toList());
         return Result.success(PageResponse.build(respList, page));
     }
 
@@ -72,7 +75,7 @@ public class StudentController {
             in = ParameterIn.HEADER, schema = @Schema(type = "string"))
     @RequestMapping(value = "/add-student", method = RequestMethod.POST)
     public Result<Void> addStudent(@Validated @RequestBody AddStudentReq req) {
-        StudentBean bean = beanMapper.map(req, StudentBean.class);
+        StudentBean bean = beanMapper.toStudentBean(req);
         studentService.add(bean);
         return Result.success();
     }

@@ -1,10 +1,8 @@
 package io.github.aicyi.example.boot.token;
 
-import io.github.aicyi.commons.core.mapper.BeanMapper;
 import io.github.aicyi.commons.core.token.AuthenticationTokenService;
 import io.github.aicyi.commons.core.token.TokenPair;
 import io.github.aicyi.commons.security.SecretKeyUtils;
-import io.github.aicyi.commons.util.id.UUIDUtils;
 import io.github.aicyi.example.boot.AicyiExampleApplication;
 import io.github.aicyi.example.domain.UserBean;
 import io.github.aicyi.example.domain.UserInfo;
@@ -13,6 +11,7 @@ import io.github.aicyi.midware.redis.template.EnhancedRedisTemplateFactory;
 import io.github.aicyi.midware.redis.token.AuthenticationConfig;
 import io.github.aicyi.midware.redis.token.JwtRefreshAuthenticationTokenService;
 import io.github.aicyi.example.fixture.util.DataSource;
+import io.github.aicyi.example.fixture.mapper.FixtureBeanMapper;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import org.junit.jupiter.api.BeforeEach;
@@ -42,9 +41,6 @@ class AuthenticationTokenServiceTest {
     @Autowired
     private EnhancedRedisTemplateFactory factory;
 
-    @Autowired
-    private BeanMapper beanMapper;
-
     private UserInfo principal;
 
     private AuthenticationTokenService<UserInfo> tokenService;
@@ -54,7 +50,7 @@ class AuthenticationTokenServiceTest {
 
         UserBean userBean = DataSource.getUser();
 
-        User user = beanMapper.map(userBean, User.class);
+        User user = FixtureBeanMapper.INSTANCE.toUser(userBean);
 
         principal = UserInfo.of(user);
 

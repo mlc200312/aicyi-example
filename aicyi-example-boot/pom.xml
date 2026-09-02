@@ -99,6 +99,11 @@
                             <artifactId>lombok</artifactId>
                             <version>${lombok.version}</version>
                         </path>
+                        <path>
+                            <groupId>org.mapstruct</groupId>
+                            <artifactId>mapstruct-processor</artifactId>
+                            <version>${mapstruct.version}</version>
+                        </path>
                     </annotationProcessorPaths>
                 </configuration>
             </plugin>
@@ -107,8 +112,6 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
                     <mainClass>io.github.aicyi.example.boot.AicyiExampleApplication</mainClass>
-                    <!-- JDK 17 强封装：orika-core 1.5.4 反射访问 Object.clone()，必须开放 java.lang 模块 -->
-                    <jvmArguments>--add-opens java.base/java.lang=ALL-UNNAMED</jvmArguments>
                 </configuration>
                 <executions>
                     <execution>

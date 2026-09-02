@@ -1,6 +1,5 @@
 package io.github.aicyi.example.boot.token;
 
-import io.github.aicyi.commons.core.mapper.BeanMapper;
 import io.github.aicyi.commons.core.token.TokenPair;
 import io.github.aicyi.commons.security.SecretKeyUtils;
 import io.github.aicyi.commons.core.token.AuthenticationTokenService;
@@ -15,6 +14,7 @@ import io.github.aicyi.midware.redis.token.AuthenticationConfig;
 import io.github.aicyi.midware.redis.token.JwtRefreshAuthenticationTokenService;
 import io.github.aicyi.example.fixture.util.BaseLoggerTest;
 import io.github.aicyi.example.fixture.util.DataSource;
+import io.github.aicyi.example.fixture.mapper.FixtureBeanMapper;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import org.junit.Before;
@@ -43,9 +43,6 @@ public class JwtRefreshAuthenticationTokenServiceTest extends BaseLoggerTest {
 
     @Autowired
     private EnhancedRedisTemplateFactory factory;
-
-    @Autowired
-    private BeanMapper beanMapper;
 
     private AuthenticationTokenService<UserInfo> authenticationTokenService;
 
@@ -78,7 +75,7 @@ public class JwtRefreshAuthenticationTokenServiceTest extends BaseLoggerTest {
 
         UserBean userBean = DataSource.getUser();
 
-        User user = beanMapper.map(userBean, User.class);
+        User user = FixtureBeanMapper.INSTANCE.toUser(userBean);
 
         UserInfo userInfo = UserInfo.of(user);
 
@@ -116,7 +113,7 @@ public class JwtRefreshAuthenticationTokenServiceTest extends BaseLoggerTest {
 
         UserBean userBean = DataSource.getUser();
 
-        User user = beanMapper.map(userBean, User.class);
+        User user = FixtureBeanMapper.INSTANCE.toUser(userBean);
 
         UserInfo userInfo = UserInfo.of(user);
 

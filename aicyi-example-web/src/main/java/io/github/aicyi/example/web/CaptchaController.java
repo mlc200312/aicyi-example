@@ -1,9 +1,9 @@
 package io.github.aicyi.example.web;
 
 import io.github.aicyi.commons.lang.model.Result;
-import io.github.aicyi.commons.core.mapper.BeanMapper;
 import io.github.aicyi.example.domain.SendCaptchaParam;
 import io.github.aicyi.example.service.CaptchaService;
+import io.github.aicyi.example.web.mapper.CaptchaVoMapper;
 import io.github.aicyi.example.web.vo.*;
 import io.github.aicyi.midware.web.annotation.IgnoreAuth;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -31,7 +31,7 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class CaptchaController {
 
-    private final BeanMapper beanMapper;
+    private final CaptchaVoMapper beanMapper;
     private final CaptchaService captchaService;
 
     @Operation(summary = "生成验证码", description = "生成验证码")
@@ -70,7 +70,7 @@ public class CaptchaController {
     @Operation(summary = "生成邮箱验证码", description = "生成邮箱验证码")
     @RequestMapping(value = "/send-email-captcha", method = RequestMethod.POST)
     public Result<SendEmailCaptchaResp> sendEmailCaptcha(@Validated @RequestBody SendEmailCaptchaReq req) {
-        SendCaptchaParam param = beanMapper.map(req, SendCaptchaParam.class);
+        SendCaptchaParam param = beanMapper.toSendCaptchaParam(req);
         String uuid = captchaService.sendEmailCaptcha(param);
         SendEmailCaptchaResp resp = new SendEmailCaptchaResp();
         resp.setUuid(uuid);
@@ -80,7 +80,7 @@ public class CaptchaController {
     @Operation(summary = "生成SMS验证码", description = "生成SMS验证码")
     @RequestMapping(value = "/send-sms-captcha", method = RequestMethod.POST)
     public Result<SendSmsCaptchaResp> sendSmsCaptcha(@Validated @RequestBody SendSmsCaptchaReq req) {
-        SendCaptchaParam param = beanMapper.map(req, SendCaptchaParam.class);
+        SendCaptchaParam param = beanMapper.toSendCaptchaParam(req);
         String uuid = captchaService.sendSmsCaptcha(param);
         SendSmsCaptchaResp resp = new SendSmsCaptchaResp();
         resp.setUuid(uuid);

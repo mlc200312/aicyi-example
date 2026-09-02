@@ -1,11 +1,12 @@
 package io.github.aicyi.example.test.util;
 
-import io.github.aicyi.commons.core.mapper.BeanMapper;
-import io.github.aicyi.commons.util.bean.MapperUtils;
 import lombok.Getter;
 import lombok.Setter;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mapstruct.Mapper;
+import org.mapstruct.MappingTarget;
+import org.mapstruct.factory.Mappers;
 
 import java.util.Arrays;
 import java.util.List;
@@ -13,10 +14,13 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * {@link MapperUtils} 测试类（Orika实现）
+ * MapStruct 对象映射测试（编译期生成，取代原 Orika 实现）
+ *
+ * @author Mr.Min
+ * @date 2026-09-02
  */
-@DisplayName("MapperUtils 对象映射测试")
-public class MapperUtilsTest {
+@DisplayName("MapStruct 对象映射测试")
+public class MapStructMapperTest {
 
     @Getter
     @Setter
@@ -34,13 +38,25 @@ public class MapperUtilsTest {
         private int age;
     }
 
+    @Mapper
+    public interface SourceTargetMapper {
+
+        SourceTargetMapper INSTANCE = Mappers.getMapper(SourceTargetMapper.class);
+
+        Target toTarget(Source source);
+
+        void updateTarget(Source source, @MappingTarget Target target);
+
+        List<Target> toTargetList(List<Source> sources);
+    }
+
     @Test
-    @DisplayName("getInstance 返回全局单例")
+    @DisplayName("Mappers.getMapper 返回全局单例")
     public void testGetInstance() {
-        BeanMapper mapper = MapperUtils.getInstance();
+        SourceTargetMapper mapper = SourceTargetMapper.INSTANCE;
 
         assertNotNull(mapper);
-        assertSame(MapperUtils.getInstance(), mapper);
+        assertSame(SourceTargetMapper.INSTANCE, mapper);
     }
 
     @Test
@@ -51,7 +67,7 @@ public class MapperUtilsTest {
         source.setName("Tom");
         source.setAge(18);
 
-        Target target = MapperUtils.getInstance().map(source, Target.class);
+        Target target = SourceTargetMapper.INSTANCE.toTarget(source);
 
         assertNotNull(target);
         assertEquals(1L, target.getId());
@@ -66,7 +82,7 @@ public class MapperUtilsTest {
         source.setName("Tom");
 
         Target target = new Target();
-        MapperUtils.getInstance().map(source, target);
+        SourceTargetMapper.INSTANCE.updateTarget(source, target);
 
         assertEquals("Tom", target.getName());
     }
@@ -79,8 +95,7 @@ public class MapperUtilsTest {
         Source s2 = new Source();
         s2.setName("b");
 
-        List<Target> targets = MapperUtils.getInstance()
-                .mapList(Arrays.asList(s1, s2), Target.class);
+        List<Target> targets = SourceTargetMapper.INSTANCE.toTargetList(Arrays.asList(s1, s2));
 
         assertEquals(2, targets.size());
         assertEquals("a", targets.get(0).getName());
@@ -90,6 +105,6 @@ public class MapperUtilsTest {
     @Test
     @DisplayName("map null源返回null")
     public void testMapNull() {
-        assertNull(MapperUtils.getInstance().map(null, Target.class));
+        assertNull(SourceTargetMapper.INSTANCE.toTarget(null));
     }
 }

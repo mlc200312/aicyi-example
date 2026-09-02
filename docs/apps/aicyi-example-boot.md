@@ -40,7 +40,7 @@ mvn spring-boot:run
 | --- | --- |
 | `WebConfiguration` | JWT Token 服务（`JwtRefreshAuthenticationTokenService`）、CORS、静态资源映射 |
 | `RedisConfiguration` | `RedissonClient`、`Cache<String,String>`、`Cache<String,UserInfo>`（RedisCache） |
-| `ManagerConfiguration` | `BeanMapper`（Orika 实现） |
+| `MapStructConvertersConfiguration` | `EnumTypeConverters`、`DateTimeTypeConverters`（MapStruct 类型转换器） |
 | `PasswordEncoderConfiguration` | `BCryptPasswordEncoder` |
 | `DataSourceConfiguration` | 事务管理器、枚举 TypeHandler 自动注册（Reflections） |
 | `SwaggerConfiguration` | springfox OpenAPI 3 文档（`/api-doc.html`） |
