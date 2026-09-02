@@ -69,10 +69,10 @@
             <scope>runtime</scope>
         </dependency>
 
+        <!-- 逆向工程生成器：版本收敛于 aicyi-base-dependencies，子模块不写版本 -->
         <dependency>
             <groupId>org.mybatis.generator</groupId>
             <artifactId>mybatis-generator-core</artifactId>
-            <version>1.3.5</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

@@ -15,3 +15,16 @@ spring:
       - nacos:aicyi-datasource.yml?group=DEFAULT_GROUP&refreshEnabled=true
       - nacos:aicyi-redis.yml?group=DEFAULT_GROUP&refreshEnabled=true
       - nacos:aicyi-rabbitmq.yml?group=DEFAULT_GROUP&refreshEnabled=true
+
+
+springdoc:
+  # API 文档基础路径（默认 /v3/api-docs）
+  api-docs:
+    enabled: true
+    path: /v3/api-docs
+  # Swagger UI 界面配置
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+    # 禁用默认的 Petstore 示例接口
+    disable-swagger-default-url: true

@@ -42,12 +42,6 @@
             <artifactId>javase</artifactId>
         </dependency>
 
-        <!-- util 中 BeanCglibCopier 能力为可选依赖，测试工程显式引入 -->
-        <dependency>
-            <groupId>cglib</groupId>
-            <artifactId>cglib</artifactId>
-        </dependency>
-
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
