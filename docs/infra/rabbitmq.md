@@ -82,11 +82,22 @@ RABBITMQ_MGMT=http://localhost:15672 RABBITMQ_USER=admin RABBITMQ_PASS=admin bas
 
 | 队列 | 绑定到 | 路由键 | 对应绑定 / 说明 |
 | --- | --- | --- | --- |
-| `default.queue` | default.exchange | `#` | `message-input`（`queue-name-group-only: true` → 队列名=group） |
-| `direct.queue` | direct.exchange | `direct.routing.key` | `direct-input`；生产端静态路由键 `'direct.routing.key'`，direct 交换机必须精确匹配 |
-| `delayed.queue` | delayed.exchange | `delayed.routing.key` | `delayed-input`；生产端静态路由键 `'delayed.routing.key'`，延迟时长由消息头 `x-delay`（毫秒）决定 |
-| `topic.exchange.order-service` | topic.exchange | `order.#` | `orderEvents-in-0`（group=order-service，默认队列名=destination.group），Handler 再按 `routingKey` 头过滤 `order.created`/`order.paid` |
+| `default.queue` | default.exchange | `#` | `messageInput-in-0`（`queue-name-group-only: true` → 队列名=group） |
+| `direct.queue` | direct.exchange | `direct.routing.key` | `directInput-in-0`；生产端静态路由键 `'direct.routing.key'`，direct 交换机必须精确匹配 |
+| `delayed.queue` | delayed.exchange | `delayed.routing.key` | `delayedInput-in-0`；生产端静态路由键 `'delayed.routing.key'`，延迟时长由消息头 `x-delay`（毫秒）决定 |
+| `topic.exchange.order-service` | topic.exchange | `order.#` | `orderEvents-in-0`（group=order-service，默认队列名=destination.group），Handler 再按 `routingKey` 头分发 `order.created`/`order.paid` |
 | `topic.exchange.log-service` | topic.exchange | `#` | `systemLogs-in-0`（group=log-service），接收全部系统日志 |
+
+> 绑定名按 Spring Cloud Stream 4.x 函数式模型派生为 `<函数名>-in-0`（函数名见
+> `spring.cloud.stream.function.definition`），不再是旧版的 `message-input` / `direct-input` / `delayed-input`。
+>
+> ⚠️ **待核对的配置不一致**：`nacos/aicyi-example-rabbitmq.yml` 的 `spring.cloud.stream.bindings` 下
+> 仍用旧名 `message-input` / `delayed-input` / `direct-input` 配置了 `destination` / `group` / `concurrency`，
+> 而 `spring.cloud.stream.rabbit.bindings` 下用的是新名 `messageInput-in-0` / `delayedInput-in-0` / `directInput-in-0`。
+> 函数式模型下生效的绑定名是后者，因此前者的 `destination: default.exchange` / `group: default.queue`
+> 很可能并未生效（对比：`orderEvents-in-0` / `systemLogs-in-0` 两处命名一致，配置正常）。
+> 本表的队列对应关系描述的是 `init-rabbitmq.sh` 建出的**预期拓扑**；
+> 若实际运行中这三个消费者收不到消息，先把 `bindings` 下的这三个 key 改为 `<函数名>-in-0` 再验证。
 
 ### 队列命名规则速记
 

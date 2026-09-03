@@ -11,11 +11,15 @@
 （可在 `nacos/aicyi-xxl-job.yml` 中调整 `xxl.job.admin.addresses`）。
 
 ```bash
-docker run -d --name xxl-job -p 8080:8080 -p 9999:9999 \
+docker run -d --name xxl-job -p 8080:8080 \
   -e PARAMS="--spring.datasource.url=jdbc:mysql://<host>:3306/xxl_job?useUnicode=true&characterEncoding=UTF-8 \
              --spring.datasource.username=root --spring.datasource.password=root" \
-  xuxueli/xxl-job-admin:2.4.1
+  xuxueli/xxl-job-admin:2.5.0
 ```
+
+> 调度中心镜像版本需与执行器依赖的 `xxl-job-core`（**2.5.0**，由 BOM 统一管理）保持一致，跳版可能出现注册/回调协议不兼容。
+> 只需映射 `8080`（调度中心 Web 端口）；执行器端口 `9998` 由**应用进程**在宿主机监听，不属于容器，无需映射。
+> 若应用与调度中心同处一个 docker 网络，`admin.addresses` 改用容器名（如 `http://xxl-job:8080/xxl-job-admin`）。
 
 > 调度中心需要自己的 MySQL 库（`xxl_job`），可用官方 `tables_xxl_job.sql` 初始化。
 
@@ -50,6 +54,7 @@ mvn spring-boot:run
 | `xxl.job.executor.port` | `9998` | 执行器回调端口 |
 | `xxl.job.accessToken` | `Aicyi_XXLJOB@2026_Secret888` | 与调度中心配置的令牌一致 |
 | `xxl.job.executor.logpath` | `./logs/xxl-job/jobhandler` | 任务日志目录 |
+| `xxl.job.executor.logretentiondays` | `30` | 任务日志保留天数 |
 
 ## 任务示例（`handler` 包）
 

@@ -61,7 +61,7 @@ public class CaptchaController {
         response.setDateHeader("Expires", 0);
 
         try {
-            ImageIO.write(image, "png", response.getOutputStream());
+            ImageIO.write(image, "jpeg", response.getOutputStream());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

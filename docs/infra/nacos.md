@@ -1,6 +1,6 @@
 # Nacos 配置中心
 
-所有可运行应用均通过 `spring.config.import` 从 Nacos 读取配置（spring-cloud-alibaba 2021.0.5.0，无需 `bootstrap.yml`）。
+所有可运行应用均通过 `spring.config.import` 从 Nacos 读取配置（spring-cloud-alibaba 2023.0.1.2，无需 `bootstrap.yml`）。
 本仓库 `nacos/` 目录下的 YAML 即各 Data ID 的源文件，需手动导入 Nacos 对应命名空间。
 
 ## 环境隔离
@@ -20,10 +20,10 @@
 
 | Data ID | 说明 | 引用它的应用 |
 | --- | --- | --- |
-| `aicyi-example.yml` | 共享：MyBatis 日志、mvc 路径匹配、freemarker | boot |
+| `aicyi-example.yml` | 共享：MyBatis 日志（`IbatisLogger`）、freemarker | boot |
 | `aicyi-example-test.yml` | test 环境：snowflake、message（邮箱/短信/MQ） | boot |
 | `aicyi-example-prod.yml` | prod 环境：snowflake、message（凭证为环境变量占位） | boot（prod） |
-| `aicyi-example-rabbitmq.yml` | 共享：Stream 绑定与交换机/路由键 | rabbitmq |
+| `aicyi-example-rabbitmq.yml` | 共享：消费函数声明、Stream 绑定与交换机/路由键 | rabbitmq |
 | `aicyi-datasource.yml` | 数据源（MySQL `test` 库） | boot / mybatisplus |
 | `aicyi-redis.yml` | Redis 连接 | boot |
 | `aicyi-rabbitmq.yml` | RabbitMQ 连接与 binder | boot / rabbitmq |
@@ -50,8 +50,10 @@
 - Nacos 开启鉴权时，通过环境变量 `NACOS_USERNAME` / `NACOS_PASSWORD` 注入账号密码。
 - 配置项开启 `refreshEnabled=true`，配合 `@RefreshScope` 可实现动态刷新。
 - 敏感凭证（邮箱/短信/XXL-Job Token）保持 `${...}` 环境变量占位符形式，实际值由部署环境注入，不写入配置中心明文。
-- `aicyi-example.yml` 中的 `spring.mvc.path-match.matching-strategy: ant_path_matcher`
-  是 springfox 3.0 兼容必需项，请勿删除（缩进必须位于 `spring.mvc` 之下）。
+- `aicyi-example.yml` 里**不需要**也**不应该**再放 `spring.mvc.path-match.matching-strategy: ant_path_matcher`：
+  那是 springfox 3.0 的兼容必需项（springfox 依赖 `AntPathMatcher` 解析其内部路径模式，遇上 Boot 3 默认的
+  `PathPatternParser` 会抛 NPE）；springdoc-openapi 2.x 不依赖它。保留会让整个 MVC 从 `PathPatternParser`
+  退回 `AntPathMatcher`，属于没有收益的回退。当前 `aicyi-example.yml` 已移除该项，只保留 MyBatis 日志与 freemarker 两项。
 
 ## 相关文档
 

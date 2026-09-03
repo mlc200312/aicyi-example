@@ -1,6 +1,6 @@
 # 将 aicyi 集成到自有项目
 
-aicyi 是一套可独立引用的 Spring Boot 2.7 基础框架（BOM / commons / midware），
+aicyi 是一套可独立引用的 Spring Boot 3.2 / JDK 17 基础框架（BOM / commons / midware），
 本文说明如何在自己的 Maven 工程中接入。框架完整能力见 aicyi 仓库的 `docs/`。
 
 > 前提：已从 aicyi 仓库执行 `mvn clean install -DskipTests`，将基础包安装到本地（或内部）仓库。
@@ -81,7 +81,13 @@ aicyi 是一套可独立引用的 Spring Boot 2.7 基础框架（BOM / commons /
 
 ```java
 @SpringBootApplication
-@EnableMidwareWeb            // 启用统一响应、全局异常处理、鉴权、请求日志与链路追踪
+// 启用统一响应、全局异常处理、鉴权、请求日志与链路追踪；
+// excludePathPatterns 需放行接口文档 UI 与其数据端点，否则鉴权拦截器会把文档请求转成错误信封
+@EnableMidwareWeb(excludePathPatterns = {
+        "/apidoc/**", "/api-doc.html",      // 自研 layui UI（classpath:/static/apidoc/）与跳板页
+        "/swagger-ui/**", "/webjars/**",    // springdoc 自带的官方 Swagger UI 及其 webjars 资源
+        "/v3/api-docs/**"                   // OpenAPI 数据端点（springdoc 2.x；springfox 时代为 /v2/api-docs）
+})
 @MapperScan("com.your.dao")  // 扫描 MyBatis Mapper
 public class YourApplication {
     public static void main(String[] args) {
@@ -118,6 +124,9 @@ public class WebConfiguration {
 
 ## 步骤 4：配置 application.yml
 
+> 示例工程把下列 `springdoc` 配置放在 `aicyi-example-boot/src/main/resources/application-test.yml`
+>（环境无关但与 profile 一同维护），放到 `application.yml` 同样生效。
+
 ```yaml
 server:
   port: 8080
@@ -131,9 +140,6 @@ spring:
   redis:
     host: localhost
     port: 6379
-  mvc:
-    path-match:
-      matching-strategy: ant_path_matcher   # springfox 3.0 兼容必需项
 
 aicyi:
   redis:
@@ -143,13 +149,82 @@ aicyi:
     service-name: your-service     # 多服务共用同一 Redis 时必须各不相同
   mybatis-plus:
     enabled: true                  # 缺省即开启，可省略
+
+springdoc:
+  api-docs:
+    enabled: true
+    path: /v3/api-docs
+    # 固定输出 OpenAPI 3.0.x：3.1 改用 type 数组并移除 nullable 来表达可空，
+    # 与自研 UI（/apidoc）及多数下游客户端的 3.0 解析语义不兼容
+    version: openapi_3_0
+    groups:
+      enabled: true                # 开启 GroupedOpenApi 分组端点 /v3/api-docs/{group}
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+    disable-swagger-default-url: true   # 禁用默认的 Petstore 示例接口
+    groups-order: asc              # 分组、tag、接口均按字母序，避免每次启动顺序抖动
+    tags-sorter: alpha
+    operations-sorter: alpha
+  cache:
+    disabled: false                # 多分组下可显著降低重复扫描开销
 ```
 
 ## 常见问题
 
-### Q: 启动报 `documentationPluginsBootstrapper` NPE？
+### Q: 接口文档页面打开是一段 JSON 错误体？
 
-springfox 3.0 与 Spring Boot 2.6+ 路径匹配策略不兼容，配置 `spring.mvc.path-match.matching-strategy: ant_path_matcher`。
+两个常见原因：
+
+1. **`excludePathPatterns` 未放行**。见步骤 3，注意 springdoc 2.x 的端点是 `/v3/api-docs`，
+   沿用 springfox 时代的 `/v2/api-docs` 会导致文档端点被鉴权拦下。
+2. **自定义了 `/webjars/**` 的 `ResourceHandler`**。Boot 默认把 `/webjars/**` 映射到
+   `classpath:/META-INF/resources/webjars/`，自行改成 `classpath:/webjars/` 会覆盖它，
+   使 springdoc 依赖的 `org.webjars:swagger-ui` 资源无法按 webjars 路径访问。
+   自研 UI 已放在 `classpath:/static/apidoc/`，由 Boot 默认静态资源映射直接暴露，**无需任何自定义映射**。
+
+因为全局异常处理器会把资源解析异常转成 HTTP 200 + JSON 错误体，前端表现为「加载成功但内容错乱」，
+排查时不要只看状态码。
+
+### Q: controller 上手写的 `@Parameter(name = "Authorization", in = HEADER)` 还需要吗？
+
+不需要。推荐在 `OpenAPI` Bean 里声明 `securitySchemes`（`type=HTTP` + `scheme=bearer`），
+再用一个 `OperationCustomizer` 把旧注解产生的冗余 header 参数剔除并改挂 `SecurityRequirement`，
+业务 controller 可以零改动。只对确实声明过该头的接口生效，因此标了 `@IgnoreAuth`
+的公开接口仍保持无 `security`，与鉴权拦截器的实际行为一致。完整实现见
+`aicyi-example-boot` 的 `SwaggerConfiguration`。
+
+**陷阱：`OperationCustomizer` Bean 不会自动作用于分组文档。**
+springdoc 只把容器里的 `OperationCustomizer` Bean 应用到默认文档 `/v3/api-docs`，
+**不会**应用到 `GroupedOpenApi` 声明的 `/v3/api-docs/{group}`；而两套 UI 都是先读
+`/v3/api-docs/swagger-config` 再按分组端点加载的，于是 UI 上看到的仍是未定制的文档
+（冗余的 Authorization 头重新出现、`security` 标记丢失，表现为需鉴权接口不被识别）。
+必须把 customizer 抽成可复用的无状态实例，在**每个** `GroupedOpenApi.builder()` 上显式注册：
+
+```java
+/** 无状态实现，由 @Bean（服务默认文档）与各分组共用，避免同一逻辑写两份 */
+private static OperationCustomizer bearerSecurityCustomizer() {
+    return (operation, handlerMethod) -> { /* 剔除 Authorization 头 + 挂 SecurityRequirement */ };
+}
+
+@Bean
+public OperationCustomizer bearerSecurityOperationCustomizer() {
+    return bearerSecurityCustomizer();          // 仅对 /v3/api-docs 生效
+}
+
+@Bean
+public GroupedOpenApi bizApi() {
+    return GroupedOpenApi.builder()
+            .group("biz")
+            .pathsToMatch("/student/**", "/user/**")
+            .addOperationCustomizer(bearerSecurityCustomizer())   // 分组文档必须显式注册
+            .build();
+}
+```
+
+> 验证方式：分别拉取 `/v3/api-docs` 与 `/v3/api-docs/{group}`，比对两者中 `security` 的出现次数
+> 与残留的 `"name":"Authorization"` 参数个数，**两端都应生效**；只查默认端点会漏判。
+> 注意 springdoc 输出的 JSON 无空格，检索时不要写成 `"name": "Authorization"`。
 
 ### Q: 如何关闭 Snowflake / Redis？
 

@@ -37,15 +37,21 @@ io.github.aicyi.example.mybatisplus
 ├── domain/entity/       # User、MessageTemplate（继承 BaseEntity，自动填充审计字段）
 ├── domain/type/         # GenderType 枚举
 ├── mapper/              # UserMapper、MessageTemplateMapper（继承 BaseMapper）
-├── service/             # IUserService、IMessageTemplateService（IService + ServiceImpl）
+├── service/             # IUserService、IMessageTemplateService（继承 IService）
+│   └── impl/            # UserServiceImpl、MessageTemplateServiceImpl（继承 ServiceImpl）
 └── config/              # PasswordEncoderConfiguration
 ```
+
+`src/main/resources/mapper/` 下另有 `UserMapper.xml` / `MessageTemplateMapper.xml`（自定义 SQL）。
 
 ## 代码生成器
 
 `src/test/java/.../MyBatisPlusGenerator` 封装了官方 `FastAutoGenerator`：
 - 连接参数、包名、字段类型覆盖从 `src/test/resources/generator.yml` 读取
 - 支持自定义实体模板（为全限定自定义类型自动补 import）
+
+> 注意：测试源码目录包名为 `io.github.aicyi.example.mybaitsplus`（`mybaits` 为历史拼写，与主源码的 `mybatisplus` 不同），
+> 下面命令里的全限定名需照此拼写。
 
 ```bash
 # 修改 generator.yml 后直接运行 main 方法

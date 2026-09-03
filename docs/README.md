@@ -1,13 +1,12 @@
-# aicyi-example
 
-> 基于 **aicyi** 框架（Spring Boot 2.7）的多模块示例工程，演示框架各核心能力的落地用法。
+> 基于 **aicyi** 框架（Spring Boot 3.2 / JDK 17）的多模块示例工程，演示框架各核心能力的落地用法。
 > 适合作为新项目脚手架参考，或新手快速熟悉框架的入门工程。
 
 ## 项目简介
 
 aicyi-example 是一个典型的分层多模块 Spring Boot 工程，覆盖：
 
-- **Web 接口**：统一响应 `Result`、JWT 认证、图形/邮件/短信验证码、用户与学生 CRUD、Swagger 文档
+- **Web 接口**：统一响应 `Result`、JWT 认证、图形/邮件/短信验证码、用户与学生 CRUD、OpenAPI 3 接口文档（springdoc + 自研 layui UI）
 - **数据访问**：MyBatis（Generator 生成）+ MyBatis-Plus（自动 CRUD、代码生成器）
 - **中间件**：Redis（缓存/分布式锁/Snowflake）、RabbitMQ（Spring Cloud Stream 消息）、XXL-Job（定时任务）
 - **配置中心**：全部环境配置存放于 Nacos，通过 `spring.config.import` 拉取
@@ -44,16 +43,16 @@ aicyi-example
 
 | 类别 | 技术 | 版本 |
 | --- | --- | --- |
-| 语言 | Java | 8 |
-| 框架 | Spring Boot / Spring Cloud | 2.7.18 / 2021.0.8 |
-| 配置中心 | Nacos (Spring Cloud Alibaba) | 2021.0.5.0 |
-| ORM | MyBatis / MyBatis-Plus | 2.3.1 / 3.5.3.1 |
+| 语言 | Java | 17 |
+| 框架 | Spring Boot / Spring Cloud | 3.2.8 / 2023.0.3 |
+| 配置中心 | Nacos (Spring Cloud Alibaba) | 2023.0.1.2 |
+| ORM | MyBatis / MyBatis-Plus | 3.0.3 / 3.5.7 |
 | 数据库 | MySQL | 8.0.x |
 | 缓存 | Redis (Redisson / Caffeine) | - |
 | 消息队列 | RabbitMQ (Spring Cloud Stream) | - |
 | 认证 | JWT (jjwt) | 0.13.0 |
 | 定时任务 | XXL-Job | 2.5.0 |
-| 接口文档 | springfox (OpenAPI 3) | 3.0.0 |
+| 接口文档 | springdoc-openapi (OpenAPI 3) | 2.5.0 |
 
 ## 依赖说明
 

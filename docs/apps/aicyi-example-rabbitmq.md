@@ -30,19 +30,22 @@ mvn spring-boot:run
 
 | Data ID | 作用 |
 | --- | --- |
-| `aicyi-example-rabbitmq.yml` | 共享：Stream 绑定（bindings）、交换机类型与路由键表达式 |
+| `aicyi-example-rabbitmq.yml` | 共享：消费函数声明（`function.definition`）、Stream 绑定（bindings）、交换机类型与路由键表达式 |
 | `aicyi-rabbitmq.yml` | RabbitMQ 连接与 binder（`localhost:5672`，账号 `test/test`） |
 
-### 通道定义（`channel` 包）
+### 通道常量（`channel` 包）
 
-| 接口 | 通道名 | 说明 |
+两个都是**纯常量接口**：Spring Cloud Stream 4.x 已移除 `@Input` / `@Output` / `@EnableBinding` / `@StreamListener`
+注解式编程模型（4.1.3 的 jar 中已无这些类型），通道名改为普通字符串常量集中维护。
+
+| 接口 | 常量值 | 说明 |
 | --- | --- | --- |
-| `OutputMessageChannels` | `message-output` / `delayed-output` / `direct-output` / `topic-output` | 生产端（`@Output`） |
-| `InputMessageChannels` | `message-input` / `delayed-input` / `direct-input` / `orderEvents-in-0` / `systemLogs-in-0` | 消费端（`@Input`） |
+| `OutputMessageChannels` | `message-output` / `delayed-output` / `direct-output` / `topic-output` | 生产端绑定名，`MqSender` 按此名发送 |
+| `InputMessageChannels` | `messageInput` / `delayedInput` / `directInput` / `orderEvents-in-0` / `systemLogs-in-0` | 消费端**函数名**，绑定名自动派生为 `<函数名>-in-0` |
 
 ## 生产者
 
-`MessageConfiguration` 通过 `@EnableBinding` 绑定全部通道，并提供 JSON `MessageConverter`。
+`MessageConfiguration` 提供 JSON `MessageConverter`，并以 `Consumer<T>` 函数 Bean 声明全部消费者（见下节）。
 生产可直接注入 `MqSender`（aicyi-midware-rabbitmq 的 `StreamMqSender` 自动装配）：
 
 ```java
@@ -65,12 +68,19 @@ mqSender.sendDelayed(OutputMessageChannels.DELAYED_OUTPUT, userBean, 5000L);
 
 ## 消费者（`handler` 包）
 
-| Handler | 通道 | 说明 |
-| --- | --- | --- |
-| `MessageHandlers` | `message-input` | 默认消息，接收 `UserBean` |
-| `DirectMessageHandlers` | `direct-input` | 直连消息 |
-| `DelayedMessageHandlers` | `delayed-input` | 延迟消息 |
-| `TopicMessageHandlers` | `orderEvents-in-0` / `systemLogs-in-0` | 主题消息，按 `headers['routingKey']` 条件过滤 `order.created` / `order.paid` |
+消费者以 `Consumer<T>` 函数 Bean 声明在 `MessageConfiguration` 中，方法引用指向 `handler` 包的实际处理逻辑：
+
+| 函数 Bean（绑定名） | Handler 方法 | 入参类型 | 说明 |
+| --- | --- | --- | --- |
+| `messageInput`（`messageInput-in-0`） | `MessageHandlers#handleMessage` | `UserBean` | 默认消息 |
+| `directInput`（`directInput-in-0`） | `DirectMessageHandlers#handleMessage` | `Message<UserBean>` | 直连消息 |
+| `delayedInput`（`delayedInput-in-0`） | `DelayedMessageHandlers#handleMessage` | `Message<UserBean>` | 延迟消息 |
+| `orderEvents`（`orderEvents-in-0`） | `TopicMessageHandlers#handleOrderEvent` | `Message<UserBean>` | 订单事件，方法内按 `routingKey` 头分发到 `orderEventsCreated` / `orderEventsPaid` |
+| `systemLogs`（`systemLogs-in-0`） | `TopicMessageHandlers#systemLogs` | `Message<UserBean>` | 系统日志 |
+
+> 旧版 `@StreamListener(condition = "...")` 的 SpEL 条件路由在函数式模型中不再支持，
+> 故 `order.created` / `order.paid` 的过滤下沉到 `handleOrderEvent` 方法内按消息头自行分发。
+> 需要读取消息头时用 `Message<T>` 包装入参，只关心消息体时可直接用 `T`（如 `messageInput`）。
 
 `aop/MessagingExceptionHandler` 统一处理消息发送/转换/处理异常。
 
