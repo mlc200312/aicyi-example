@@ -1,8 +1,8 @@
 package io.github.aicyi.example.rabbitmq;
 
-import io.github.aicyi.example.domain.UserBean;
-import io.github.aicyi.example.fixture.util.BaseLoggerTest;
-import io.github.aicyi.example.fixture.util.DataSource;
+import io.github.aicyi.example.domain.bo.UserBean;
+import io.github.aicyi.example.domain.util.BaseLoggerTest;
+import io.github.aicyi.example.domain.util.DataSource;
 import io.github.aicyi.example.rabbitmq.channel.OutputMessageChannels;
 import io.github.aicyi.midware.message.mq.sender.MqSender;
 import io.jsonwebtoken.lang.Maps;

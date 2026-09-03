@@ -1,7 +1,6 @@
 package io.github.aicyi.example.domain.mapper;
 
-import io.github.aicyi.example.domain.UserInfo;
-import io.github.aicyi.example.domain.entity.base.User;
+import io.github.aicyi.example.domain.bo.UserInfo;import io.github.aicyi.example.domain.entity.base.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;

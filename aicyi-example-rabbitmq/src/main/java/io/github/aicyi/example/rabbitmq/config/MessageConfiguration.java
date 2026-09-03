@@ -2,7 +2,7 @@ package io.github.aicyi.example.rabbitmq.config;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.github.aicyi.example.domain.UserBean;
+import io.github.aicyi.example.domain.bo.UserBean;
 import io.github.aicyi.example.rabbitmq.handler.DelayedMessageHandlers;
 import io.github.aicyi.example.rabbitmq.handler.DirectMessageHandlers;
 import io.github.aicyi.example.rabbitmq.handler.MessageHandlers;

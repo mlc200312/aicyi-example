@@ -4,6 +4,7 @@ import io.github.aicyi.commons.lang.StringEnumType;
 import io.github.aicyi.commons.util.json.jackson.StringEnumTypeJsonDeserializer;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import lombok.Getter;
 
 /**
  * @author Mr.Min
@@ -19,6 +20,7 @@ public enum GradeType implements StringEnumType {
     FIVE("伍", "五年级");
 
     private String code;
+    @Getter
     private String description;
 
     GradeType(String code, String description) {
@@ -31,7 +33,4 @@ public enum GradeType implements StringEnumType {
         return code;
     }
 
-    public String getDescription() {
-        return description;
-    }
 }

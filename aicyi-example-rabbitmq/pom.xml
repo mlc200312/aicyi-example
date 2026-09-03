@@ -12,14 +12,14 @@
 
     <parent>
         <groupId>io.github.aicyi.example</groupId>
-        <artifactId>aicyi-example</artifactId>
+        <artifactId>aicyi-examples</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
     <dependencies>
         <dependency>
             <groupId>io.github.aicyi.example</groupId>
-            <artifactId>aicyi-example-fixture</artifactId>
+            <artifactId>aicyi-example-domain</artifactId>
         </dependency>
 
         <dependency>

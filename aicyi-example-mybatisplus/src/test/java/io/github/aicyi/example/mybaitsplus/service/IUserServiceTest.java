@@ -1,7 +1,7 @@
 package io.github.aicyi.example.mybaitsplus.service;
 
-import io.github.aicyi.example.domain.UserBean;
-import io.github.aicyi.example.fixture.util.DataSource;
+import io.github.aicyi.example.domain.bo.UserBean;
+import io.github.aicyi.example.domain.util.DataSource;
 import io.github.aicyi.example.mybatisplus.AicyiExampleMyBatisPlusApplication;
 import io.github.aicyi.example.mybatisplus.domain.entity.User;
 import io.github.aicyi.example.mybaitsplus.mapper.UserBeanMapper;

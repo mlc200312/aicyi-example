@@ -21,7 +21,6 @@ aicyi-example
 ├── aicyi-example-service     # Service 层：业务实现 + 统一消息调用
 ├── aicyi-example-domain      # 领域模型：BO/DTO/DO/Entity/枚举/错误码
 ├── aicyi-example-dao         # DAO 层：MyBatis Mapper + db/init.sql
-├── aicyi-example-fixture     # 测试夹具：Mock 数据 / 随机生成 / 基础测试基类
 ├── aicyi-example-test        # 纯单测：commons 工具/安全模块测试
 ├── aicyi-example-mybatisplus # MyBatis-Plus 示例应用（可运行，端口 8081）
 ├── aicyi-example-rabbitmq    # RabbitMQ 消息应用（可运行，端口 8082）

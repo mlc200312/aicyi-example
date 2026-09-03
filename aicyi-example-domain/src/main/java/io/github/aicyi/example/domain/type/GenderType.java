@@ -4,6 +4,7 @@ import io.github.aicyi.commons.lang.EnumType;
 import io.github.aicyi.commons.util.json.jackson.EnumTypeJsonDeserializer;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import lombok.Getter;
 
 /**
  * @author Mr.Min
@@ -15,7 +16,8 @@ public enum GenderType implements EnumType {
     MAN(1, "男"), WOMAN(2, "女");
 
     private final Integer code;
-    private String description;
+    @Getter
+    private final String description;
 
     GenderType(Integer code, String description) {
         this.code = code;
@@ -27,7 +29,4 @@ public enum GenderType implements EnumType {
         return code;
     }
 
-    public String getDescription() {
-        return description;
-    }
 }

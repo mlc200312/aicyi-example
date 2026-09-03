@@ -9,6 +9,7 @@ import io.github.aicyi.commons.lang.IResultCode;
  **/
 public enum ExampleResultCode implements IResultCode {
     OBJECT_NOT_FOUND(100001, "对象不存在"),
+    USER_HAS_REGISTERED(100002, "该用户已经注册"),
 
     MESSAGE_SEND_FAILURE(100002, "消息发送失败"),
     MESSAGE_CONVERSION_FAILURE(100002, "消息转换失败"),

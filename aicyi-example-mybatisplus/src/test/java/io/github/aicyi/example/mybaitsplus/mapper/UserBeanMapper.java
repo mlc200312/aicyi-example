@@ -1,6 +1,6 @@
 package io.github.aicyi.example.mybaitsplus.mapper;
 
-import io.github.aicyi.example.domain.UserBean;
+import io.github.aicyi.example.domain.bo.UserBean;
 import io.github.aicyi.example.mybatisplus.domain.entity.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;

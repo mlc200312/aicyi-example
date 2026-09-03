@@ -5,11 +5,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>io.github.aicyi.example</groupId>
-    <artifactId>aicyi-example</artifactId>
+    <artifactId>aicyi-examples</artifactId>
 
     <packaging>pom</packaging>
-    <name>aicyi example</name>
-    <description>aicyi example</description>
+    <name>aicyi examples</name>
+    <description>aicyi examples</description>
 
     <parent>
         <groupId>io.github.aicyi.base</groupId>
@@ -18,19 +18,35 @@
     </parent>
 
     <modules>
-        <module>aicyi-example-boot</module>
-        <module>aicyi-example-dao</module>
         <module>aicyi-example-domain</module>
-        <module>aicyi-example-fixture</module>
         <module>aicyi-example-mybatisplus</module>
         <module>aicyi-example-rabbitmq</module>
-        <module>aicyi-example-service</module>
         <module>aicyi-example-test</module>
-        <module>aicyi-example-web</module>
         <module>aicyi-example-xxljob</module>
+        <module>aicyi-example-server</module>
     </modules>
 
     <dependencies>
+        <dependency>
+            <groupId>io.github.aicyi.commons</groupId>
+            <artifactId>aicyi-commons-core</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.github.aicyi.commons</groupId>
+            <artifactId>aicyi-commons-logging</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.github.aicyi.commons</groupId>
+            <artifactId>aicyi-commons-security</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.github.aicyi.commons</groupId>
+            <artifactId>aicyi-commons-util</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>org.aspectj</groupId>
             <artifactId>aspectjrt</artifactId>
@@ -77,12 +93,17 @@
             </dependency>
             <dependency>
                 <groupId>io.github.aicyi.example</groupId>
-                <artifactId>aicyi-example-boot</artifactId>
+                <artifactId>aicyi-example-mybatisplus</artifactId>
                 <version>0.0.1-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>io.github.aicyi.example</groupId>
                 <artifactId>aicyi-example-rabbitmq</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.aicyi.example</groupId>
+                <artifactId>aicyi-example-boot</artifactId>
                 <version>0.0.1-SNAPSHOT</version>
             </dependency>
             <dependency>
@@ -97,17 +118,12 @@
             </dependency>
             <dependency>
                 <groupId>io.github.aicyi.example</groupId>
-                <artifactId>aicyi-example-fixture</artifactId>
-                <version>0.0.1-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>io.github.aicyi.example</groupId>
-                <artifactId>aicyi-example-mybatisplus</artifactId>
-                <version>0.0.1-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>io.github.aicyi.example</groupId>
                 <artifactId>aicyi-example-service</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.aicyi.example</groupId>
+                <artifactId>aicyi-example-web</artifactId>
                 <version>0.0.1-SNAPSHOT</version>
             </dependency>
             <dependency>
@@ -117,7 +133,7 @@
             </dependency>
             <dependency>
                 <groupId>io.github.aicyi.example</groupId>
-                <artifactId>aicyi-example-web</artifactId>
+                <artifactId>aicyi-example-xxljob</artifactId>
                 <version>0.0.1-SNAPSHOT</version>
             </dependency>
         </dependencies>

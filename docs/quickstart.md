@@ -191,7 +191,7 @@ Nacos 未启动、namespace 不对，或 `nacos/` 下的 Data ID 未完整导入
 
 ### Q: 如何跑单元/集成测试？
 
-boot 模块内测试直接依赖本机 Redis/MySQL（见 `aicyi-example-fixture` 的测试夹具）：
+boot 模块内测试直接依赖本机 Redis/MySQL：
 `mvn test -pl aicyi-example-boot`。纯单测在 `aicyi-example-test` 模块：`mvn test -pl aicyi-example-test`。
 
 ### Q: 访问 `/apidoc/index.html` 或 `/v3/api-docs` 返回的是一段 JSON 错误体？
