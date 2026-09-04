@@ -14,80 +14,56 @@ spring:
     function:
       definition: messageInput;delayedInput;directInput;orderEvents;systemLogs
 
+    stream:
       # 绑定配置：函数式模型下消费者绑定名固定派生为 <函数名>-in-0，
       # 此处 key 必须与之一致，否则该消费者的 destination / group 不生效
       bindings:
         message-output:
           destination: default.exchange
-          # group: default.queue           # 冗余：group 仅对入站绑定生效，输出绑定被忽略；队列存在性由下方 required-groups 保证
-          # content-type: application/json # 冗余：SCS 默认即 application/json
-          # binder: rabbit                 # 冗余：aicyi-rabbitmq.yml 已声明 default-binder: rabbit，classpath 仅此一个 binder
           producer:
             required-groups: default.queue # 确保消费者组存在
 
         delayed-output:
           destination: delayed.exchange
-          # group: delayed.queue # 冗余：输出绑定不生效
-          # binder: rabbit       # 冗余：已由 default-binder 决定
 
         direct-output:
           destination: direct.exchange
-          # group: direct.queue # 冗余：输出绑定不生效
-          # binder: rabbit      # 冗余：已由 default-binder 决定
 
         topic-output:
           destination: topic.exchange
-          # content-type: application/json # 冗余：SCS 默认即 application/json
-          # binder: rabbit                 # 冗余：已由 default-binder 决定
 
         messageInput-in-0:
           destination: default.exchange
           group: default.queue
-          # content-type: application/json # 冗余：SCS 默认即 application/json
-          # binder: rabbit                 # 冗余：已由 default-binder 决定
           consumer:
             concurrency: 3 # 最大并发数（默认 1，属有效调优项，保留）
-            # max-attempts: 3                 # 冗余：SCS 默认 3（含首次消费，即最多重试 2 次）
-            # back-off-initial-interval: 1000 # 冗余：SCS 默认 1000ms
-            # TODO(生产)：重试参数仅此绑定声明，其余 4 个消费者依赖默认值，
-            #            建议用 spring.cloud.stream.default.consumer.* 统一收口。
 
         delayedInput-in-0:
           destination: delayed.exchange
           group: delayed.queue
-          # content-type: application/json # 冗余：SCS 默认即 application/json
-          # binder: rabbit                 # 冗余：已由 default-binder 决定
 
         directInput-in-0:
           destination: direct.exchange
           group: direct.queue
-          # binder: rabbit # 冗余：已由 default-binder 决定
 
         orderEvents-in-0:
           destination: topic.exchange
           group: order-service
-          # binder: rabbit # 冗余：已由 default-binder 决定
 
         systemLogs-in-0:
           destination: topic.exchange
           group: log-service
-          # binder: rabbit # 冗余：已由 default-binder 决定
-          # TODO(生产)：init 脚本以 "#" 将 topic.exchange 绑到本队列，会接收全量消息
-          #            （含 order.*），高峰期易堆积，建议收窄路由键。
 
       # RabbitMQ特定配置
       rabbit:
         bindings:
           message-output:
             producer:
-              # exchange-type: topic    # 冗余：Rabbit binder 默认即 topic
-              # delayed-exchange: false # 冗余：默认 false
               declare-exchange: false # 不自动声明交换机（拓扑由 init-rabbitmq.sh / DBA 预建）
               bind-queue: false # 不自动绑定队列
 
           delayed-output:
             producer:
-              # exchange-type: topic # 冗余：默认 topic；且 declare-exchange=false 时不参与声明
               declare-exchange: false
               bind-queue: false
               routing-key-expression: "'delayed.routing.key'" # 静态路由键
@@ -101,7 +77,6 @@ spring:
 
           topic-output:
             producer:
-              # exchange-type: topic # 冗余：默认 topic
               declare-exchange: false
               bind-queue: false
               routing-key-expression: headers['routingKey'] # 动态路由键
@@ -129,7 +104,6 @@ spring:
               exchange-auto-delete: false # 不自动删除交换机（declare-exchange=false 时不生效，仅语义留档；另 4 个消费者未声明，存在不一致）
               declare-exchange: false # 不自动声明交换机
               bind-queue: false # 不自动绑定队列
-              # auto-bind-dlq: false    # 冗余：默认 false。DLX/DLQ 由脚本预建，binder 不托管
               republish-to-dlq: false   # 显式关闭 binder 重投，改由 broker 原生 DLX 路由（见上方说明）
               # requeue-rejected: false # 冗余：默认 false。重试耗尽后 reject 且不重回队列 → 进 DLQ
               queue-declaration-arguments:
@@ -142,7 +116,6 @@ spring:
           delayedInput-in-0:
             consumer:
               queue-name-group-only: true
-              # durable-subscription: true # 冗余：默认 true
               declare-exchange: false
               bind-queue: false
               republish-to-dlq: false
@@ -156,7 +129,6 @@ spring:
           directInput-in-0:
             consumer:
               queue-name-group-only: true
-              # durable-subscription: true # 冗余：默认 true
               declare-exchange: false
               bind-queue: false
               republish-to-dlq: false
@@ -169,7 +141,6 @@ spring:
 
           orderEvents-in-0:
             consumer:
-              # durable-subscription: true # 冗余：默认 true
               declare-exchange: false
               bind-queue: false
               republish-to-dlq: false
@@ -182,7 +153,6 @@ spring:
 
           systemLogs-in-0:
             consumer:
-              # durable-subscription: true # 冗余：默认 true
               declare-exchange: false
               bind-queue: false
               republish-to-dlq: false

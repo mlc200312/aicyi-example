@@ -1,6 +1,7 @@
 package io.github.aicyi.example.rabbitmq.handler;
 
 import io.github.aicyi.commons.core.logging.Logger;
+import io.github.aicyi.commons.lang.exception.BusinessException;
 import io.github.aicyi.commons.logging.LoggerFactory;
 import io.github.aicyi.example.domain.bo.UserBean;
 import org.springframework.messaging.Message;
@@ -32,7 +33,10 @@ public class TopicMessageHandlers {
         } else if ("order.paid".equals(routingKey)) {
             orderEventsPaid(message);
         } else {
+
             logger.info("Ignored order event [{}]: {}", routingKey, message.getPayload());
+
+            throw new BusinessException("Unknown routing key: " + routingKey);
         }
     }
 
