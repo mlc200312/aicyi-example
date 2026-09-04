@@ -10,13 +10,11 @@ import io.github.aicyi.midware.redis.template.EnhancedRedisTemplateFactory;
 import io.github.aicyi.midware.redis.token.RedisTokenServiceImpl;
 import io.github.aicyi.example.domain.util.BaseLoggerTest;
 import io.github.aicyi.example.domain.util.RandomGenerator;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.platform.commons.util.StringUtils;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.Map;
 import java.util.Set;
@@ -27,7 +25,6 @@ import java.util.concurrent.TimeUnit;
  * @description 业务描述
  * @date 19:53
  **/
-@RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = AicyiExampleApplication.class)
 public class RedisTokenServiceImplTest extends BaseLoggerTest {
 
@@ -38,7 +35,7 @@ public class RedisTokenServiceImplTest extends BaseLoggerTest {
     private TokenCreateRequest<UserInfo> request;
     private TokenService<String, UserInfo> tokenService;
 
-    @Before
+    @BeforeEach
     @Override
     public void beforeTest() {
         jwtInfo = new UserInfo();

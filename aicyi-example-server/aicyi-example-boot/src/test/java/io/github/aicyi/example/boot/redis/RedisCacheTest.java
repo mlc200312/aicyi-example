@@ -14,13 +14,11 @@ import io.github.aicyi.midware.redis.cache.RedisCache;
 import io.github.aicyi.midware.redis.cache.RedisCacheConfig;
 import io.github.aicyi.example.domain.util.BaseLoggerTest;
 import org.apache.commons.collections4.MapUtils;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.time.Duration;
 import java.util.HashMap;
@@ -31,7 +29,6 @@ import java.util.Map;
  * @description 业务描述
  * @date 11:13
  **/
-@RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = AicyiExampleApplication.class)
 public class RedisCacheTest extends BaseLoggerTest {
 
@@ -46,7 +43,7 @@ public class RedisCacheTest extends BaseLoggerTest {
 
     private RedisCache<MessageTemplate> redisCache;
 
-    @Before
+    @BeforeEach
     @Override
     public void beforeTest() {
         cache.clear();

@@ -16,19 +16,34 @@
 
 ## Data ID 清单
 
-`nacos/` 目录下所有配置均需导入 **test 环境命名空间**（prod 环境按需导入 `aicyi-example-prod.yml`）：
+`nacos/` 目录下所有配置均需导入 **test 环境命名空间**；prod 命名空间只需导入下表「prod 需要」为 ✅ 的 Data ID：
 
-| Data ID | 说明 | 引用它的应用 |
-| --- | --- | --- |
-| `aicyi-example.yml` | 共享：MyBatis 日志（`IbatisLogger`）、freemarker | boot |
-| `aicyi-example-test.yml` | test 环境：snowflake、message（邮箱/短信/MQ） | boot |
-| `aicyi-example-prod.yml` | prod 环境：snowflake、message（凭证为环境变量占位） | boot（prod） |
-| `aicyi-example-rabbitmq.yml` | 共享：消费函数声明、Stream 绑定与交换机/路由键 | rabbitmq |
-| `aicyi-datasource.yml` | 数据源（MySQL `test` 库） | boot / mybatisplus |
-| `aicyi-redis.yml` | Redis 连接 | boot |
-| `aicyi-rabbitmq.yml` | RabbitMQ 连接与 binder | boot / rabbitmq |
-| `aicyi-xxl-job.yml` | XXL-Job 调度中心与执行器参数 | xxljob |
+| Data ID | 说明 | 引用它的应用 | prod 需要 |
+| --- | --- | --- | --- |
+| `aicyi-example.yml` | 共享：MyBatis 日志（`IbatisLogger`）、freemarker | boot | ✅ |
+| `aicyi-example-test.yml` | test 环境：snowflake、message（邮箱/短信/MQ） | boot | ❌ |
+| `aicyi-example-prod.yml` | prod 环境：snowflake、message（凭证为环境变量占位） | boot（prod） | ✅ |
+| `aicyi-example-rabbitmq.yml` | 共享：消费函数声明、Stream 绑定与交换机/路由键 | rabbitmq | ✅ |
+| `aicyi-datasource.yml` | 数据源（MySQL `test` 库） | boot / mybatisplus | ✅ |
+| `aicyi-redis.yml` | Redis 连接 | boot | ✅ |
+| `aicyi-rabbitmq.yml` | RabbitMQ 连接与 binder | boot / rabbitmq | ✅ |
+| `aicyi-xxl-job.yml` | XXL-Job 调度中心与执行器参数 | xxljob | ✅ |
 
+各应用 prod 命名空间的导入清单（与模块内 `application-prod.yml` 的 `spring.config.import` 一一对应）：
+
+| 应用 | prod 需导入的 Data ID |
+| --- | --- |
+| `aicyi-example-boot` | `aicyi-example.yml`、`aicyi-example-prod.yml`、`aicyi-datasource.yml`、`aicyi-redis.yml`、`aicyi-rabbitmq.yml` |
+| `aicyi-example-mybatisplus` | `aicyi-datasource.yml` |
+| `aicyi-example-rabbitmq` | `aicyi-example-rabbitmq.yml`、`aicyi-rabbitmq.yml` |
+| `aicyi-example-xxljob` | `aicyi-xxl-job.yml` |
+
+> ⚠️ **共享型 Data ID 不得原样复制到 prod**：`aicyi-datasource.yml` / `aicyi-redis.yml` /
+> `aicyi-rabbitmq.yml` / `aicyi-xxl-job.yml` 在仓库内保存的是**本地开发基线**
+> （localhost 地址 + 明文开发账号/Token）。导入 prod 命名空间时必须替换为生产集群地址与专用账号，
+> 凭证按 `${ENV_VAR}` 占位由部署环境注入，不在配置中心落明文
+> （与 `aicyi-example-prod.yml` 的邮箱/短信凭证保持同一约定）。
+>
 > 各应用实际导入哪些 Data ID，以对应模块 `src/main/resources/application-{profile}.yml` 中的
 > `spring.config.import` 为准。
 

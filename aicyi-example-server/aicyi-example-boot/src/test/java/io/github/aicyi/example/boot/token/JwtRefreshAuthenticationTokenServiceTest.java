@@ -16,13 +16,11 @@ import io.github.aicyi.example.domain.util.DataSource;
 import io.github.aicyi.example.web.mapper.FixtureBeanMapper;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.crypto.SecretKey;
 import java.util.ArrayList;
@@ -36,7 +34,6 @@ import java.util.concurrent.TimeUnit;
  * @description 业务描述
  * @date 17:29
  **/
-@RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = AicyiExampleApplication.class)
 public class JwtRefreshAuthenticationTokenServiceTest extends BaseLoggerTest {
 
@@ -45,7 +42,7 @@ public class JwtRefreshAuthenticationTokenServiceTest extends BaseLoggerTest {
 
     private AuthenticationTokenService<UserInfo> authenticationTokenService;
 
-    @Before
+    @BeforeEach
     @Override
     public void beforeTest() {
 

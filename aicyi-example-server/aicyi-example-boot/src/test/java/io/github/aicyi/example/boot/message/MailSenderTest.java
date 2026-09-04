@@ -10,14 +10,12 @@ import io.github.aicyi.example.domain.util.BaseLoggerTest;
 import io.github.aicyi.midware.message.mail.model.MailAttachment;
 import io.github.aicyi.commons.core.template.TemplateEngine;
 import lombok.SneakyThrows;
-import org.junit.Before;
-import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.File;
 import java.time.LocalDateTime;
@@ -29,7 +27,6 @@ import java.util.concurrent.CompletableFuture;
  * @description 业务描述
  * @date 18:41
  **/
-@RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = AicyiExampleApplication.class)
 public class MailSenderTest extends BaseLoggerTest {
 
@@ -40,7 +37,7 @@ public class MailSenderTest extends BaseLoggerTest {
     private MailAttachment attachment;
     private TemplateEngine templateEngine;
 
-    @Before
+    @BeforeEach
     @Override
     public void beforeTest() {
         toList = Arrays.asList("15910436675@163.com", "mlc200312@163.com");

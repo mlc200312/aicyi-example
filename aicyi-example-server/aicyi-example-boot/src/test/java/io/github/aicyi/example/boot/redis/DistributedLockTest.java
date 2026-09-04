@@ -6,17 +6,14 @@ import io.github.aicyi.commons.core.lock.DistributedLockManager;
 import io.github.aicyi.example.domain.util.BaseLoggerTest;
 import io.github.aicyi.example.domain.util.RedisLockStressFactory;
 import lombok.SneakyThrows;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.*;
 
 
-@RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = AicyiExampleApplication.class)
 public class DistributedLockTest extends BaseLoggerTest {
 
@@ -25,7 +22,7 @@ public class DistributedLockTest extends BaseLoggerTest {
 
     private static final int LOCK = 1;
 
-    @Before
+    @BeforeEach
     @Override
     public void beforeTest() {
     }

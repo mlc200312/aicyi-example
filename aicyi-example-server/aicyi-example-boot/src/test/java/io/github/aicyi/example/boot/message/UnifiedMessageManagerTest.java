@@ -13,12 +13,10 @@ import io.github.aicyi.midware.message.core.sender.UnifiedMessageManager;
 import io.github.aicyi.example.domain.util.BaseLoggerTest;
 import io.github.aicyi.midware.message.sms.model.SmsMessage;
 import lombok.SneakyThrows;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -33,14 +31,13 @@ import java.util.concurrent.TimeUnit;
  * @description 业务描述
  * @date 16:12
  **/
-@RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = AicyiExampleApplication.class)
 public class UnifiedMessageManagerTest extends BaseLoggerTest {
 
     @Autowired
     private UnifiedMessageManager unifiedMessageManager;
 
-    @Before
+    @BeforeEach
     @Override
     public void beforeTest() {
     }

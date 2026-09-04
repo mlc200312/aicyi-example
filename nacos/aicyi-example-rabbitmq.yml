@@ -1,131 +1,194 @@
 # Nacos dataId: aicyi-example-rabbitmq.yml
 # group: DEFAULT_GROUP，格式：YAML
-# 共享配置（所有环境生效），当前无环境无关的公共配置项，可按需扩展
+# 共享配置（所有环境生效）：消费函数声明、Stream 绑定、RabbitMQ 交换机类型与路由键、死信路由
+#
+# 冗余约定：被注释的行均为「取值与框架默认值一致」或「对当前绑定方向不生效」的冗余项，
+#           按生产精简原则注释保留，仅供可读性与审计，不影响运行行为。
+# 参数联动：下方 5 个消费者的 queue-declaration-arguments 必须与
+#           aicyi-example-rabbitmq/scripts/init-rabbitmq.sh 的 queue_args() 逐字一致，
+#           否则应用启动报 PRECONDITION_FAILED - inequivalent arg。改一边必须改另一边。
 
 spring:
   cloud:
-    stream:
-      # Spring Cloud Stream 4.x 函数式模型：声明消费者函数名，绑定名自动派生为 <函数名>-in-0
-      function:
-        definition: messageInput;delayedInput;directInput;orderEvents;systemLogs
+    # 函数定义归属 Spring Cloud Function：SCS 4.x 只认 spring.cloud.function.definition。
+    function:
+      definition: messageInput;delayedInput;directInput;orderEvents;systemLogs
 
-      # 绑定配置
+      # 绑定配置：函数式模型下消费者绑定名固定派生为 <函数名>-in-0，
+      # 此处 key 必须与之一致，否则该消费者的 destination / group 不生效
       bindings:
         message-output:
           destination: default.exchange
-          group: default.queue
-          content-type: application/json
-          binder: rabbit
+          # group: default.queue           # 冗余：group 仅对入站绑定生效，输出绑定被忽略；队列存在性由下方 required-groups 保证
+          # content-type: application/json # 冗余：SCS 默认即 application/json
+          # binder: rabbit                 # 冗余：aicyi-rabbitmq.yml 已声明 default-binder: rabbit，classpath 仅此一个 binder
           producer:
             required-groups: default.queue # 确保消费者组存在
 
         delayed-output:
           destination: delayed.exchange
-          group: delayed.queue
-          binder: rabbit
+          # group: delayed.queue # 冗余：输出绑定不生效
+          # binder: rabbit       # 冗余：已由 default-binder 决定
 
         direct-output:
           destination: direct.exchange
-          group: direct.queue
-          binder: rabbit
+          # group: direct.queue # 冗余：输出绑定不生效
+          # binder: rabbit      # 冗余：已由 default-binder 决定
 
         topic-output:
           destination: topic.exchange
-          content-type: application/json
-          binder: rabbit
+          # content-type: application/json # 冗余：SCS 默认即 application/json
+          # binder: rabbit                 # 冗余：已由 default-binder 决定
 
-        message-input:
+        messageInput-in-0:
           destination: default.exchange
           group: default.queue
-          content-type: application/json
-          binder: rabbit
+          # content-type: application/json # 冗余：SCS 默认即 application/json
+          # binder: rabbit                 # 冗余：已由 default-binder 决定
           consumer:
-            concurrency: 3 # 最大并发数
-            max-attempts: 3 # 最大重试次数
-            back-off-initial-interval: 1000 # 重试间隔(ms)
+            concurrency: 3 # 最大并发数（默认 1，属有效调优项，保留）
+            # max-attempts: 3                 # 冗余：SCS 默认 3（含首次消费，即最多重试 2 次）
+            # back-off-initial-interval: 1000 # 冗余：SCS 默认 1000ms
+            # TODO(生产)：重试参数仅此绑定声明，其余 4 个消费者依赖默认值，
+            #            建议用 spring.cloud.stream.default.consumer.* 统一收口。
 
-        delayed-input:
+        delayedInput-in-0:
           destination: delayed.exchange
           group: delayed.queue
-          content-type: application/json
-          binder: rabbit
+          # content-type: application/json # 冗余：SCS 默认即 application/json
+          # binder: rabbit                 # 冗余：已由 default-binder 决定
 
-        direct-input:
+        directInput-in-0:
           destination: direct.exchange
           group: direct.queue
-          binder: rabbit
+          # binder: rabbit # 冗余：已由 default-binder 决定
 
         orderEvents-in-0:
           destination: topic.exchange
           group: order-service
-          binder: rabbit
+          # binder: rabbit # 冗余：已由 default-binder 决定
 
         systemLogs-in-0:
           destination: topic.exchange
           group: log-service
-          binder: rabbit
+          # binder: rabbit # 冗余：已由 default-binder 决定
+          # TODO(生产)：init 脚本以 "#" 将 topic.exchange 绑到本队列，会接收全量消息
+          #            （含 order.*），高峰期易堆积，建议收窄路由键。
 
       # RabbitMQ特定配置
       rabbit:
         bindings:
           message-output:
             producer:
-              exchange-type: topic # 消息模式：topic
-              delayed-exchange: false # 不自动声明延迟交换机
-              declare-exchange: false # 不自动声明交换机
+              # exchange-type: topic    # 冗余：Rabbit binder 默认即 topic
+              # delayed-exchange: false # 冗余：默认 false
+              declare-exchange: false # 不自动声明交换机（拓扑由 init-rabbitmq.sh / DBA 预建）
               bind-queue: false # 不自动绑定队列
 
           delayed-output:
             producer:
-              exchange-type: topic
+              # exchange-type: topic # 冗余：默认 topic；且 declare-exchange=false 时不参与声明
               declare-exchange: false
               bind-queue: false
               routing-key-expression: "'delayed.routing.key'" # 静态路由键
 
           direct-output:
             producer:
-              exchange-type: direct # 消息模式：direct
+              exchange-type: direct # 消息模式：direct（非默认值，保留；declare-exchange=false 时仅作文档语义）
               declare-exchange: false
               bind-queue: false
               routing-key-expression: "'direct.routing.key'" # 静态路由键
 
           topic-output:
             producer:
-              exchange-type: topic
+              # exchange-type: topic # 冗余：默认 topic
               declare-exchange: false
               bind-queue: false
               routing-key-expression: headers['routingKey'] # 动态路由键
 
+          # -------------------------------------------------------------------
+          # 消费者死信兜底（方案 A：broker 原生 DLX）
+          #   拓扑由 aicyi-example-rabbitmq/scripts/init-rabbitmq.sh 预建：业务队列挂
+          #   x-dead-letter-exchange=dlx.exchange + x-dead-letter-routing-key=<队列名>.dlq，
+          #   本地重试耗尽后 binder 以 requeue=false 拒绝消息，由 broker 原生路由进 DLQ。
+          #
+          #   ⚠️ queue-declaration-arguments 必须与脚本 queue_args() 的输出逐字一致：
+          #      binder 虽不建交换机/绑定，但仍会幂等声明队列（消费者属性里有
+          #      declare-exchange / bind-queue，却没有 declare-queue 开关），参数不符即启动报
+          #      PRECONDITION_FAILED - inequivalent arg。
+          #
+          #   republish-to-dlq 显式置 false：该项默认为 true 时 binder 会自行重投到
+          #   <destination>.dlq（本拓扑中不存在），导致消息彻底丢失；置 false 后完全交给
+          #   broker 原生 DLX，行为与 binder 版本无关。代价是 DLQ 消息不带
+          #   x-exception-stacktrace 头，异常需由业务侧自行落日志。
+          # -------------------------------------------------------------------
           messageInput-in-0:
             consumer:
               queue-name-group-only: true # 队名列等于组名，默认队列名等于交换机+组名
-              durable-subscription: true # 持久化订阅
-              exchange-auto-delete: false # 不自动删除交换机
+              # durable-subscription: true # 冗余：Rabbit binder 默认 true
+              exchange-auto-delete: false # 不自动删除交换机（declare-exchange=false 时不生效，仅语义留档；另 4 个消费者未声明，存在不一致）
               declare-exchange: false # 不自动声明交换机
               bind-queue: false # 不自动绑定队列
+              # auto-bind-dlq: false    # 冗余：默认 false。DLX/DLQ 由脚本预建，binder 不托管
+              republish-to-dlq: false   # 显式关闭 binder 重投，改由 broker 原生 DLX 路由（见上方说明）
+              # requeue-rejected: false # 冗余：默认 false。重试耗尽后 reject 且不重回队列 → 进 DLQ
+              queue-declaration-arguments:
+                x-dead-letter-exchange: dlx.exchange
+                x-dead-letter-routing-key: default.queue.dlq
+                x-max-length: 100000
+                x-max-length-bytes: 524288000
+                x-overflow: reject-publish
 
           delayedInput-in-0:
             consumer:
               queue-name-group-only: true
-              durable-subscription: true
+              # durable-subscription: true # 冗余：默认 true
               declare-exchange: false
               bind-queue: false
+              republish-to-dlq: false
+              queue-declaration-arguments:
+                x-dead-letter-exchange: dlx.exchange
+                x-dead-letter-routing-key: delayed.queue.dlq
+                x-max-length: 100000
+                x-max-length-bytes: 524288000
+                x-overflow: reject-publish
 
           directInput-in-0:
             consumer:
               queue-name-group-only: true
-              durable-subscription: true
+              # durable-subscription: true # 冗余：默认 true
               declare-exchange: false
               bind-queue: false
+              republish-to-dlq: false
+              queue-declaration-arguments:
+                x-dead-letter-exchange: dlx.exchange
+                x-dead-letter-routing-key: direct.queue.dlq
+                x-max-length: 100000
+                x-max-length-bytes: 524288000
+                x-overflow: reject-publish
 
           orderEvents-in-0:
             consumer:
-              durable-subscription: true
+              # durable-subscription: true # 冗余：默认 true
               declare-exchange: false
               bind-queue: false
+              republish-to-dlq: false
+              queue-declaration-arguments:
+                x-dead-letter-exchange: dlx.exchange
+                x-dead-letter-routing-key: topic.exchange.order-service.dlq
+                x-max-length: 100000
+                x-max-length-bytes: 524288000
+                x-overflow: reject-publish
 
           systemLogs-in-0:
             consumer:
-              durable-subscription: true
+              # durable-subscription: true # 冗余：默认 true
               declare-exchange: false
               bind-queue: false
+              republish-to-dlq: false
+              queue-declaration-arguments:
+                x-dead-letter-exchange: dlx.exchange
+                x-dead-letter-routing-key: topic.exchange.log-service.dlq
+                x-max-length: 100000
+                x-max-length-bytes: 524288000
+                x-overflow: reject-publish

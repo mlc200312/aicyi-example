@@ -39,21 +39,11 @@
             <artifactId>javase</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <scope>test</scope>
-        </dependency>
-
+        <!-- 本模块未引入 spring-boot-starter-test，测试栈需在此显式声明；
+             全仓库已统一 JUnit 5，故不再需要 junit:junit 与 junit-vintage-engine 兼容层 -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.junit.vintage</groupId>
-            <artifactId>junit-vintage-engine</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>

@@ -1,0 +1,29 @@
+# 环境相关配置已迁移至 Nacos 配置中心
+# prod 环境专用 namespace，必须通过环境变量 NACOS_NAMESPACE 注入（未设置时启动报错，防止误连其他环境）
+# 配置内容见模块根目录 nacos/，需先导入 Nacos 后再启动应用
+#
+# ⚠️ 生产上线前置检查（本文件只负责 namespace 与导入清单，实际连接参数都在 Nacos 中）：
+#   1. prod namespace 下必须存在下列两个 Data ID。导入为非 optional，缺失即启动失败。
+#   2. aicyi-rabbitmq.yml 的 prod 副本须改为生产集群的 host/port/virtual-host 与专用账号；
+#      仓库内该文件是本地开发基线（localhost:5672，test/test），不要原样复制到 prod namespace。
+#      凭证建议用 ${RABBITMQ_USERNAME} / ${RABBITMQ_PASSWORD} 占位、由部署环境注入，
+#      与 nacos/aicyi-example-prod.yml 的邮箱/短信凭证保持同一约定（配置中心不落明文）。
+#   3. 交换机 / 队列 / 绑定须由 DBA 工单或 scripts/init-rabbitmq.sh 预先建好：
+#      所有绑定均声明 declare-exchange: false / bind-queue: false，binder 不会创建它们，
+#      拓扑缺失时启动报 NOT_FOUND。
+#   4. delayed.exchange 为 x-delayed-message 类型，依赖 rabbitmq_delayed_message_exchange 插件，
+#      需确认生产集群**每个节点**均已启用，否则发送延迟消息时抛 PRECONDITION_FAILED。
+#   5. 生产集群建议启用镜像队列 / Quorum Queue 策略，并关闭 guest 账号远程访问。
+#   6. 启动时须覆盖 application.yml 中默认的 test profile：
+#      SPRING_PROFILES_ACTIVE=prod 或 --spring.profiles.active=prod
+spring:
+  cloud:
+    nacos:
+      config:
+        # prod 环境 namespace（Nacos 控制台 → 命名空间 → 命名空间 ID）
+        namespace: ${NACOS_NAMESPACE}
+
+  config:
+    import:
+      - nacos:aicyi-example-rabbitmq.yml?group=DEFAULT_GROUP&refreshEnabled=true
+      - nacos:aicyi-rabbitmq.yml?group=DEFAULT_GROUP&refreshEnabled=true

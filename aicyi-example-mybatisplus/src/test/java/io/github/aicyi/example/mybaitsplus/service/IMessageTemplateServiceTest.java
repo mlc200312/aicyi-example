@@ -1,13 +1,12 @@
 package io.github.aicyi.example.mybaitsplus.service;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import io.github.aicyi.example.mybatisplus.AicyiExampleMyBatisPlusApplication;
 import io.github.aicyi.example.mybatisplus.domain.entity.MessageTemplate;
 import io.github.aicyi.example.mybatisplus.service.IMessageTemplateService;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -18,7 +17,6 @@ import java.util.List;
  * @description 业务描述
  * @date 2026/8/21
  **/
-@RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = AicyiExampleMyBatisPlusApplication.class)
 public class IMessageTemplateServiceTest {
 
@@ -28,8 +26,12 @@ public class IMessageTemplateServiceTest {
     @Test
     public void save() {
 
+        QueryWrapper<MessageTemplate> wrapper = new QueryWrapper<MessageTemplate>()
+                .eq("template_code", "Test");
+        messageTemplateService.remove(wrapper);
+
         MessageTemplate messageTemplate = new MessageTemplate();
-        messageTemplate.setTemplateCode("Test");
+        messageTemplate.setTemplateCode("Test_01");
         messageTemplate.setTemplateName("测试");
         messageTemplate.setMessageType("SMS");
         messageTemplate.setFormat("TEXT");

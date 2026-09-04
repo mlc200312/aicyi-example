@@ -17,11 +17,9 @@ import io.jsonwebtoken.security.Keys;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.crypto.SecretKey;
 import java.util.*;
@@ -34,7 +32,6 @@ import static org.junit.jupiter.api.Assertions.*;
  *
  * @author Mr.Min
  */
-@RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = AicyiExampleApplication.class)
 class AuthenticationTokenServiceTest {
 

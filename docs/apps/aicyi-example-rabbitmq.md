@@ -20,18 +20,36 @@ cd aicyi-example-rabbitmq
 mvn spring-boot:run
 ```
 
+默认以 `test` profile 启动（`application.yml` 中写死）。以生产 profile 启动需覆盖：
+
+```bash
+SPRING_PROFILES_ACTIVE=prod NACOS_NAMESPACE=<prod-namespace-id> mvn spring-boot:run
+# 或 java -jar target/aicyi-example-rabbitmq-0.0.1-SNAPSHOT.jar --spring.profiles.active=prod
+```
+
 ## 配置
 
 ### 本地 `application.yml`
 
 - `server.port: 8082`，`spring.profiles.active: test`
+- Nacos 地址：`${NACOS_SERVER_ADDR:127.0.0.1:8848}`
 
-### Nacos 导入清单（`application-test.yml`）
+### profile 与 namespace
+
+| profile | 配置文件 | namespace | 说明 |
+| --- | --- | --- | --- |
+| test | `application-test.yml` | `${NACOS_NAMESPACE:29b4684f-0751-4290-a0a4-f65a51893ef6}` | 内置默认值，本地开箱可用 |
+| prod | `application-prod.yml` | `${NACOS_NAMESPACE}` | 必须由环境变量注入，未设置则启动失败，防止误连其他环境 |
+
+### Nacos 导入清单（test / prod 相同）
 
 | Data ID | 作用 |
 | --- | --- |
 | `aicyi-example-rabbitmq.yml` | 共享：消费函数声明（`function.definition`）、Stream 绑定（bindings）、交换机类型与路由键表达式 |
-| `aicyi-rabbitmq.yml` | RabbitMQ 连接与 binder（`localhost:5672`，账号 `test/test`） |
+| `aicyi-rabbitmq.yml` | RabbitMQ 连接与 binder。仓库内为本地基线（`localhost:5672`，账号 `test/test`）；prod namespace 的副本须改为生产集群参数与专用账号 |
+
+> 两个 profile 导入的 Data ID 完全一致，差异只在 namespace 来源。
+> 生产上线前置检查清单（插件、拓扑预建、凭证注入、集群高可用策略）见 `application-prod.yml` 文件头注释。
 
 ### 通道常量（`channel` 包）
 
