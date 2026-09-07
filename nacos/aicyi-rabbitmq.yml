@@ -31,6 +31,7 @@ spring:
         initial-interval: 1000ms
     listener:
       simple:
+        missing-queues-fatal: true   # 显式开启（默认即为 true，此处强调）
         acknowledge-mode: auto
         retry:
           enabled: true
