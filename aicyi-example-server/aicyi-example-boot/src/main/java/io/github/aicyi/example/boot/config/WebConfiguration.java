@@ -1,19 +1,11 @@
 package io.github.aicyi.example.boot.config;
 
-import io.github.aicyi.commons.core.token.IJWTInfo;
-import io.github.aicyi.commons.core.token.AuthenticationTokenService;
-import io.github.aicyi.example.domain.bo.UserInfo;
-import io.github.aicyi.midware.redis.template.EnhancedRedisTemplateFactory;
-import io.github.aicyi.midware.redis.token.AuthenticationConfig;
-import io.github.aicyi.midware.redis.token.JwtRefreshAuthenticationTokenService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author Mr.Min
@@ -32,12 +24,6 @@ import java.util.concurrent.TimeUnit;
 @Configuration
 public class WebConfiguration implements WebMvcConfigurer {
 
-    private final EnhancedRedisTemplateFactory templateFactory;
-
-    public WebConfiguration(EnhancedRedisTemplateFactory templateFactory) {
-        this.templateFactory = templateFactory;
-    }
-
     @Bean
     public CorsFilter apiCrossFilter() {
         UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();
@@ -48,23 +34,5 @@ public class WebConfiguration implements WebMvcConfigurer {
         corsConfiguration.addAllowedOrigin("*");
         urlBasedCorsConfigurationSource.registerCorsConfiguration("/**", corsConfiguration);
         return new CorsFilter(urlBasedCorsConfigurationSource);
-    }
-
-    @Bean
-    public AuthenticationTokenService<IJWTInfo> tokenService() {
-
-        AuthenticationConfig config = AuthenticationConfig.builder()
-                .secretKey("OczHbdKy3tzPx2PdYw5FwyQALsEZ36jd0Vrj3ZWZ3ic=")
-                .issuer("aicyi")
-                .subject("aicyi.com")
-                .refreshTokenTtl(7)
-                .refreshTokenTimeUnit(TimeUnit.DAYS)
-                .accessTokenTtl(1)
-                .accessTokenTimeUnit(TimeUnit.DAYS)
-                .multiTokenAllowed(true)
-                .multiTokenCount(2)
-                .build();
-
-        return new JwtRefreshAuthenticationTokenService<>(config, templateFactory.getStringRedisTemplate(), UserInfo.class);
     }
 }

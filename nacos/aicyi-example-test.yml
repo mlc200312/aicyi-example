@@ -14,6 +14,18 @@ aicyi:
     clock-backward-tolerance-ms: 5
     epoch: 1672531200000
 
+  token:
+    enabled: true
+    secret-key: OczHbdKy3tzPx2PdYw5FwyQALsEZ36jd0Vrj3ZWZ3ic=
+    issuer: Leon
+    subject: example
+    principal-type: io.github.aicyi.example.domain.bo.UserInfo
+    refresh-token-ttl: 2592000
+    access-token-ttl: 86400
+    multi-token-allowed: false
+    key-prefix: aicyi-token
+    principal-claim-fields: userId,username,deviceId
+
   message:
     email:
       host: smtp.163.com
