@@ -26,12 +26,14 @@ public class IMessageTemplateServiceTest {
     @Test
     public void save() {
 
+        String templateCode = "Test_01";
+
         QueryWrapper<MessageTemplate> wrapper = new QueryWrapper<MessageTemplate>()
-                .eq("template_code", "Test");
+                .eq("template_code", templateCode);
         messageTemplateService.remove(wrapper);
 
         MessageTemplate messageTemplate = new MessageTemplate();
-        messageTemplate.setTemplateCode("Test_01");
+        messageTemplate.setTemplateCode(templateCode);
         messageTemplate.setTemplateName("测试");
         messageTemplate.setMessageType("SMS");
         messageTemplate.setFormat("TEXT");
