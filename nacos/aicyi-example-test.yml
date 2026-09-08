@@ -16,12 +16,15 @@ aicyi:
 
   token:
     enabled: true
-    secret-key: OczHbdKy3tzPx2PdYw5FwyQALsEZ36jd0Vrj3ZWZ3ic=
+    # JWT 签名密钥属高敏感凭证，禁止写入配置中心/仓库；必须由部署环境变量注入，
+    # 未注入时占位符无法解析，应用启动即失败（fail-fast），避免带着默认密钥上线
+    secret-key: ${AICYI_TOKEN_SECRET_KEY}
     issuer: Leon
     subject: example
     principal-type: io.github.aicyi.example.domain.bo.UserInfo
-    refresh-token-ttl: 2592000
-    access-token-ttl: 86400
+    # Duration 裸数字默认按毫秒绑定，必须显式带单位，否则 86400 会被解析为 86.4 秒
+    refresh-token-ttl: 2592000s   # 30 天
+    access-token-ttl: 86400s      # 1 天
     multi-token-allowed: false
     key-prefix: aicyi-token
     principal-claim-fields: userId,username,deviceId
@@ -30,17 +33,18 @@ aicyi:
     email:
       host: smtp.163.com
       port: -1
-      # 敏感凭证通过部署环境的环境变量注入，不写入配置中心明文
+      # 第三方 SaaS 凭证（SMTP 授权码 / Twilio AuthToken）一律无默认值，
+      # 只能由部署环境变量注入；缺省即启动失败，不降级为可猜测的弱凭证
       username: ${MAIL_USERNAME:minlc1024@163.com} # your-account@example.com
-      password: ${MAIL_PASSWORD:FMBHOGEPRJONSQQQ} # your-smtp-auth-code
+      password: ${MAIL_PASSWORD} # your-smtp-auth-code
       from-name: minliangchao
 
     sms:
       provider: default
-      # 敏感凭证通过部署环境的环境变量注入，不写入配置中心明文
-      username: ${SMS_ACCOUNT_SID:AC56dfa4c2d3284693ddebd2834b499486} # your-sms-account-sid
-      password: ${SMS_AUTH_TOKEN:c20f2f9c73b6c5b795cd04c168d1c2c8} # your-sms-auth-token
-      from: ${SMS_FROM_NUMBER:+19472182422} # +10000000000
+      # Account SID 与 AuthToken 成对构成 Twilio 访问凭证，同样不提供默认值
+      username: ${SMS_ACCOUNT_SID} # your-sms-account-sid
+      password: ${SMS_AUTH_TOKEN} # your-sms-auth-token
+      from: ${SMS_FROM_NUMBER} # +10000000000
 
     mq:
       provider: rabbitMq

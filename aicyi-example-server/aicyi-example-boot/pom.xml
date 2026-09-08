@@ -32,6 +32,15 @@
             <artifactId>aicyi-midware-message-spring-boot-starter</artifactId>
         </dependency>
 
+        <!-- RedisConfiguration 直接构造 RedissonClient，且 DistributedLockManager / DistributedCacheLock
+             的自动装配需要 Redisson 在类路径上。aicyi-midware-redis 已将 redisson 声明为 optional
+             （仅需缓存/Token/雪花 ID 的接入方不必被迫引入 netty、kryo 等 20+ 传递依赖），
+             故此处必须显式声明；版本由 aicyi-base-dependencies 的 dependencyManagement 统一管理，禁止复写 -->
+        <dependency>
+            <groupId>org.redisson</groupId>
+            <artifactId>redisson</artifactId>
+        </dependency>
+
         <!-- nacos配置中心 -->
         <dependency>
             <groupId>com.alibaba.cloud</groupId>

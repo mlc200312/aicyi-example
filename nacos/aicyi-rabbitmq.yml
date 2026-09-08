@@ -17,8 +17,9 @@ spring:
               rabbitmq:
                 host: localhost
                 port: 5672
-                username: test
-                password: test
+                # 本地开发保留弱口令默认值以便开箱即跑；非 localhost 环境必须由环境变量注入
+                username: ${RABBITMQ_USERNAME:test}
+                password: ${RABBITMQ_PASSWORD:test}
                 virtual-host: /
 
   # RabbitMQ原生配置
